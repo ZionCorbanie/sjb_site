@@ -1,0 +1,32 @@
+package templates
+
+import (
+    "sjb_site/internal/store"
+    "fmt"
+)
+
+templ LidEdit(user *store.User) {
+    <image class="rounded-full" src={ user.Image } alt={ fmt.Sprintf("Foto van %s", user.Username) }/>
+    <form
+        hx-patch={ fmt.Sprintf("/webalmanak/leden/%d/edit", user.ID) }
+        hx-trigger="submit"
+        hx-target-401="#register-error"
+    >
+        <div id="register-error"></div>
+        <div>
+            <label for="email">Email: </label>
+            <input type="email" name="email" id="email" placeholder="naam@mail.com" required="" value={ user.Email }/>
+        </div>
+        <div>
+            <label for="phone">Telefoon: </label>
+            <input type="phone" name="phone" id="phone" placeholder="+31 xxxxxx" required="" value={ user.Phone_number }/>
+        </div>
+        <div>
+            <label for="address">Adres: </label>
+            <input type="address" name="address" id="address" placeholder="waar woon je?" value={ user.Adres }/>
+        </div>
+        <button type="submit">
+            Aanpassen
+        </button>
+    </form>
+}

@@ -1,0 +1,16 @@
+<div><image class=\"rounded-full\" src=\"
+\" alt=\"
+\"></image> 
+<a href=\"
+\">wijzig </a>
+<div>naam: 
+ 
+</div><div>email: 
+</div><div>telefoon: 
+</div><div>adres: 
+</div><div>lid sinds: 
+</div>
+<div>uitgeschreven: 
+</div>
+</div>
+<h3 class=\"text-2xl\">Leden</h3><div class=\"flex flex-col space-y-5\"><a class=\"text-red-600\" href=\"/webalmanak/leden\">Leden</a> <a class=\"text-red-600\" href=\"/webalmanak/leden/add\">Voeg lid toe</a></div>

@@ -1,0 +1,8 @@
+<input class=\"form-control my-5\" type=\"search\" name=\"search\" placeholder=\"Zoek voor naam, email, telefoon, adres\" hx-post=\"/webalmanak/leden\" hx-trigger=\"input changed delay:500ms, keyup[key==&#39;Enter&#39;], load\" hx-target=\"#leden\"><div id=\"leden\"></div>
+<div class=\"flex flex-wrap justify-normal\">
+<a class=\"flex-none w-28 mr-5\" href=\"
+\"><image class=\"rounded-full\" src=\"
+\" alt=\"
+\"></image><div class=\"text-center text-wrap\">
+</div></a>
+</div>

@@ -1,0 +1,7 @@
+<image class=\"rounded-full\" src=\"
+\" alt=\"
+\"></image><form hx-patch=\"
+\" hx-trigger=\"submit\" hx-target-401=\"#register-error\"><div id=\"register-error\"></div><div><label for=\"email\">Email: </label> <input type=\"email\" name=\"email\" id=\"email\" placeholder=\"naam@mail.com\" required=\"\" value=\"
+\"></div><div><label for=\"phone\">Telefoon: </label> <input type=\"phone\" name=\"phone\" id=\"phone\" placeholder=\"+31 xxxxxx\" required=\"\" value=\"
+\"></div><div><label for=\"address\">Adres: </label> <input type=\"address\" name=\"address\" id=\"address\" placeholder=\"waar woon je?\" value=\"
+\"></div><button type=\"submit\">Aanpassen</button></form>

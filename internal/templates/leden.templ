@@ -1,0 +1,28 @@
+package templates
+
+import(
+    "sjb_site/internal/store"
+    "fmt"
+)
+
+templ Leden() {
+    <input class="form-control my-5" type="search"
+       name="search" placeholder="Zoek voor naam, email, telefoon, adres"
+       hx-post="/webalmanak/leden"
+       hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+       hx-target="#leden">   
+
+    <div id="leden">
+    </div>
+}
+
+templ RenderLeden(leden []*store.User) {
+    <div class="flex flex-wrap justify-normal">
+        for _, lid := range leden {
+            <a class="flex-none w-28 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", lid.ID)) }>
+                <image class="rounded-full" src={ lid.Image } alt={ fmt.Sprintf("Foto van %s", lid.Username) }/>
+                <div class="text-center text-wrap">{ lid.Username }</div>
+            </a>
+        }
+    </div>
+}

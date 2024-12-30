@@ -1,0 +1,5 @@
+bin
+tmp
+*.db
+tailwindcss
+dev/database/

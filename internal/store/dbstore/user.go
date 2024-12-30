@@ -1,0 +1,76 @@
+package dbstore
+
+import (
+	"fmt"
+	"sjb_site/internal/hash"
+	"sjb_site/internal/store"
+
+	"gorm.io/gorm"
+)
+
+type UserStore struct {
+	db           *gorm.DB
+	passwordhash hash.PasswordHash
+}
+
+type NewUserStoreParams struct {
+	DB           *gorm.DB
+	PasswordHash hash.PasswordHash
+}
+
+func NewUserStore(params NewUserStoreParams) *UserStore {
+	return &UserStore{
+		db:           params.DB,
+		passwordhash: params.PasswordHash,
+	}
+}
+
+func (s *UserStore) CreateUser(email string, password string) error {
+
+	hashedPassword, err := s.passwordhash.GenerateFromPassword(password)
+	if err != nil {
+		return err
+	}
+
+	return s.db.Create(&store.User{
+		Email:    email,
+		Password: hashedPassword,
+	}).Error
+}
+
+func (s *UserStore) GetUser(username string) (*store.User, error) {
+
+	var user store.User
+	err := s.db.Where("username = ?", username).First(&user).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return &user, err
+}
+
+func (s *UserStore) GetUserById(userId uint) (*store.User, error) {
+
+	var user store.User
+	err := s.db.Where("id = ?", userId).First(&user).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return &user, err
+}
+
+func (s *UserStore) SearchUsers(username string) ([]*store.User, error) {
+
+	var users []*store.User
+	err := s.db.Where("username like ?", fmt.Sprintf("%%%s%%",username)).Find(&users).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return users, err
+}
+
+func (s *UserStore) PatchUser(user store.User) error {
+    return s.db.Model(&store.User{}).Where("id = ?", user.ID).Updates(user).Error
+}
