@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
-	"net/http"
 )
 
 type HomeHandler struct{}

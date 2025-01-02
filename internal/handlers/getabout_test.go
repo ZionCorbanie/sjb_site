@@ -3,9 +3,9 @@ package handlers
 import (
 	"bytes"
 	"context"
-	"sjb_site/internal/middleware"
 	"net/http"
 	"net/http/httptest"
+	"sjb_site/internal/middleware"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

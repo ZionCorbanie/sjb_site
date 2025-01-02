@@ -6,9 +6,9 @@ import (
 	b64 "encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"sjb_site/internal/store"
 	"log"
 	"net/http"
+	"sjb_site/internal/store"
 	"strings"
 )
 
@@ -144,9 +144,6 @@ func (m *AuthMiddleware) AddUserToContext(next http.Handler) http.Handler {
 		sessionID := splitValue[0]
 		userID := splitValue[1]
 
-		fmt.Println("sessionID", sessionID)
-		fmt.Println("userID", userID)
-
 		user, err := m.sessionStore.GetUserFromSession(sessionID, userID)
 
 		if err != nil {
@@ -165,11 +162,11 @@ func (m *AuthMiddleware) IsAdmin(next http.Handler) http.Handler {
 		user, ok := r.Context().Value(UserKey).(*store.User)
 
 		if !ok {
-            http.Redirect(w, r, "/login", http.StatusFound)
+			http.Redirect(w, r, "/login", http.StatusFound)
 			return
 		}
 		if user.User_type != "admin" {
-            http.Redirect(w, r, "/", http.StatusFound)
+			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		}
 
@@ -182,7 +179,7 @@ func (m *AuthMiddleware) LoggedIn(next http.Handler) http.Handler {
 		_, ok := r.Context().Value(UserKey).(*store.User)
 
 		if !ok {
-            http.Redirect(w, r, "/login", http.StatusFound)
+			http.Redirect(w, r, "/login", http.StatusFound)
 			return
 		}
 
@@ -200,19 +197,19 @@ func GetUser(ctx context.Context) *store.User {
 }
 
 func IsAdmin(ctx context.Context) bool {
-    user := GetUser(ctx)
-    if user == nil {
-        return false
-    }
+	user := GetUser(ctx)
+	if user == nil {
+		return false
+	}
 
-    return user.User_type == "admin"
+	return user.User_type == "admin"
 }
 
 func CanPost(ctx context.Context) bool {
-    user := GetUser(ctx)
-    if user == nil {
-        return false
-    }
+	user := GetUser(ctx)
+	if user == nil {
+		return false
+	}
 
-    return user.User_type == "admin" || user.User_type == "poster"
+	return user.User_type == "admin" || user.User_type == "poster"
 }

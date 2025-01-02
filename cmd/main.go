@@ -50,6 +50,18 @@ func main() {
 		},
 	)
 
+	groupStore := dbstore.NewGroupStore(
+		dbstore.NewGroupStoreParams{
+			DB:           db,
+		},
+	)
+
+    groupUserStore := dbstore.NewGroupUserStore(
+        dbstore.NewGroupUserStoreParams{
+            DB: db,
+        },
+    )
+
 	sessionStore := dbstore.NewSessionStore(
 		dbstore.NewSessionStoreParams{
 			DB: db,
@@ -93,6 +105,15 @@ func main() {
                         UserStore: userStore,
                     }).ServeHTTP)
                 })
+                r.Route("/{groupType}", func(r chi.Router){
+                    r.Get("/", handlers.NewGroupsHandler(handlers.GetGroupsHandlerParams{
+                        GroupStore: groupStore,
+                    }).ServeHTTP)
+                })
+                r.Get("/groep/{groupId}", handlers.NewGroupHandler(handlers.GetGroupHandlerParams{
+                    GroupStore: groupStore,
+                    GroupUserStore: groupUserStore,
+                }).ServeHTTP)
             })
         })
 

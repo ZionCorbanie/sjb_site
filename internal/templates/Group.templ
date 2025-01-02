@@ -1,0 +1,21 @@
+package templates
+
+import "sjb_site/internal/store"
+import "sjb_site/internal/middleware"
+import "fmt"
+
+templ Group(group *store.Group, users []*store.User) {
+    <div>
+        if middleware.IsAdmin(ctx) || false {
+            <a href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d/edit", group.ID)) }> wijzig </a>
+        }
+        <div class="flex flex-wrap justify-normal">
+            for _, user := range users {
+                <a class="flex-none w-28 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>
+                    <image class="rounded-full" src={ user.Image } alt={ fmt.Sprintf("Foto van %s", user.First_name) }/>
+                    <div> { user.First_name } { user.Last_name } </div>
+                </a>
+            }
+        </div>
+    </div>
+}

@@ -49,7 +49,7 @@ func (s *UserStore) GetUser(username string) (*store.User, error) {
 	return &user, err
 }
 
-func (s *UserStore) GetUserById(userId uint) (*store.User, error) {
+func (s *UserStore) GetUserById(userId string) (*store.User, error) {
 
 	var user store.User
 	err := s.db.Where("id = ?", userId).First(&user).Error
@@ -60,10 +60,10 @@ func (s *UserStore) GetUserById(userId uint) (*store.User, error) {
 	return &user, err
 }
 
-func (s *UserStore) SearchUsers(username string) ([]*store.User, error) {
+func (s *UserStore) SearchUsers(search string) ([]*store.User, error) {
 
 	var users []*store.User
-	err := s.db.Where("username like ?", fmt.Sprintf("%%%s%%",username)).Find(&users).Error
+	err := s.db.Where("username like ?", fmt.Sprintf("%%%s%%", search)).Find(&users).Error
 
 	if err != nil {
 		return nil, err
@@ -72,5 +72,5 @@ func (s *UserStore) SearchUsers(username string) ([]*store.User, error) {
 }
 
 func (s *UserStore) PatchUser(user store.User) error {
-    return s.db.Model(&store.User{}).Where("id = ?", user.ID).Updates(user).Error
+	return s.db.Model(&store.User{}).Where("id = ?", user.ID).Updates(user).Error
 }

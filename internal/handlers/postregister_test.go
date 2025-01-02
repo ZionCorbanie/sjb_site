@@ -3,9 +3,9 @@ package handlers
 import (
 	"bytes"
 
-	storemock "sjb_site/internal/store/mock"
 	"net/http"
 	"net/http/httptest"
+	storemock "sjb_site/internal/store/mock"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

@@ -3,10 +3,10 @@ package handlers
 import (
 	b64 "encoding/base64"
 	"fmt"
+	"net/http"
 	"sjb_site/internal/hash"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
-	"net/http"
 	"time"
 )
 

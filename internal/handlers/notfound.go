@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"sjb_site/internal/templates"
 	"net/http"
+	"sjb_site/internal/templates"
 )
 
 type NotFoundHandler struct{}

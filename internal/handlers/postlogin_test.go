@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"encoding/base64"
 
+	"net/http"
+	"net/http/httptest"
 	hashmock "sjb_site/internal/hash/mock"
 	"sjb_site/internal/store"
 	storemock "sjb_site/internal/store/mock"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

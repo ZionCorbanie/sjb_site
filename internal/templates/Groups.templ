@@ -1,0 +1,16 @@
+package templates
+
+import "sjb_site/internal/store"
+import "fmt"
+
+templ Groups(groups []*store.Group) {
+    <div class="flex flex-wrap justify-normal">
+        for _, group := range groups {
+            <a class="flex-none w-28 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
+                <image class="rounded-full" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
+                <div class="text-center text-wrap">{ group.Name }</div>
+            </a>
+        }
+    </div>
+}
+

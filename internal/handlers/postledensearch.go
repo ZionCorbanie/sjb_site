@@ -3,31 +3,21 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"sjb_site/internal/hash"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 )
 
 type PostLedenSearchHandler struct {
-	userStore         store.UserStore
-	sessionStore      store.SessionStore
-	passwordhash      hash.PasswordHash
-	sessionCookieName string
+	userStore store.UserStore
 }
 
 type PostLedenSearchHandlerParams struct {
-	UserStore         store.UserStore
-	SessionStore      store.SessionStore
-	PasswordHash      hash.PasswordHash
-	SessionCookieName string
+	UserStore store.UserStore
 }
 
 func NewPostLedenSearchHandler(params PostLedenSearchHandlerParams) *PostLedenSearchHandler {
 	return &PostLedenSearchHandler{
-		userStore:         params.UserStore,
-		sessionStore:      params.SessionStore,
-		passwordhash:      params.PasswordHash,
-		sessionCookieName: params.SessionCookieName,
+		userStore: params.UserStore,
 	}
 }
 
@@ -40,9 +30,9 @@ func (h *PostLedenSearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-    fmt.Println(users)
+	fmt.Println(users)
 
-    c := templates.RenderLeden(users)
-    c.Render(r.Context(), w)
-    return
+	c := templates.RenderLeden(users)
+	c.Render(r.Context(), w)
+	return
 }

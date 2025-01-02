@@ -36,12 +36,12 @@ func (s *SessionStore) CreateSession(session *store.Session) (*store.Session, er
 
 func (s *SessionStore) GetUserFromSession(sessionID string, userID string) (*store.User, error) {
 	var session store.Session
-    var user store.User
+	var user store.User
 
 	err := s.db.Preload("User", func(db *gorm.DB) *gorm.DB {
 		return db.First(&user)
 	}).Where("session_id = ? AND user_id = ?", sessionID, userID).First(&session).Error
-    fmt.Println(session.User)
+	fmt.Println(session.User)
 
 	if err != nil {
 		return nil, err

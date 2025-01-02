@@ -28,7 +28,9 @@ templ header(title string) {
 }
 
 templ footer() {
-	<footer class="bg-neutral-800 p-4 text-neutral-300">hoe tf doe ik een voeter</footer>
+    <footer class="bg-neutral-800 text-neutral-300 p-4">
+        test
+    </footer>
 }
 
 templ nav() {
@@ -78,11 +80,35 @@ templ Layout(contents templ.Component, title string) {
 	@header(title)
 	<body>
         <div class="w-full bg-[url('/static/img/delft_background.jpg')]">
-            <div class="flex flex-col h-full  w-full lg:w-[1000px] mx-auto">
-                <div class="bg-primary lg:shadow-lg">
+            <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
+                <div class="bg-primary shadow-lg">
                     @nav()
                 </div>
-                <main class="bg-primary flex-1 lg:shadow-lg mt-5 p-7">
+                <main class="bg-primary flex-1 shadow-lg mt-5 p-7">
+                    @contents
+                </main>
+                @footer()
+            </div>
+        </div>
+	</body>
+}
+
+templ BannerLayout(contents templ.Component, banner string, title string) {
+	@header(title)
+	<body>
+        <div class="w-full bg-[url('/static/img/delft_background.jpg')]">
+            <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
+                <div class="bg-primary shadow-xl">
+                    @nav()
+                </div>
+                <div class="rounded-b-lg bg-primary shadow-xl ">
+                    <div class="w-full h-80">
+                        <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
+                    </div>
+                    <h1 class="text-2xl p-3 pl-5">{ title }</h1>
+                </div>
+
+                <main class="bg-primary flex-1 shadow-xl mt-5 p-7">
                     @contents
                 </main>
                 @footer()

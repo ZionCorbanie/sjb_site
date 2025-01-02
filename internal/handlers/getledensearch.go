@@ -1,11 +1,11 @@
 package handlers
 
 import (
-    "sjb_site/internal/templates"
-    "net/http"
+	"net/http"
+	"sjb_site/internal/templates"
 )
 
-type GetLedenSearchHandler struct {}
+type GetLedenSearchHandler struct{}
 
 func NewLedenSearchHandler() *GetLedenSearchHandler {
 	return &GetLedenSearchHandler{}

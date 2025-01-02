@@ -1,6 +1,6 @@
 <head><title>
 </title><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><!--<script src=\"/static/script/htmx.min.js\" nonce={ middleware.GetHtmxNonce(ctx) }></script>--><script src=\"https://unpkg.com/htmx.org@2.0.4\" integrity=\"sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+\" crossorigin=\"anonymous\"></script><script src=\"https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js\"></script><script src=\"code.iconify.design/1/1.0.6/iconify.min.js\"></script><!--<script src=\"/static/script/response-targets.js\" nonce={ middleware.GetResponseTargetsNonce(ctx) }></script>--><!--<link rel=\"stylesheet\" href=\"/static/css/style.min.css\" nonce={ middleware.GetTwNonce(ctx) }/>--><link rel=\"stylesheet\" href=\"/static/css/style.min.css\"></head>
-<footer class=\"bg-neutral-800 p-4 text-neutral-300\">hoe tf doe ik een voeter</footer>
+<footer class=\"bg-neutral-800 text-neutral-300 p-4\">test</footer>
 <nav class=\"p-4 bg-[url(&#39;/static/img/header_background_lijn.png&#39;)]\"><div class=\"container flex justify-between\"><ol class=\"flex space-x-4\"><li><a class=\"text-red-600\" href=\"/\">Home</a></li><li><a class=\"text-red-600\" href=\"/about\">About</a></li>
 <li><a class=\"text-red-600\" href=\"/webalmanak/leden\">Webalmanak</a></li>
 </ol><ol class=\"flex space-x-4\">
@@ -10,8 +10,14 @@
  <li><button class=\"text-red-600\" hx-target=\"body\" hx-swap=\"innerHTML\" hx-post=\"/logout\">Uitloggen</button></li>
 <li><a class=\"text-red-600\" href=\"/register\">Register</a></li><li><a class=\"text-red-600\" href=\"/login\">Login</a></li>
 </ol></div></nav>
-<body><div class=\"w-full bg-[url(&#39;/static/img/delft_background.jpg&#39;)]\"><div class=\"flex flex-col h-full  w-full lg:w-[1000px] mx-auto\"><div class=\"bg-primary lg:shadow-lg\">
-</div><main class=\"bg-primary flex-1 lg:shadow-lg mt-5 p-7\">
+<body><div class=\"w-full bg-[url(&#39;/static/img/delft_background.jpg&#39;)]\"><div class=\"flex flex-col h-full  w-full lg:w-[1024px] mx-auto\"><div class=\"bg-primary shadow-lg\">
+</div><main class=\"bg-primary flex-1 shadow-lg mt-5 p-7\">
+</main>
+</div></div></body>
+<body><div class=\"w-full bg-[url(&#39;/static/img/delft_background.jpg&#39;)]\"><div class=\"flex flex-col h-full  w-full lg:w-[1024px] mx-auto\"><div class=\"bg-primary shadow-xl\">
+</div><div class=\"rounded-b-lg bg-primary shadow-xl \"><div class=\"w-full h-80\"><image class=\"w-full h-full object-cover\" src=\"
+\" alt=\"banner\"></image></div><h1 class=\"text-2xl p-3 pl-5\">
+</h1></div><main class=\"bg-primary flex-1 shadow-xl mt-5 p-7\">
 </main>
 </div></div></body>
 <div class=\"flex justify-between h-full\"><div class=\"w-3/4\">

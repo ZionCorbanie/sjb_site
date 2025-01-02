@@ -8,23 +8,23 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type GetLidEditHandler struct {
-	userStore store.UserStore
+type GetGroupsHandler struct {
+	GroupStore store.GroupStore
 }
 
-type GetLidEditHandlerParams struct {
-	UserStore store.UserStore
+type GetGroupsHandlerParams struct {
+	GroupStore store.GroupStore
 }
 
-func NewLidEditHandler(params GetLidEditHandlerParams) *GetLidEditHandler {
-	return &GetLidEditHandler{
-		userStore: params.UserStore,
+func NewGroupsHandler(params GetGroupsHandlerParams) *GetGroupsHandler {
+	return &GetGroupsHandler{
+		GroupStore: params.GroupStore,
 	}
 }
 
-func (h *GetLidEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	userId := chi.URLParam(r, "userId")
-	user, err := h.userStore.GetUserById(userId)
+func (h *GetGroupsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	groupType := chi.URLParam(r, "groupType")
+	groups, err := h.GroupStore.GetGroupsByType(groupType)
 	if err != nil {
 		err = templates.NotFound().Render(r.Context(), w)
 		if err != nil {
@@ -34,7 +34,7 @@ func (h *GetLidEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := templates.LidEdit(user)
+	c := templates.Groups(groups)
 	err = templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
