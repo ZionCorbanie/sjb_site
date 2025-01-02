@@ -17,6 +17,7 @@ templ header(title string) {
         <!--<script src="/static/script/response-targets.js" nonce={ middleware.GetResponseTargetsNonce(ctx) }></script>-->
 		<!--<link rel="stylesheet" href="/static/css/style.min.css" nonce={ middleware.GetTwNonce(ctx) }/>-->
 		<link rel="stylesheet" href="/static/css/style.min.css"/>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
         // if os.Getenv("env") == "production" {
@@ -38,15 +39,70 @@ templ nav() {
 	<nav class="p-4 bg-[url('/static/img/header_background_lijn.png')]">
 		<div class="container flex justify-between">
 			<ol class="flex space-x-4">
-				<li>
-					<a class="text-red-600" href="/">Home</a>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 p-2 items-center" href="/">Home</a>
 				</li>
-				<li>
-					<a class="text-red-600" href="/about">About</a>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 p-2 items-center" href="/about">About</a>
 				</li>
 				if user != nil {
-                    <li>
-                        <a class="text-red-600" href="/webalmanak/leden">Webalmanak</a>
+                    <li x-data="{
+                        open: false,
+                        toggle() {
+                            if (this.open) {
+                                return this.close()
+                            }
+                            this.$refs.button.focus()
+                            this.open = true
+                        },
+                        close() {
+                            if (! this.open) return
+                            this.open = false
+                        }
+                        }"
+                        x-on:keydown.escape.prevent.stop="close()"
+                        x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+                        x-id="['dropdown-button']"
+                        @mouseleave="close()"
+                        class="relative"
+                        >
+                        <!-- Button -->
+                        <a
+                            href="/webalmanak/leden"    
+                            x-ref="button"
+                            x-on:click="toggle()"
+                            @mouseover="open = true"
+                            :aria-expanded="open"
+                            :aria-controls="$id('dropdown-button')"
+                            type="button"
+                            class="flex items-center gap-2 p-2 text-red-600"
+                            >
+                            Webalmanak
+                        </a>
+                        <!-- Panel -->
+                        <div
+                            x-ref="panel"
+                            x-show="open"
+                            x-transition.origin.top.left
+                            x-on:click.outside="close()"
+                            :id="$id('dropdown-button')"
+                            @mouseleave="close()"
+                            style="display: none;"
+                            class="absolute left-0 w-40 rounded-md bg-white shadow-md"
+                        >
+                            <a href="/webalmanak/leden" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Leden
+                            </a>
+                            <a href="/webalmanak/jaarclub" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Jaarclubs
+                            </a>
+                            <a href="/webalmanak/gilde" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Gilde
+                            </a>
+                            <a href="/webalmanak/commissie" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Commissies
+                            </a>
+                        </div>
                     </li>
                 }
 			</ol>
@@ -81,10 +137,10 @@ templ Layout(contents templ.Component, title string) {
 	<body>
         <div class="w-full bg-[url('/static/img/delft_background.jpg')]">
             <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
-                <div class="bg-primary shadow-lg">
+                <div class="bg-primary shadow-xl">
                     @nav()
                 </div>
-                <main class="bg-primary flex-1 shadow-lg mt-5 p-7">
+                <main class="bg-primary flex-1 shadow-xl mt-5 p-7">
                     @contents
                 </main>
                 @footer()
@@ -118,11 +174,11 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
 }
 
 templ Sidebar(main templ.Component, sidebar templ.Component) {
-    <div class="flex justify-between h-full">
-        <div class="w-3/4">
+    <div class="flex flex-col lg:flex-row justify-between lg:h-full">
+        <div class="w-full lg:h-full lg:w-3/4">
             @main
         </div>
-        <div class="w-1/4 border-l-2 border-red-600 pl-5">
+        <div class="w-full lg:h-full lg:w-1/4 max-md:mt-10 max-md:pt-5 max-md:border-t-2 lg:border-l-2 border-red-600 pl-5">
             @sidebar
         </div>
     </div>

@@ -12,16 +12,17 @@ templ Leden() {
        hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
        hx-target="#leden">   
 
-    <div id="leden">
+    <div id="leden" class="mx-auto">
     </div>
 }
 
 templ RenderLeden(leden []*store.User) {
-    <div class="flex flex-wrap justify-normal">
+    <div class="flex flex-wrap justify-center">
         for _, lid := range leden {
-            <a class="flex-none w-28 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", lid.ID)) }>
+            <a class="flex-none w-24 md:w-28 mx-2 mb-2" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", lid.ID)) }>
                 <image class="rounded-full" src={ lid.Image } alt={ fmt.Sprintf("Foto van %s", lid.Username) }/>
-                <div class="text-center text-wrap">{ lid.Username }</div>
+                <div class="text-center text-wrap">{ lid.First_name }</div>
+                <div class="text-center text-wrap">{ lid.Last_name }</div>
             </a>
         }
     </div>
