@@ -8,21 +8,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type GetLidEditHandler struct {
+type GetUserEditHandler struct {
 	userStore store.UserStore
 }
 
-type GetLidEditHandlerParams struct {
+type GetUserEditHandlerParams struct {
 	UserStore store.UserStore
 }
 
-func NewLidEditHandler(params GetLidEditHandlerParams) *GetLidEditHandler {
-	return &GetLidEditHandler{
+func NewUserEditHandler(params GetUserEditHandlerParams) *GetUserEditHandler {
+	return &GetUserEditHandler{
 		userStore: params.UserStore,
 	}
 }
 
-func (h *GetLidEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *GetUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, "userId")
 	user, err := h.userStore.GetUserById(userId)
 	if err != nil {
@@ -34,7 +34,7 @@ func (h *GetLidEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := templates.LidEdit(user)
+	c := templates.UserEdit(user)
 	err = templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {

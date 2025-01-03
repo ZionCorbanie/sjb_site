@@ -5,13 +5,13 @@ import (
 	"sjb_site/internal/templates"
 )
 
-type GetLedenSearchHandler struct{}
+type GetUserSearchHandler struct{}
 
-func NewLedenSearchHandler() *GetLedenSearchHandler {
-	return &GetLedenSearchHandler{}
+func NewUserSearchHandler() *GetUserSearchHandler {
+	return &GetUserSearchHandler{}
 }
 
-func (h *GetLedenSearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *GetUserSearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := templates.Users()
 	err := templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 

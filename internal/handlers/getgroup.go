@@ -48,7 +48,7 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c := templates.Group(group, users)
-	s := templates.SidebarLid()
+	s := templates.SidebarUser()
 	err = templates.BannerLayout(templates.Sidebar(c, s), group.Image, group.Name).Render(r.Context(), w)
 
 	if err != nil {

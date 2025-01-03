@@ -1,27 +1,26 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 )
 
-type PostLedenSearchHandler struct {
+type PostUserSearchHandler struct {
 	userStore store.UserStore
 }
 
-type PostLedenSearchHandlerParams struct {
+type PostUserSearchHandlerParams struct {
 	UserStore store.UserStore
 }
 
-func NewPostLedenSearchHandler(params PostLedenSearchHandlerParams) *PostLedenSearchHandler {
-	return &PostLedenSearchHandler{
+func NewPostUserSearchHandler(params PostUserSearchHandlerParams) *PostUserSearchHandler {
+	return &PostUserSearchHandler{
 		userStore: params.UserStore,
 	}
 }
 
-func (h *PostLedenSearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *PostUserSearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	search := r.FormValue("search")
 	users, err := h.userStore.SearchUsers(search)

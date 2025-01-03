@@ -6,7 +6,7 @@ templ Index(user *store.User) {
     <div>
     Hallo {user.Email}, trek
     </div>
-    if user.User_type == "admin" {
+    if user.UserType == "admin" {
         <div>Wtf bro is admin</div>
     }
 }

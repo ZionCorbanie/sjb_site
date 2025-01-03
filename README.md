@@ -26,7 +26,7 @@ De makefile zorgt ervoor dat je makkelijk de site kan draaien en bouwen.
 
 ## Naming
 
-Omdat computer science kut is en ik mn leven haat is alles wat de user zou kunnen zien nederlands en anders engels. Endpoints zijn dus nederlands en data ook. Verder alles engels (ja ik weet dat er files en functions zijn die leden heten en eigenlijk zou dit groups moeten zijn maar moet refactoren).
+Omdat computer science kut is en ik mn leven haat is alles wat de user zou kunnen zien nederlands en anders engels. Endpoints zijn dus nederlands en data ook. Verder alles engels.
 
 Verder idk camelCase/PascalCase omdat dat conanical go is. Pas op met json en sql want daar is de norm snake_case.
 

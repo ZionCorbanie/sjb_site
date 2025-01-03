@@ -10,21 +10,21 @@ import (
 	"strconv"
 )
 
-type PatchLidEditHandler struct {
+type PatchUserEditHandler struct {
 	userStore store.UserStore
 }
 
-type PatchLidEditHandlerParams struct {
+type PatchUserEditHandlerParams struct {
 	UserStore store.UserStore
 }
 
-func NewPatchtLidEditHandler(params PatchLidEditHandlerParams) *PatchLidEditHandler {
-	return &PatchLidEditHandler{
+func NewPatchtUserEditHandler(params PatchUserEditHandlerParams) *PatchUserEditHandler {
+	return &PatchUserEditHandler{
 		userStore: params.UserStore,
 	}
 }
 
-func (h *PatchLidEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	userId, _ := strconv.ParseUint(chi.URLParam(r, "userId"), 10, 64)
 
 	if middleware.GetUser(r.Context()).ID != uint(userId) && !middleware.IsAdmin(r.Context()) {
@@ -40,7 +40,7 @@ func (h *PatchLidEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		ID:           uint(userId),
 		Email:        email,
 		Adres:        address,
-		Phone_number: phone,
+		PhoneNumber: phone,
 	}
 
 	err := h.userStore.PatchUser(userPatch)

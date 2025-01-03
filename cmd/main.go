@@ -3,16 +3,16 @@ package main
 import (
 	"context"
 	"errors"
-	"sjb_site/internal/config"
-	"sjb_site/internal/handlers"
-	"sjb_site/internal/hash/passwordhash"
-	database "sjb_site/internal/store/db"
-	"sjb_site/internal/store/dbstore"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/exec"
 	"os/signal"
+	"sjb_site/internal/config"
+	"sjb_site/internal/handlers"
+	"sjb_site/internal/hash/passwordhash"
+	database "sjb_site/internal/store/db"
+	"sjb_site/internal/store/dbstore"
 	"syscall"
 	"time"
 
@@ -52,15 +52,15 @@ func main() {
 
 	groupStore := dbstore.NewGroupStore(
 		dbstore.NewGroupStoreParams{
-			DB:           db,
+			DB: db,
 		},
 	)
 
-    groupUserStore := dbstore.NewGroupUserStore(
-        dbstore.NewGroupUserStoreParams{
-            DB: db,
-        },
-    )
+	groupUserStore := dbstore.NewGroupUserStore(
+		dbstore.NewGroupUserStoreParams{
+			DB: db,
+		},
+	)
 
 	sessionStore := dbstore.NewSessionStore(
 		dbstore.NewSessionStoreParams{
@@ -85,42 +85,42 @@ func main() {
 
 		r.Get("/", handlers.NewHomeHandler().ServeHTTP)
 
-        //Need to be logged in to access these routes
-        r.Group(func(r chi.Router) {
-            r.Use(authMiddleware.LoggedIn)
-            r.Route("/webalmanak", func(r chi.Router) {
-                r.Route("/leden", func(r chi.Router) {
-                    r.Get("/", handlers.NewLedenSearchHandler().ServeHTTP)
-                    r.Post("/", handlers.NewPostLedenSearchHandler(handlers.PostLedenSearchHandlerParams{
-                        UserStore: userStore,
-                    }).ServeHTTP)
+		//Need to be logged in to access these routes
+		r.Group(func(r chi.Router) {
+			r.Use(authMiddleware.LoggedIn)
+			r.Route("/webalmanak", func(r chi.Router) {
+				r.Route("/leden", func(r chi.Router) {
+					r.Get("/", handlers.NewUserSearchHandler().ServeHTTP)
+					r.Post("/", handlers.NewPostUserSearchHandler(handlers.PostUserSearchHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
 
-                    r.Get("/{userId}", handlers.NewLedenHandler(handlers.GetLidHandlerParams{
-                        UserStore: userStore,
-                    }).ServeHTTP)
-                    r.Get("/{userId}/edit", handlers.NewLidEditHandler(handlers.GetLidEditHandlerParams{
-                        UserStore: userStore,
-                    }).ServeHTTP)
-                    r.Patch("/{userId}/edit", handlers.NewPatchtLidEditHandler(handlers.PatchLidEditHandlerParams{
-                        UserStore: userStore,
-                    }).ServeHTTP)
-                })
-                r.Route("/{groupType}", func(r chi.Router){
-                    r.Get("/", handlers.NewGroupsHandler(handlers.GetGroupsHandlerParams{
-                        GroupStore: groupStore,
-                    }).ServeHTTP)
-                })
-                r.Get("/groep/{groupId}", handlers.NewGroupHandler(handlers.GetGroupHandlerParams{
-                    GroupStore: groupStore,
-                    GroupUserStore: groupUserStore,
-                }).ServeHTTP)
-            })
-        })
+					r.Get("/{userId}", handlers.NewUserHandler(handlers.GetUserHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Get("/{userId}/edit", handlers.NewUserEditHandler(handlers.GetUserEditHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Patch("/{userId}/edit", handlers.NewPatchtUserEditHandler(handlers.PatchUserEditHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+				})
+				r.Route("/{groupType}", func(r chi.Router) {
+					r.Get("/", handlers.NewGroupsHandler(handlers.GetGroupsHandlerParams{
+						GroupStore: groupStore,
+					}).ServeHTTP)
+				})
+				r.Get("/groep/{groupId}", handlers.NewGroupHandler(handlers.GetGroupHandlerParams{
+					GroupStore:     groupStore,
+					GroupUserStore: groupUserStore,
+				}).ServeHTTP)
+			})
+		})
 
-        r.Route("/admin", func(r chi.Router) {
-            r.Use(authMiddleware.IsAdmin)
-            r.Get("/", handlers.NewAdminHandler().ServeHTTP)
-        })
+		r.Route("/admin", func(r chi.Router) {
+			r.Use(authMiddleware.IsAdmin)
+			r.Get("/", handlers.NewAdminHandler().ServeHTTP)
+		})
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)
 
