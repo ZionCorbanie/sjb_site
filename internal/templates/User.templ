@@ -3,28 +3,28 @@ package templates
 import (
     "sjb_site/internal/store"
     "fmt"
-    "strconv"
     "sjb_site/internal/middleware"
 )
 
-templ Lid(User *store.User) {
+templ User(User *store.User) {
     <div>
         <image class="rounded-full" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
         if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
             <a href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }> wijzig </a>
         }
-        <div> naam: { User.First_name } { User.Last_name } </div>
+        <div> naam: { User.FirstName } { User.LastName } </div>
         <div> email: { User.Email } </div>
-        <div> telefoon: { User.Phone_number } </div>
+        <div> telefoon: { User.PhoneNumber } </div>
         <div> adres: { User.Adres } </div>
-        <div> lid sinds: { strconv.Itoa(User.Start_date.Year()) }</div>
-        if User.End_date.IsZero() {
-            <div> uitgeschreven: { strconv.Itoa(User.End_date.Year()) }</div>
+        <div> lid sinds: { User.StartDate.Format("02/01/2006") }</div>
+        if !User.EndDate.IsZero() {
+            <div> uitgeschreven: { User.EndDate.Format("02/01/2006") }</div>
         }
     </div>
 }
 
-templ SidebarLid() {
+templ SidebarUser() {
+    //Todo implement user list and search
     <h3 class="text-2xl">Leden</h3>
     <div class="flex flex-col space-y-5">
         <a class="text-red-600" href="/webalmanak/leden">Leden</a>

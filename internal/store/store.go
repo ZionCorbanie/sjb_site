@@ -7,13 +7,13 @@ type User struct {
 	Email        string    `json:"email" gorm:"type:varchar(255);not null"`
 	Password     string    `json:"-" gorm:"type:varchar(255);not null"`
 	Username     string    `json:"username" gorm:"type:varchar(255)"`
-	First_name   string    `json:"first_name" gorm:"type:varchar(255)"`
-	Last_name    string    `json:"last_name" gorm:"type:varchar(255)"`
-	Start_date   time.Time `json:"start_date"`
-	End_date     time.Time `json:"end_date"`
-	User_type    string    `json:"user_type" gorm:"type:enum('admin','lid','oud_lid');default:lid"`
+	FirstName   string    `json:"first_name" gorm:"type:varchar(255)"`
+	LastName    string    `json:"last_name" gorm:"type:varchar(255)"`
+    StartDate   time.Time `json:"start_date;default:current_timestamp;not null"`
+	EndDate     time.Time `json:"end_date"`
+	UserType    string    `json:"user_type" gorm:"type:enum('admin','lid','oud_lid');default:lid"`
 	Adres        string    `json:"adres" gorm:"type:varchar(255)"`
-	Phone_number string    `json:"phone_number" gorm:"type:varchar(255)"`
+	PhoneNumber string    `json:"phone_number" gorm:"type:varchar(255)"`
 	Image        string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-150x150.png'"`
 }
 
@@ -22,15 +22,17 @@ type Parent struct {
 	User         User   `gorm:"foreignKey:UserID" json:"user"`
 	Title        string `json:"title" gorm:"type:varchar(255)"`
 	Adres        string `json:"adres" gorm:"type:varchar(255)"`
-	Phone_number string `json:"phone_number" gorm:"type:varchar(255)"`
+	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
 }
 
 type Group struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
 	Name        string    `json:"name"`
-	Group_type  string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep')"`
-	Start_date  time.Time `json:"start_date"`
-	End_date    time.Time `json:"end_date"`
+	Email        string    `json:"email"`
+	Website        string    `json:"website"`
+	GroupType  string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep')"`
+	StartDate  time.Time `json:"start_date;default:current_timestamp;not null"`
+	EndDate    time.Time `json:"end_date"`
 	Description string    `json:"description" gorm:"type:varchar(2048)"`
 	Image       string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-group.png'"`
 }

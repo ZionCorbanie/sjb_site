@@ -165,7 +165,7 @@ func (m *AuthMiddleware) IsAdmin(next http.Handler) http.Handler {
 			http.Redirect(w, r, "/login", http.StatusFound)
 			return
 		}
-		if user.User_type != "admin" {
+		if user.UserType != "admin" {
 			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		}
@@ -202,7 +202,7 @@ func IsAdmin(ctx context.Context) bool {
 		return false
 	}
 
-	return user.User_type == "admin"
+	return user.UserType == "admin"
 }
 
 func CanPost(ctx context.Context) bool {
@@ -211,5 +211,5 @@ func CanPost(ctx context.Context) bool {
 		return false
 	}
 
-	return user.User_type == "admin" || user.User_type == "poster"
+	return user.UserType == "admin" || user.UserType == "poster"
 }

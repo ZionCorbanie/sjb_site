@@ -5,7 +5,7 @@ import (
     "fmt"
 )
 
-templ LidEdit(user *store.User) {
+templ UserEdit(user *store.User) {
     <image class="rounded-full" src={ user.Image } alt={ fmt.Sprintf("Foto van %s", user.Username) }/>
     <form
         hx-patch={ fmt.Sprintf("/webalmanak/leden/%d/edit", user.ID) }
@@ -19,7 +19,7 @@ templ LidEdit(user *store.User) {
         </div>
         <div>
             <label for="phone">Telefoon: </label>
-            <input type="phone" name="phone" id="phone" placeholder="+31 xxxxxx" required="" value={ user.Phone_number }/>
+            <input type="phone" name="phone" id="phone" placeholder="+31 xxxxxx" required="" value={ user.PhoneNumber }/>
         </div>
         <div>
             <label for="address">Adres: </label>

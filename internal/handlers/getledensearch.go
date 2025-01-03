@@ -12,7 +12,7 @@ func NewLedenSearchHandler() *GetLedenSearchHandler {
 }
 
 func (h *GetLedenSearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := templates.Leden()
+	c := templates.Users()
 	err := templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {

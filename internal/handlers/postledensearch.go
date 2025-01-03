@@ -30,9 +30,7 @@ func (h *PostLedenSearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	fmt.Println(users)
-
-	c := templates.RenderLeden(users)
+	c := templates.RenderUsers(users)
 	c.Render(r.Context(), w)
 	return
 }

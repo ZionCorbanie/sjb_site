@@ -1,7 +1,14 @@
 <div>
 <a href=\"
 \">wijzig </a>
-<div class=\"flex flex-wrap justify-normal\">
+<div>Email: 
+ 
+Website: 
+ 
+Sinds: 
+ 
+Einde: 
+</div><div class=\"flex flex-wrap justify-normal\">
 <a class=\"flex-none w-28 mr-5\" href=\"
 \"><image class=\"rounded-full\" src=\"
 \" alt=\"
