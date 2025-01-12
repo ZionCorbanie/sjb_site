@@ -1,4 +1,10 @@
-<div>Hallo 
-, trek</div>
-<div>Wtf bro is admin</div>
-<div>Welcome guest</div>
+<div>Ding voor niet ingelogde gebruikers om naar te kijken</div><hr>
+<div class=\"flex justify-evenly\">
+<div>Sjaarsch van de dag <a href=\"/webalmanak/leden/1\"><image class=\"rounded-full\" src=\"/static/img/placeholder-150x150.png\" alt=\"Foto van sjaarsch van de dag\"></image> Je moeder</a></div>
+<div id=\"menu\" hx-trigger=\"load\" hx-get=\"
+\" hx-target=\"#menu\" hx-swap=\"outerHTML\">Eettafelmenu</div></div><hr><div><h1>Laatste nieuws</h1><div class=\"flex flex-wrap justify-normal\">
+<a class=\"flex-none w-44 mr-5\" href=\"
+\"><image class=\"rounded-md\" src=\"/static/img/placeholder-group.png\" alt=\"
+\"></image><div class=\"text-center text-wrap\">
+</div></a>
+</div></div>

@@ -8,7 +8,7 @@
 \">Profiel</a></li>
 <li><a class=\"text-red-600\" href=\"/admin\">Admin</a></li>
  <li><button class=\"text-red-600\" hx-target=\"body\" hx-swap=\"innerHTML\" hx-post=\"/logout\">Uitloggen</button></li>
-<li><a class=\"text-red-600\" href=\"/register\">Register</a></li><li><a class=\"text-red-600\" href=\"/login\">Login</a></li>
+<li><a class=\"text-red-600\" href=\"/login\">Login</a></li>
 </ol></div></nav>
 <body><div class=\"w-full bg-[url(&#39;/static/img/delft_background.jpg&#39;)]\"><div class=\"flex flex-col h-full  w-full lg:w-[1024px] mx-auto\"><div class=\"bg-primary shadow-xl\">
 </div><main class=\"bg-primary flex-1 shadow-xl mt-5 p-7\">

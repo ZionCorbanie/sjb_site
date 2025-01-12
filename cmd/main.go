@@ -68,6 +68,12 @@ func main() {
 		},
 	)
 
+    menuStore := dbstore.NewMenuStore(
+        dbstore.NewMenuStoreParams{
+            DB: db,
+        },
+    )
+
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
@@ -115,6 +121,9 @@ func main() {
 					GroupUserStore: groupUserStore,
 				}).ServeHTTP)
 			})
+            r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
+                MenuStore: menuStore,
+            }).ServeHTTP)
 		})
 
 		r.Route("/admin", func(r chi.Router) {

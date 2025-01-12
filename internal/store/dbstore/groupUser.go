@@ -30,8 +30,6 @@ func (s *GroupUserStore) AddUserToGroup(userId uint, groupId uint) error {
 func (s *GroupUserStore) GetUsersByGroup(groupId string) ([]*store.User, error) {
 	var users []*store.User
 
-	// err := s.db.Table("group_users").Select("user_id").Where("group_id = ?", groupId).Find(&users).Error
-	// err := s.db.Where("group_id=?", groupId).Find(&store.GroupUser{}).Scan(&users).Error
 	err := s.db.Joins("JOIN group_users ON group_users.user_id = users.id").
 		Where("group_users.group_id = ?", groupId).
 		Find(&users).Error

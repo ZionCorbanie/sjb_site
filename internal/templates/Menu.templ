@@ -1,0 +1,36 @@
+package templates
+
+import (
+    "sjb_site/internal/store"
+    "fmt"
+)
+
+templ MenuDay(menu *store.Menu) {
+    <div id="menu">
+        <h3>
+            {menu.Name}
+        </h3>
+        <div>
+            Basis: {menu.Basis}
+        </div>
+        <div>
+            Vlees: {menu.Vlees}
+        </div>
+        <div>
+            Vega: {menu.Vega}
+        </div>
+        <div>
+            Toe: {menu.Toe}
+        </div>
+
+        <div>
+            <button hx-get={ fmt.Sprintf("/menu/%d",menu.ID-1) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                vorige
+            </button>
+            { menu.Date.Format("02-01-2006") }
+            <button hx-get={ fmt.Sprintf("/menu/%d",menu.ID+1)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                volgende
+            </button>
+        </div>
+    </div>
+}

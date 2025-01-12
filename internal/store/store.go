@@ -63,6 +63,16 @@ type Post struct {
 	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
 }
 
+type Menu struct {
+    ID       uint      `gorm:"primaryKey" json:"id"`
+    Date     time.Time `json:"date"`
+    Name     string    `json:"name" gorm:"type:varchar(255)"`
+    Basis    string    `json:"basis" gorm:"type:varchar(255)"`
+    Vlees    string    `json:"vlees" gorm:"type:varchar(255)"`
+    Vega     string    `json:"vega" gorm:"type:varchar(255)"`
+    Toe      string    `json:"toe" gorm:"type:varchar(255)"`
+}
+
 type Session struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
 	SessionID string `json:"session_id" gorm:"type:varchar(255)"`
@@ -92,4 +102,9 @@ type GroupStore interface {
 type GroupUserStore interface {
 	AddUserToGroup(userId uint, groupId uint) error
 	GetUsersByGroup(groupId string) ([]*User, error)
+}
+
+type MenuStore interface {
+    GetMenu(id string) (*Menu, error)
+    GetMenuRange(start string, length string) ([]*Menu, error)
 }

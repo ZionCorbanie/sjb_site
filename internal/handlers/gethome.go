@@ -15,22 +15,12 @@ func NewHomeHandler() *HomeHandler {
 
 func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	user, ok := r.Context().Value(middleware.UserKey).(*store.User)
+	user, _ := r.Context().Value(middleware.UserKey).(*store.User)
 
-	if !ok {
-		c := templates.GuestIndex()
+    // get alle posts ffe hier
+    posts := make([]*store.Post, 0)
 
-		err := templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
-
-		if err != nil {
-			http.Error(w, "Error rendering template", http.StatusInternalServerError)
-			return
-		}
-
-		return
-	}
-
-	c := templates.Index(user)
+	c := templates.Index(user, posts)
 	err := templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {

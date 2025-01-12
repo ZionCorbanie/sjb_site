@@ -1,18 +1,45 @@
 package templates
 
 import "sjb_site/internal/store"
+import "fmt"
+import "time"
 
-templ Index(user *store.User) {
-    <div>
-    Hallo {user.Email}, trek
-    </div>
-    if user.UserType == "admin" {
-        <div>Wtf bro is admin</div>
+templ Index(user *store.User, posts []*store.Post) {
+    if user == nil {
+        <div>
+            Ding voor niet ingelogde gebruikers om naar te kijken
+        </div>
+        <hr>
     }
-}
-
-templ GuestIndex() {
-	<div>
-	Welcome guest
-	</div>
+    <div class="flex justify-evenly">
+        if user != nil {
+            <div>
+                Sjaarsch van de dag
+                <a href="/webalmanak/leden/1">
+                    <image class="rounded-full" src="/static/img/placeholder-150x150.png" alt="Foto van sjaarsch van de dag"/>
+                    Je moeder
+                </a>
+            </div>
+        }
+        <div id="menu"
+            hx-trigger="load" 
+            hx-get={ fmt.Sprintf("/menu/%d", time.Now().Unix()/(60*60*24)) }
+            hx-target="#menu"
+            hx-swap="outerHTML"
+            >
+            Eettafelmenu
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h1>Laatste nieuws</h1>
+        <div class="flex flex-wrap justify-normal">
+            for _, post := range posts {
+                <a class="flex-none w-44 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/post/%d", post.ID)) }>
+                    <image class="rounded-md" src="/static/img/placeholder-group.png" alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                    <div class="text-center text-wrap">{ post.Title }</div>
+                </a>
+            }
+        </div>
+    </div>
 }
