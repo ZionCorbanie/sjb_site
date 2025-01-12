@@ -1,9 +1,17 @@
-<div id=\"menu\"><h3>
-</h3><div>Basis: 
-</div><div>Vlees: 
-</div><div>Vega: 
-</div><div>Toe: 
-</div><div><button hx-get=\"
+<div id=\"menu\" class=\"flex flex-col justify-between\"><div><h3>
+</h3><div>
+<div>Basis: 
+</div>
+</div><div>
+<div>Vlees: 
+</div>
+</div><div>
+<div>Vega: 
+</div>
+</div><div>
+<div>Toe: 
+</div>
+</div></div><div><button hx-get=\"
 \" hx-swap=\"outerHTML\" hx-trigger=\"click\" hx-target=\"#menu\">vorige</button> 
  <button hx-get=\"
 \" hx-swap=\"outerHTML\" hx-trigger=\"click\" hx-target=\"#menu\">volgende</button></div></div>

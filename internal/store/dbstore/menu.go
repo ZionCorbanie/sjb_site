@@ -48,3 +48,7 @@ func (s *MenuStore) GetMenuRange(start string, length string) ([]*store.Menu, er
 
     return menus, err
 }
+
+func (s *MenuStore) CreateMenu(menu *store.Menu) error {
+    return s.db.Save(menu).Error
+}

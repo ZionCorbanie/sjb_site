@@ -6,21 +6,39 @@ import (
 )
 
 templ MenuDay(menu *store.Menu) {
-    <div id="menu">
-        <h3>
-            {menu.Name}
-        </h3>
+    <div id="menu" class="flex flex-col justify-between">
         <div>
-            Basis: {menu.Basis}
-        </div>
-        <div>
-            Vlees: {menu.Vlees}
-        </div>
-        <div>
-            Vega: {menu.Vega}
-        </div>
-        <div>
-            Toe: {menu.Toe}
+            <h3>
+                {menu.Name}
+            </h3>
+            <div>
+                if menu.Basis != "" {
+                    <div>
+                        Basis: {menu.Basis}
+                    </div>
+                }
+            </div>
+            <div>
+                if menu.Vlees != "" {
+                    <div>
+                        Vlees: {menu.Vlees}
+                    </div>
+                }
+            </div>
+            <div>
+                if menu.Vega != "" {
+                    <div>
+                        Vega: {menu.Vega}
+                    </div>
+                }
+            </div>
+            <div>
+                if menu.Toe != "" {
+                    <div>
+                        Toe: {menu.Toe}
+                    </div>
+                }
+            </div>
         </div>
 
         <div>
