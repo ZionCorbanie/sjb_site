@@ -68,11 +68,11 @@ func main() {
 		},
 	)
 
-    menuStore := dbstore.NewMenuStore(
-        dbstore.NewMenuStoreParams{
-            DB: db,
-        },
-    )
+	menuStore := dbstore.NewMenuStore(
+		dbstore.NewMenuStoreParams{
+			DB: db,
+		},
+	)
 
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
@@ -121,18 +121,22 @@ func main() {
 					GroupUserStore: groupUserStore,
 				}).ServeHTTP)
 			})
-            r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
-                MenuStore: menuStore,
-            }).ServeHTTP)
+			r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
+				MenuStore: menuStore,
+			}).ServeHTTP)
 		})
 
 		r.Route("/admin", func(r chi.Router) {
 			r.Use(authMiddleware.IsAdmin)
 			r.Get("/", handlers.NewAdminHandler().ServeHTTP)
-            r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
-            r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
-                MenuStore: menuStore,
-            }).ServeHTTP)
+			r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
+			r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
+				MenuStore: menuStore,
+			}).ServeHTTP)
+			r.Get("/users", handlers.NewGetUserManagementHandler().ServeHTTP)
+			r.Post("/users", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
+				UserStore: userStore,
+			}).ServeHTTP)
 		})
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)

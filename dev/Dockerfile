@@ -3,7 +3,7 @@ WORKDIR /app
 
 RUN apk add --no-cache make gcc g++ curl
 
-RUN go install github.com/a-h/templ/cmd/templ@latest && \
+RUN go install github.com/a-h/templ/cmd/templ@v0.2.793 && \
     go install github.com/air-verse/air@latest
 
 RUN curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && \

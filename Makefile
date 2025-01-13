@@ -44,11 +44,11 @@ docker-build:
 
 .PHONY: docker-up
 docker-up:
-	docker-compose -f ./dev/docker-compose.yml up
+	docker-compose -f ./dev/docker-compose.yml up 
 
 .PHONY: docker-dev
 docker-dev:
-	docker-compose -f ./dev/docker-compose.dev.yml up 
+	docker-compose -f ./dev/docker-compose.dev.yml up --build --force-recreate
 
 .PHONY: docker-down
 docker-down:
