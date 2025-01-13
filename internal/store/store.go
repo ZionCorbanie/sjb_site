@@ -81,7 +81,7 @@ type Session struct {
 }
 
 type UserStore interface {
-	CreateUser(email string, password string) error
+	CreateUser(username string, password string) error
 	GetUser(username string) (*User, error)
 	GetUserById(userId string) (*User, error)
 	SearchUsers(search string) ([]*User, error)

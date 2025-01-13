@@ -25,7 +25,7 @@ func NewUserStore(params NewUserStoreParams) *UserStore {
 	}
 }
 
-func (s *UserStore) CreateUser(email string, password string) error {
+func (s *UserStore) CreateUser(username string, password string) error {
 
 	hashedPassword, err := s.passwordhash.GenerateFromPassword(password)
 	if err != nil {
@@ -33,7 +33,7 @@ func (s *UserStore) CreateUser(email string, password string) error {
 	}
 
 	return s.db.Create(&store.User{
-		Email:    email,
+		Username:    username,
 		Password: hashedPassword,
 	}).Error
 }
