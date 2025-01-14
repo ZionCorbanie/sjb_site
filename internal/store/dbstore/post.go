@@ -27,7 +27,7 @@ func (s *PostStore) CreatePost(post *store.Post) error{
 
 func (s *PostStore) GetPost(postId string) (*store.Post, error){
 	var post store.Post
-	err := s.db.Where("id = ?", postId).First(&post).Error
+	err := s.db.Preload("Author").Where("id = ?", postId).First(&post).Error
 
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (s *PostStore) GetPost(postId string) (*store.Post, error){
 
 func (s *PostStore) GetPostsRange(start int, length int) ([]*store.Post, error){
     var posts []*store.Post
-    err := s.db.Order("date desc").Offset(start).Limit(length).Find(&posts).Error
+    err := s.db.Preload("Author").Order("date desc").Offset(start).Limit(length).Find(&posts).Error
 
     return posts, err
 }
