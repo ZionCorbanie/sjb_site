@@ -74,6 +74,12 @@ func main() {
         },
     )
 
+    postStore := dbstore.NewPostStore(
+        dbstore.NewPostStoreParams{
+            DB: db,
+        },
+    )
+
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
@@ -89,7 +95,13 @@ func main() {
 
 		r.NotFound(handlers.NewNotFoundHandler().ServeHTTP)
 
-		r.Get("/", handlers.NewHomeHandler().ServeHTTP)
+		r.Get("/", handlers.NewHomeHandler(&handlers.HomeHandlerParams{
+            PostStore: postStore,
+        }).ServeHTTP)
+
+        r.Get("/posts/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
+            PostStore: postStore,
+        }).ServeHTTP)
 
 		//Need to be logged in to access these routes
 		r.Group(func(r chi.Router) {
@@ -133,6 +145,10 @@ func main() {
             r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
                 MenuStore: menuStore,
             }).ServeHTTP)
+            r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
+            r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
+                    PostStore: postStore,
+                }).ServeHTTP)
 		})
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)

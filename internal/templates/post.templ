@@ -1,0 +1,14 @@
+package templates
+
+import (
+    "sjb_site/internal/store"
+)
+
+templ Post(post *store.Post){
+    <div class="post">
+        <h1>{ post.Title }</h1>
+        <p>{ post.Author.Username }</p>
+        <p>{ post.Date.Format("02-01-2006") }</p>
+        <p>{ post.Content }</p>
+    </div>
+}

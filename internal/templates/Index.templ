@@ -35,7 +35,7 @@ templ Index(user *store.User, posts []*store.Post) {
         <h1>Laatste nieuws</h1>
         <div class="flex flex-wrap justify-normal">
             for _, post := range posts {
-                <a class="flex-none w-44 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/post/%d", post.ID)) }>
+                <a class="flex-none w-44 mr-5" href={ templ.URL(fmt.Sprintf("/posts/%d", post.ID)) }>
                     <image class="rounded-md" src="/static/img/placeholder-group.png" alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
                     <div class="text-center text-wrap">{ post.Title }</div>
                 </a>

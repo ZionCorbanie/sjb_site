@@ -109,3 +109,9 @@ type MenuStore interface {
     GetMenuRange(start string, length string) ([]*Menu, error)
     CreateMenu(menu *Menu) error
 }
+
+type PostStore interface {
+    CreatePost(post *Post) error
+    GetPost(id string) (*Post, error)
+    GetPostsRange(start int, length int) ([]*Post, error)
+}
