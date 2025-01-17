@@ -133,10 +133,18 @@ func main() {
 			r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
 				MenuStore: menuStore,
 			}).ServeHTTP)
-			r.Get("/users", handlers.NewGetUserManagementHandler().ServeHTTP)
-			r.Post("/users", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
-				UserStore: userStore,
-			}).ServeHTTP)
+			r.Route("/leden", func(r chi.Router) {
+				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
+				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
+					UserStore: userStore,
+				}).ServeHTTP)
+				r.Get("/{userId}", handlers.NewAdminUserEditHandler(handlers.GetAdminUserEditHandlerParams{
+					UserStore: userStore,
+				}).ServeHTTP)
+				r.Patch("/{userId}", handlers.NewPatchAdminUserEditHandler(handlers.PatchAdminUserEditHandlerParams{
+					UserStore: userStore,
+				}).ServeHTTP)
+			})
 		})
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)
