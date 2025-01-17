@@ -61,6 +61,15 @@ type Post struct {
 	Date     time.Time `json:"date"`
 	AuthorID uint      `json:"author_id"`
 	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
+    Comments []Comment `gorm:"foreignKey:PostID" json:"comments"`
+}
+
+type Comment struct {
+    ID      uint      `gorm:"primaryKey" json:"id"`
+    Content string    `json:"content"`
+    Date    time.Time `json:"date"`
+    AuthorID uint     `json:"author_id"`
+    Author   User     `gorm:"foreignKey:AuthorID" json:"author"`
 }
 
 type Menu struct {
