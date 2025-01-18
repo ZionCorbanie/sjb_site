@@ -34,7 +34,7 @@ func (h *DeleteCommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
         return
     }
 
-    if comment.Author.ID != middleware.GetUser(r.Context()).ID || !middleware.IsAdmin(r.Context()) {
+    if comment.Author.ID != middleware.GetUser(r.Context()).ID && !middleware.IsAdmin(r.Context()) {
         w.WriteHeader(http.StatusForbidden)
         return
     }
