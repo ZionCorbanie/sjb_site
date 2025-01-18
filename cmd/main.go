@@ -138,12 +138,17 @@ func main() {
 				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
 					UserStore: userStore,
 				}).ServeHTTP)
-				r.Get("/{userId}", handlers.NewAdminUserEditHandler(handlers.GetAdminUserEditHandlerParams{
-					UserStore: userStore,
-				}).ServeHTTP)
-				r.Patch("/{userId}", handlers.NewPatchAdminUserEditHandler(handlers.PatchAdminUserEditHandlerParams{
-					UserStore: userStore,
-				}).ServeHTTP)
+				r.Route("/{userId}", func(r chi.Router) {
+					r.Get("/", handlers.NewAdminUserEditHandler(handlers.GetAdminUserEditHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Patch("/", handlers.NewPatchAdminUserEditHandler(handlers.PatchAdminUserEditHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Delete("/delete", handlers.NewDeleteUserHandler(handlers.DeleteUserHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+				})
 			})
 		})
 

@@ -3,36 +3,36 @@ package store
 import "time"
 
 type User struct {
-	ID           uint      `gorm:"primaryKey" json:"id"`
-	Email        string    `json:"email" gorm:"type:varchar(255);not null"`
-	Password     string    `json:"-" gorm:"type:varchar(255);not null"`
-	Username     string    `json:"username" gorm:"type:varchar(255)"`
+	ID          uint      `gorm:"primaryKey" json:"id"`
+	Email       string    `json:"email" gorm:"type:varchar(255);not null"`
+	Password    string    `json:"-" gorm:"type:varchar(255);not null"`
+	Username    string    `json:"username" gorm:"type:varchar(255)"`
 	FirstName   string    `json:"first_name" gorm:"type:varchar(255)"`
 	LastName    string    `json:"last_name" gorm:"type:varchar(255)"`
-    StartDate   time.Time `json:"start_date;default:current_timestamp;not null"`
+	StartDate   time.Time `json:"start_date;default:current_timestamp;not null"`
 	EndDate     time.Time `json:"end_date"`
 	UserType    string    `json:"user_type" gorm:"type:enum('admin','lid','oud_lid');default:lid"`
-	Adres        string    `json:"adres" gorm:"type:varchar(255)"`
+	Adres       string    `json:"adres" gorm:"type:varchar(255)"`
 	PhoneNumber string    `json:"phone_number" gorm:"type:varchar(255)"`
-	Image        string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-150x150.png'"`
+	Image       string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-150x150.png'"`
 }
 
 type Parent struct {
-	UserID       uint   `json:"user_id"`
-	User         User   `gorm:"foreignKey:UserID" json:"user"`
-	Title        string `json:"title" gorm:"type:varchar(255)"`
-	Adres        string `json:"adres" gorm:"type:varchar(255)"`
+	UserID      uint   `json:"user_id"`
+	User        User   `gorm:"foreignKey:UserID" json:"user"`
+	Title       string `json:"title" gorm:"type:varchar(255)"`
+	Adres       string `json:"adres" gorm:"type:varchar(255)"`
 	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
 }
 
 type Group struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
 	Name        string    `json:"name"`
-	Email        string    `json:"email"`
-	Website        string    `json:"website"`
-	GroupType  string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep')"`
-	StartDate  time.Time `json:"start_date;default:current_timestamp;not null"`
-	EndDate    time.Time `json:"end_date"`
+	Email       string    `json:"email"`
+	Website     string    `json:"website"`
+	GroupType   string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep')"`
+	StartDate   time.Time `json:"start_date;default:current_timestamp;not null"`
+	EndDate     time.Time `json:"end_date"`
 	Description string    `json:"description" gorm:"type:varchar(2048)"`
 	Image       string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-group.png'"`
 }
@@ -41,7 +41,7 @@ type GroupUser struct {
 	GroupID  uint   `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
 	Group    Group  `gorm:"foreignKey:GroupID" json:"group"`
 	UserID   uint   `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
-	User     User   `gorm:"foreignKey:UserID" json:"user"`
+	User     User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
 	Status   string `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
 	Title    string `json:"title" gorm:"type:varchar(255)"`
 	Function string `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester')"`
@@ -64,13 +64,13 @@ type Post struct {
 }
 
 type Menu struct {
-    ID       uint      `gorm:"primaryKey" json:"id"`
-    Date     time.Time `json:"date"`
-    Name     string    `json:"name" gorm:"type:varchar(255)"`
-    Basis    string    `json:"basis" gorm:"type:varchar(255)"`
-    Vlees    string    `json:"vlees" gorm:"type:varchar(255)"`
-    Vega     string    `json:"vega" gorm:"type:varchar(255)"`
-    Toe      string    `json:"toe" gorm:"type:varchar(255)"`
+	ID    uint      `gorm:"primaryKey" json:"id"`
+	Date  time.Time `json:"date"`
+	Name  string    `json:"name" gorm:"type:varchar(255)"`
+	Basis string    `json:"basis" gorm:"type:varchar(255)"`
+	Vlees string    `json:"vlees" gorm:"type:varchar(255)"`
+	Vega  string    `json:"vega" gorm:"type:varchar(255)"`
+	Toe   string    `json:"toe" gorm:"type:varchar(255)"`
 }
 
 type Session struct {
@@ -86,6 +86,7 @@ type UserStore interface {
 	GetUserById(userId string) (*User, error)
 	SearchUsers(search string) ([]*User, error)
 	PatchUser(user User) error
+	DeleteUser(userId string) error
 }
 
 type SessionStore interface {
@@ -105,7 +106,7 @@ type GroupUserStore interface {
 }
 
 type MenuStore interface {
-    GetMenu(id string) (*Menu, error)
-    GetMenuRange(start string, length string) ([]*Menu, error)
-    CreateMenu(menu *Menu) error
+	GetMenu(id string) (*Menu, error)
+	GetMenuRange(start string, length string) ([]*Menu, error)
+	CreateMenu(menu *Menu) error
 }

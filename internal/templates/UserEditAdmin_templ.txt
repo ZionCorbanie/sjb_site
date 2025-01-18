@@ -8,3 +8,5 @@
 \"></div><div><label for=\"address\">Adres: </label> <input type=\"address\" name=\"address\" id=\"address\" placeholder=\"waar woon je?\" value=\"
 \"></div><div><label for=\"username\">Gebruiksernaam:</label> <input type=\"text\" name=\"username\" id=\"username\" placeholder=\"voornaam.achternaam\" value=\"
 \"></div><div></div><button type=\"submit\">Aanpassen</button></form>
+<h3 class=\"text-2xl\">Lid bewerken</h3><div class=\"flex flex-col space-y-5\"><a class=\"text-red-600\" href=\"/admin/leden\">Leden</a> <button class=\"text-red-600\" hx-delete=\"
+\" hx-confirm=\"Weet je zeker dat je dit lid wilt verwijderen?\">Lid verwijderen</button></div>
