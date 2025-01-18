@@ -7,6 +7,7 @@ services:
       - ..:/app
     environment:
       - ENVIRONMENT=development
+      - TZ=Europe/Amsterdam
     depends_on:
       db:
         condition: service_healthy

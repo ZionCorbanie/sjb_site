@@ -20,8 +20,8 @@ templ Post(post *store.Post){
             hx-swap="innerHTML"
             hx-target="#comments"
             hx-target-400="#commentError">
-            <textarea class="" name="content" placeholder="Schrijf hier je comment"></textarea>
-            <button class="text-secondary-600" type="submit">Verstuur</button>
+            <textarea id="content" class="" name="content" placeholder="Schrijf hier je comment"></textarea>
+            <button class="text-secondary-600" @click="$el.replaceWith($el.cloneNode(true))" type="submit">Verstuur</button>
         </form>
         <div id="commentError"> </div>
 
@@ -50,7 +50,8 @@ templ Comments(comments []*store.Comment){
                         <div class="text-secondary-600 cursor-pointer"
                             hx-delete={ fmt.Sprintf("/comments/%d/%d", comment.PostID, comment.ID) }
                             hx-swap="innerHTML"
-                            hx-target="#comments">
+                            hx-target="#comments"
+                            hx-confirm="Ben je zeker dat je deze comment wil verwijderen?">
                             Delete
                         </div>
                     }
