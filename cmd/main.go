@@ -142,11 +142,15 @@ func main() {
             r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
                 MenuStore: menuStore,
             }).ServeHTTP)
+
             r.Route("/comments/{postId}", func(r chi.Router) {
                 r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
                     CommentStore: commentStore,
                 }).ServeHTTP)
                 r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
+                    CommentStore: commentStore,
+                }).ServeHTTP)
+                r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
                     CommentStore: commentStore,
                 }).ServeHTTP)
             })

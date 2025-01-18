@@ -129,4 +129,6 @@ type PostStore interface {
 type CommentStore interface {
     CreateComment(comment *Comment) error
     GetCommentsByPost(postId string) ([]*Comment, error)
+    GetComment(commentId string) (*Comment, error)
+    DeleteComment(commentId string) error
 }

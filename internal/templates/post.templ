@@ -36,6 +36,31 @@ templ Post(post *store.Post){
     }
 }
 
+templ Comments(comments []*store.Comment){
+    for _, comment := range comments {
+        <div class="flex flex-row flex-wrap mt-5">
+            <div class="flex flex-row">
+                <a href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", comment.Author.ID)) }> 
+                    <image class="rounded-full w-20" src={ comment.Author.Image } alt={ fmt.Sprintf("Foto van %s", comment.Author.Username) }/> 
+                </a>
+                <div class="ml-2"> 
+                    <a class="underline" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", comment.Author.ID)) }>{ fmt.Sprintf("%s %s", comment.Author.FirstName, comment.Author.LastName) }</a>
+                    <p class="text-neutral-600">{ comment.Date.Format("02-01-2006 15:04") }</p>
+                    if comment.Author.ID == middleware.GetUser(ctx).ID || middleware.IsAdmin(ctx){
+                        <div class="text-secondary-600 cursor-pointer"
+                            hx-delete={ fmt.Sprintf("/comments/%d/%d", comment.PostID, comment.ID) }
+                            hx-swap="innerHTML"
+                            hx-target="#comments">
+                            Delete
+                        </div>
+                    }
+                </div>
+            </div>
+            <p class="ml-10">{ comment.Content }</p>
+        </div>
+    }
+}
+
 templ CommentError(err string){
     <div class="text-red-600">{ err }</div>
 }
