@@ -61,7 +61,7 @@ type Post struct {
 	Date     time.Time `json:"date"`
 	AuthorID uint      `json:"author_id"`
 	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
-    Comments []Comment `gorm:"foreignKey:PostID" json:"comments"`
+    Comments []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE;" json:"comments"`
 }
 
 type Comment struct {
@@ -70,6 +70,7 @@ type Comment struct {
     Date    time.Time `json:"date"`
     AuthorID uint     `json:"author_id"`
     Author   User     `gorm:"foreignKey:AuthorID" json:"author"`
+    PostID   uint      `json:"post_id"`
 }
 
 type Menu struct {
@@ -123,4 +124,9 @@ type PostStore interface {
     CreatePost(post *Post) error
     GetPost(id string) (*Post, error)
     GetPostsRange(start int, length int) ([]*Post, error)
+}
+
+type CommentStore interface {
+    CreateComment(comment *Comment) error
+    GetCommentsByPost(postId string) ([]*Comment, error)
 }

@@ -2,13 +2,40 @@ package templates
 
 import (
     "sjb_site/internal/store"
+	"sjb_site/internal/middleware"
+	"fmt"
 )
 
 templ Post(post *store.Post){
-    <div class="post">
-        <h1>{ post.Title }</h1>
-        <p>{ post.Author.Username }</p>
-        <p>{ post.Date.Format("02-01-2006") }</p>
-        <p>{ post.Content }</p>
+    <a class="underline" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>{ post.Author.FirstName } { post.Author.LastName }</a>
+    <p class="text-neutral-600">{ post.Date.Format("02-01-2006") }</p>
+    <div class="mt-5 md:mx-10">
+        <p class="text-justify">{ post.Content }</p>
     </div>
+    if middleware.GetUser(ctx) != nil{
+        <hr class="my-5">
+
+        <h2 class="text-secondary-600">Laat een comment achter</h2>
+        <form hx-post={ fmt.Sprintf("/comments/%d", post.ID) } 
+            hx-swap="innerHTML"
+            hx-target="#comments"
+            hx-target-400="#commentError">
+            <textarea class="" name="content" placeholder="Schrijf hier je comment"></textarea>
+            <button class="text-secondary-600" type="submit">Verstuur</button>
+        </form>
+        <div id="commentError"> </div>
+
+        <h2 class="text-secondary-600">Comments</h2>
+        <div id="comments" 
+            hx-get={ fmt.Sprintf("/comments/%d", post.ID) } 
+            hx-trigger="load"
+            hx-swap="innerHTML">
+
+            hier komen comments fzo
+        </div>
+    }
+}
+
+templ CommentError(err string){
+    <div class="text-red-600">{ err }</div>
 }

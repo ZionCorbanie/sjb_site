@@ -80,6 +80,12 @@ func main() {
         },
     )
 
+    commentStore := dbstore.NewCommentStore(
+        dbstore.NewCommentStoreParams{
+            DB: db,
+        },
+    )
+
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
@@ -136,6 +142,14 @@ func main() {
             r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
                 MenuStore: menuStore,
             }).ServeHTTP)
+            r.Route("/comments/{postId}", func(r chi.Router) {
+                r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
+                    CommentStore: commentStore,
+                }).ServeHTTP)
+                r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
+                    CommentStore: commentStore,
+                }).ServeHTTP)
+            })
 		})
 
 		r.Route("/admin", func(r chi.Router) {

@@ -48,7 +48,7 @@ func MustOpen(dbName string) *gorm.DB {
 		panic(err)
 	}
 
-	err = db.AutoMigrate(&store.User{}, &store.Session{}, &store.Group{}, &store.GroupUser{}, &store.Parent{}, &store.ParentGroup{}, &store.Post{}, &store.Menu{})
+	err = db.AutoMigrate(&store.User{}, &store.Session{}, &store.Group{}, &store.GroupUser{}, &store.Parent{}, &store.ParentGroup{}, &store.Post{}, &store.Menu{}, &store.Comment{})
 
 	if err != nil {
 		panic(err)
