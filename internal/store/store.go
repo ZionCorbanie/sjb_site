@@ -17,14 +17,6 @@ type User struct {
 	Image        string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-150x150.png'"`
 }
 
-type Parent struct {
-	UserID       uint   `json:"user_id"`
-	User         User   `gorm:"foreignKey:UserID" json:"user"`
-	Title        string `json:"title" gorm:"type:varchar(255)"`
-	Adres        string `json:"adres" gorm:"type:varchar(255)"`
-	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
-}
-
 type Group struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
 	Name        string    `json:"name"`
@@ -39,12 +31,20 @@ type Group struct {
 
 type GroupUser struct {
 	GroupID  uint   `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
-	Group    Group  `gorm:"foreignKey:GroupID" json:"group"`
+	Group    Group  `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
 	UserID   uint   `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
-	User     User   `gorm:"foreignKey:UserID" json:"user"`
+	User     User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
 	Status   string `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
 	Title    string `json:"title" gorm:"type:varchar(255)"`
 	Function string `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester')"`
+}
+
+type Parent struct {
+	UserID       uint   `json:"user_id"`
+	User         User   `gorm:"foreignKey:UserID" json:"user"`
+	Title        string `json:"title" gorm:"type:varchar(255)"`
+	Adres        string `json:"adres" gorm:"type:varchar(255)"`
+	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
 }
 
 type ParentGroup struct {
@@ -69,7 +69,7 @@ type Comment struct {
     Content string    `json:"content"`
     Date    time.Time `json:"date"`
     AuthorID uint     `json:"author_id"`
-    Author   User     `gorm:"foreignKey:AuthorID" json:"author"`
+    Author   User     `gorm:"foreignKey:AuthorID;constraint:OnDelete:CASCADE;" json:"author"`
     PostID   uint      `json:"post_id"`
 }
 
