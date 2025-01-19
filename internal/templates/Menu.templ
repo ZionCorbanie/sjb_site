@@ -52,3 +52,82 @@ templ MenuDay(menu *store.Menu) {
         </div>
     </div>
 }
+
+templ Eettafel(page int) {
+    <div class="flex flex-col justify-center">
+        <h1>
+            Eettafel
+        </h1>
+        <div hx-get={ fmt.Sprintf("/eettafel/%d", page) } hx-swap="outerHTML" hx-trigger="load">
+            Menu
+        </div>
+    </div>
+}
+
+templ WeekMenu(menus []*store.Menu) {
+    <div id="menu" class="">
+        <h3>
+            Menu
+        </h3>
+        <div>
+            <button hx-get={ fmt.Sprintf("/eettafel/%d",menus[0].ID-7) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                vorige
+            </button>
+            <button hx-get={ fmt.Sprintf("/eettafel/%d",menus[0].ID+7)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                volgende
+            </button>
+        </div>
+        <div class="flex md:w-4/5 flex-col justify-center">
+            <table class="">
+                <tr>
+                    <th>Datum</th>
+                    <th></th>
+                    <th>Gerecht</th>
+                    <th>Alergiën</th>
+                </tr>
+                for _, menu := range menus {
+                    <tr>
+                        <td>
+                            {menu.Date.Format("02-01-2006")}
+                        </td>
+                        <td>
+                            Gerecht:<br>
+                            Basis:<br>
+                            Vlees:<br>
+                            Vega:<br>
+                            Toe:
+                        </td>
+                        <td>
+                            <div>
+                                {menu.Name}
+                            </div>
+                            <div>
+                                if menu.Basis != "" {
+                                    {menu.Basis}
+                                }
+                            </div>
+                            <div>
+                                if menu.Vlees != "" {
+                                    {menu.Vlees}
+                                }
+                            </div>
+                            <div>
+                                if menu.Vega != "" {
+                                    {menu.Vega}
+                                }
+                            </div>
+                            <div>
+                                if menu.Toe != "" {
+                                    {menu.Toe}
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            {menu.Vlees}
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+}
