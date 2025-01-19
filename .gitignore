@@ -4,3 +4,6 @@ tmp
 tailwindcss
 dev/database/
 static/uploads/
+static/css/style.min.css
+internal/templates/*.go
+internal/templates/*.txt
