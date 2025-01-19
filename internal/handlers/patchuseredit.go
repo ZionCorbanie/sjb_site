@@ -59,7 +59,7 @@ func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
     if err == nil {
         defer file.Close()
 
-        fileName := fmt.Sprint("%d%s",userId,filepath.Ext(header.Filename))
+        fileName := fmt.Sprintf("%d%s",userId,filepath.Ext(header.Filename))
         uploadDir := "static/uploads/user"
         os.MkdirAll(uploadDir, os.ModePerm)
         filePath := filepath.Join(uploadDir, fileName)

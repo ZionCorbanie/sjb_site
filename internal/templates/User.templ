@@ -8,7 +8,9 @@ import (
 
 templ User(User *store.User) {
     <div>
-        <image class="rounded-full" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
+        <div class="w-32 h-32 overflow-hidden">
+            <image class="rounded-full w-full h-full object-cover object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
+        </div>
         if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
             <a href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }> wijzig </a>
         }

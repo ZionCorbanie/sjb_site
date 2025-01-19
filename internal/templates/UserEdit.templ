@@ -24,11 +24,13 @@ templ UserEdit(user *store.User) {
             enctype="multipart/form-data"
         >
             <label for="profile-image" class="cursor-pointer">
-                <img 
-                    class="rounded-full" 
-                    :src="previewUrl"
-                    alt={ fmt.Sprintf("Foto van %s", user.Username) }
-                />
+                <div class="w-32 h-32 overflow-hidden">
+                    <img 
+                        class="rounded-full w-full h-full object-cover object-center" 
+                        :src="previewUrl"
+                        alt={ fmt.Sprintf("Foto van %s", user.Username) }
+                    />
+                </div>
             </label>
             <input 
                 id="profile-image" 
