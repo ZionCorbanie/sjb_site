@@ -10,6 +10,7 @@ import (
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -58,6 +59,15 @@ func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
     file, header, err := r.FormFile("image")
     if err == nil {
         defer file.Close()
+
+        oldUser, err := h.userStore.GetUserById(chi.URLParam(r, "userId"))
+        if strings.Contains(oldUser.Image, "uploads/user") {
+            err = os.Remove(oldUser.Image[1:])
+            if err != nil {
+                fmt.Printf("Error deleting file: %s\n", oldUser.Image)
+            }
+        }
+        
 
         fileName := fmt.Sprintf("%d%s",userId,filepath.Ext(header.Filename))
         uploadDir := "static/uploads/user"
