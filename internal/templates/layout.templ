@@ -131,13 +131,13 @@ templ nav() {
 
 templ Layout(contents templ.Component, title string) {
 	@header(title)
-	<body>
-        <div class="w-full bg-[url('/static/img/delft_background.jpg')]">
+	<body class="bg-fixed" style="background-image: url('/static/img/delft_background.jpg');">
+        <div class="w-full">
             <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
                 <div class="bg-primary shadow-xl">
                     @nav()
                 </div>
-                <main class="bg-primary flex-1 shadow-xl mt-5 p-7">
+                <main class="rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
                     @contents
                 </main>
                 @footer()
@@ -148,8 +148,8 @@ templ Layout(contents templ.Component, title string) {
 
 templ BannerLayout(contents templ.Component, banner string, title string) {
 	@header(title)
-	<body>
-        <div class="w-full bg-[url('/static/img/delft_background.jpg')]">
+        <body class="bg-fixed" style="background-image: url('/static/img/delft_background.jpg');">
+        <div class="w-full">
             <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
                 <div class="bg-primary shadow-xl">
                     @nav()
@@ -158,10 +158,10 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
                     <div class="w-full h-80">
                         <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
                     </div>
-                    <h1 class="text-2xl p-3 pl-5">{ title }</h1>
+                    <h1 class="text-secondary-600 text-2xl p-3 pl-5">{ title }</h1>
                 </div>
 
-                <main class="bg-primary flex-1 shadow-xl mt-5 p-7">
+                <main class="rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
                     @contents
                 </main>
                 @footer()
