@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/go-chi/chi/v5"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type PatchUserEditHandler struct {
@@ -36,10 +37,18 @@ func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 	address := r.FormValue("address")
 	phone := r.FormValue("phone")
 
+	validateErr := h.userStore.ValidateInput(email, address, userId)
+	if validateErr != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		c := templates.RegisterError()
+		c.Render(r.Context(), w)
+		return
+	}
+
 	userPatch := store.User{
-		ID:           uint(userId),
-		Email:        email,
-		Adres:        address,
+		ID:          uint(userId),
+		Email:       email,
+		Adres:       address,
 		PhoneNumber: phone,
 	}
 

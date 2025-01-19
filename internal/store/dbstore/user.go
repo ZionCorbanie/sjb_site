@@ -33,7 +33,7 @@ func (s *UserStore) CreateUser(username string, password string) error {
 	}
 
 	return s.db.Create(&store.User{
-		Username:    username,
+		Username: username,
 		Password: hashedPassword,
 	}).Error
 }
@@ -73,4 +73,27 @@ func (s *UserStore) SearchUsers(search string) ([]*store.User, error) {
 
 func (s *UserStore) PatchUser(user store.User) error {
 	return s.db.Model(&store.User{}).Where("id = ?", user.ID).Updates(user).Error
+}
+
+func (s *UserStore) ValidateInput(email, address string, userId uint64) error {
+	var emailCount, addressCount int64
+
+	if err := s.db.Model(&store.User{}).Where("email = ? AND id != ?", email, userId).Count(&emailCount).Error; err != nil {
+		return err
+	}
+
+	if err := s.db.Model(&store.User{}).Where("adres = ? AND id != ?", address, userId).Count(&addressCount).Error; err != nil {
+		return err
+	}
+
+	// If we found any users with the same email or address, return an error
+	if emailCount > 0 {
+		return fmt.Errorf("email")
+	}
+
+	if addressCount > 0 {
+		return fmt.Errorf("address")
+	}
+
+	return nil
 }
