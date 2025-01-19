@@ -1,0 +1,29 @@
+package templates
+
+import(
+    "sjb_site/internal/store"
+    "fmt"
+)
+
+templ UserManagement() {
+    <input class="form-control my-5" type="search"
+       name="search" placeholder="Zoek voor naam, email, telefoon, adres"
+       hx-post="/admin/users"
+       hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+       hx-target="#leden">   
+
+    <div id="leden" class="mx-auto">
+    </div>
+}
+
+templ RenderUserManagement(leden []*store.User) {
+    <div class="flex flex-wrap justify-center">
+        for _, lid := range leden {
+            <a class="flex-none w-24 md:w-28 mx-2 mb-2" href={ templ.URL(fmt.Sprintf("/admin/users/%d", lid.ID)) }>
+                <image class="rounded-full" src={ lid.Image } alt={ fmt.Sprintf("Foto van %s", lid.Username) }/>
+                <div class="text-center text-wrap">{ lid.FirstName }</div>
+                <div class="text-center text-wrap">{ lid.LastName }</div>
+            </a>
+        }
+    </div>
+}

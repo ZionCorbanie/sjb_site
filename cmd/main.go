@@ -68,11 +68,11 @@ func main() {
 		},
 	)
 
-    menuStore := dbstore.NewMenuStore(
-        dbstore.NewMenuStoreParams{
-            DB: db,
-        },
-    )
+	menuStore := dbstore.NewMenuStore(
+		dbstore.NewMenuStoreParams{
+			DB: db,
+		},
+	)
 
     postStore := dbstore.NewPostStore(
         dbstore.NewPostStoreParams{
@@ -176,6 +176,10 @@ func main() {
             r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
                     PostStore: postStore,
                 }).ServeHTTP)
+			r.Get("/users", handlers.NewGetUserManagementHandler().ServeHTTP)
+			r.Post("/users", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
+				UserStore: userStore,
+			}).ServeHTTP)
 		})
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)
