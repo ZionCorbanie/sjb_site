@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
@@ -43,7 +44,8 @@ func (h *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
             return
         }
         if user == nil && !post.External{
-			http.Redirect(w, r, "/login", http.StatusFound)
+            target := r.URL.Path
+            http.Redirect(w, r, fmt.Sprintf("/login?redirect=%s", target), http.StatusFound)
 			return
         }
     }
