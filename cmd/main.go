@@ -74,17 +74,17 @@ func main() {
 		},
 	)
 
-    postStore := dbstore.NewPostStore(
-        dbstore.NewPostStoreParams{
-            DB: db,
-        },
-    )
+	postStore := dbstore.NewPostStore(
+		dbstore.NewPostStoreParams{
+			DB: db,
+		},
+	)
 
-    commentStore := dbstore.NewCommentStore(
-        dbstore.NewCommentStoreParams{
-            DB: db,
-        },
-    )
+	commentStore := dbstore.NewCommentStore(
+		dbstore.NewCommentStoreParams{
+			DB: db,
+		},
+	)
 
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
@@ -102,36 +102,35 @@ func main() {
 		r.NotFound(handlers.NewNotFoundHandler().ServeHTTP)
 
 		r.Get("/", handlers.NewHomeHandler(&handlers.HomeHandlerParams{
-            PostStore: postStore,
-        }).ServeHTTP)
+			PostStore: postStore,
+		}).ServeHTTP)
 
-        r.Get("/post/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
-            PostStore: postStore,
-        }).ServeHTTP)
+		r.Get("/post/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
+			PostStore: postStore,
+		}).ServeHTTP)
 
-        r.Get("/posts", handlers.NewPostsHandler(handlers.PostsHandlerParams{
-            PostsStore: postStore,
-        }).ServeHTTP)
-        r.Get("/posts/{page}", handlers.NewPostsHandler(handlers.PostsHandlerParams{
-            PostsStore: postStore,
-        }).ServeHTTP)
+		r.Get("/posts", handlers.NewPostsHandler(handlers.PostsHandlerParams{
+			PostsStore: postStore,
+		}).ServeHTTP)
+		r.Get("/posts/{page}", handlers.NewPostsHandler(handlers.PostsHandlerParams{
+			PostsStore: postStore,
+		}).ServeHTTP)
 
-        r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
-            MenuStore: menuStore,
-        }).ServeHTTP)
+		r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
+			MenuStore: menuStore,
+		}).ServeHTTP)
 
-        r.Route("/comments/{postId}", func(r chi.Router) {
-            r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
-                CommentStore: commentStore,
-            }).ServeHTTP)
-            r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
-                CommentStore: commentStore,
-            }).ServeHTTP)
-            r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
-                CommentStore: commentStore,
-            }).ServeHTTP)
-        })
-
+		r.Route("/comments/{postId}", func(r chi.Router) {
+			r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
+				CommentStore: commentStore,
+			}).ServeHTTP)
+			r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
+				CommentStore: commentStore,
+			}).ServeHTTP)
+			r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
+				CommentStore: commentStore,
+			}).ServeHTTP)
+		})
 
 		//Need to be logged in to access these routes
 		r.Group(func(r chi.Router) {
@@ -172,10 +171,10 @@ func main() {
 			r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
 				MenuStore: menuStore,
 			}).ServeHTTP)
-      r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
-      r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
-              PostStore: postStore,
-        }).ServeHTTP)
+			r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
+			r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
+				PostStore: postStore,
+			}).ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {
 				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
 				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
@@ -192,6 +191,20 @@ func main() {
 						UserStore: userStore,
 					}).ServeHTTP)
 				})
+			})
+			r.Get("/groep/{groupId}", handlers.NewAdminGroupEditHandler(handlers.GetAdminGroupEditHandlerParams{
+				GroupStore: groupStore,
+			}).ServeHTTP)
+			r.Patch("/groep/{groupId}", handlers.NewPatchAdminGroupEditHandler(handlers.PatchAdminGroupEditHandlerParams{
+				GroupStore: groupStore,
+			}).ServeHTTP)
+			r.Delete("/groep/{groupId}", handlers.NewDeleteGroupHandler(handlers.DeleteGroupHandlerParams{
+				GroupStore: groupStore,
+			}).ServeHTTP)
+			r.Route("/groepen", func(r chi.Router) {
+				r.Get("/{groupType}", handlers.NewGroupManagementHandler(handlers.GetGroupManagementHandlerParams{
+					GroupStore: groupStore,
+				}).ServeHTTP)
 			})
 		})
 

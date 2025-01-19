@@ -1,0 +1,55 @@
+package templates
+
+import (
+    "sjb_site/internal/store"
+    "fmt"
+)
+
+templ GroupEditAdmin(group *store.Group) {
+    <image class="rounded-full" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
+    <form
+        hx-patch={ fmt.Sprintf("/admin/groep/%d", group.ID) }
+        hx-trigger="submit"
+        hx-target-401="#register-error"
+    >
+        <div id="register-error"></div>
+        <div>
+            <label for="name">Naam:</label>
+            <input type="text" name="name" id="name" placeholder="Naam" required="" value={ group.Name }/>
+        </div>
+        <div>
+            <label for="email">Email: </label>
+            <input type="email" name="email" id="email" placeholder="naam@mail.com" required="" value={ group.Email }/>
+        </div>
+        <div>
+            <label for="website">Website: </label>
+            <input type="text" name="website" id="website" placeholder="www.site.nl" required="" value={ group.Website }/>
+        </div>
+        <div>
+            <label for="description">Beschrijving: </label>
+            <input type="text" name="description" id="description" placeholder="Gaafste groepering van SJB" value={ group.Description }/>
+        </div>
+        <div>
+            //TODO: Image upload
+        </div>
+        <button type="submit">
+            Aanpassen
+        </button>
+    </form>
+    <button class="border border-red-600 rounded hover:bg-red-100 text-red-600" hx-delete={ fmt.Sprintf("/admin/groep/%d", group.ID) } hx-confirm="Weet je zeker dat je deze groep wilt verwijderen?">Groep verwijderen</button>
+}
+
+templ AdminSidebarGroup(group *store.Group, groups []*store.Group) {
+    <h3 class="text-2xl">Groep bewerken</h3>
+    <div class="flex flex-col space-y-5">
+        <a class="text-red-600" href="/admin/groepen/gilde">Gildes</a>
+        <a class="text-red-600" href="/admin/groepen/commissie">Commissies</a>
+        <a class="text-red-600" href="/admin/groepen/jaarclub">Jaarclubs</a>
+    </div>
+    <div class="flex flex-col space-y-5">
+        <h3 class="text-2xl pt-5">Meer { group.GroupType }:</h3>
+        for _, group := range groups {
+            <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/admin/groep/%d", group.ID)) }>{ group.Name }</a>
+        }
+    </div>
+}

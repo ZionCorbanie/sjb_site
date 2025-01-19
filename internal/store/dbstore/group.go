@@ -44,3 +44,11 @@ func (s *GroupStore) GetGroupsByType(groupType string) ([]*store.Group, error) {
 	}
 	return groups, err
 }
+
+func (s *GroupStore) PatchGroup(group store.Group) error {
+	return s.db.Model(&store.Group{}).Where("id = ?", group.ID).Updates(group).Error
+}
+
+func (s *GroupStore) DeleteGroup(groupId string) error {
+	return s.db.Delete(&store.Group{}, "id = ?", groupId).Error
+}
