@@ -168,18 +168,31 @@ func main() {
 		r.Route("/admin", func(r chi.Router) {
 			r.Use(authMiddleware.IsAdmin)
 			r.Get("/", handlers.NewAdminHandler().ServeHTTP)
-            r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
-            r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
-                MenuStore: menuStore,
-            }).ServeHTTP)
-            r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
-            r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
-                    PostStore: postStore,
-                }).ServeHTTP)
-			r.Get("/users", handlers.NewGetUserManagementHandler().ServeHTTP)
-			r.Post("/users", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
-				UserStore: userStore,
+			r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
+			r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
+				MenuStore: menuStore,
 			}).ServeHTTP)
+      r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
+      r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
+              PostStore: postStore,
+        }).ServeHTTP)
+			r.Route("/leden", func(r chi.Router) {
+				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
+				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
+					UserStore: userStore,
+				}).ServeHTTP)
+				r.Route("/{userId}", func(r chi.Router) {
+					r.Get("/", handlers.NewAdminUserEditHandler(handlers.GetAdminUserEditHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Patch("/", handlers.NewPatchAdminUserEditHandler(handlers.PatchAdminUserEditHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Delete("/delete", handlers.NewDeleteUserHandler(handlers.DeleteUserHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+				})
+			})
 		})
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)

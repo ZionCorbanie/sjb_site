@@ -107,6 +107,7 @@ type UserStore interface {
 	SearchUsers(search string) ([]*User, error)
 	PatchUser(user User) error
 	ValidateInput(email, address string, userId uint64) error
+	DeleteUser(userId string) error
 }
 
 type SessionStore interface {
