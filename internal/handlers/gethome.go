@@ -25,7 +25,10 @@ func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	user, _ := r.Context().Value(middleware.UserKey).(*store.User)
 
-    posts, err := h.postStore.GetPostsRange(0, 10)
+    admin := middleware.IsAdmin(r.Context())
+    external := user == nil
+
+    posts, err := h.postStore.GetPostsRange(0, 3, admin, external)
     if err != nil {
         http.Error(w, "Error getting posts", http.StatusInternalServerError)
         return

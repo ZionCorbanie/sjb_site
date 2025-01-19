@@ -61,6 +61,8 @@ type Post struct {
 	Date     time.Time `json:"date"`
 	AuthorID uint      `json:"author_id"`
 	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
+    Published   bool      `gorm:"default:False" json:"public"`
+    External bool      `gorm:"default:False" json:"external"`
     Comments []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE;" json:"comments"`
 }
 
@@ -123,7 +125,7 @@ type MenuStore interface {
 type PostStore interface {
     CreatePost(post *Post) error
     GetPost(id string) (*Post, error)
-    GetPostsRange(start int, length int) ([]*Post, error)
+    GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
 }
 
 type CommentStore interface {

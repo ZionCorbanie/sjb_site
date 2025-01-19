@@ -105,9 +105,33 @@ func main() {
             PostStore: postStore,
         }).ServeHTTP)
 
-        r.Get("/posts/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
+        r.Get("/post/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
             PostStore: postStore,
         }).ServeHTTP)
+
+        r.Get("/posts", handlers.NewPostsHandler(handlers.PostsHandlerParams{
+            PostsStore: postStore,
+        }).ServeHTTP)
+        r.Get("/posts/{page}", handlers.NewPostsHandler(handlers.PostsHandlerParams{
+            PostsStore: postStore,
+        }).ServeHTTP)
+
+        r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
+            MenuStore: menuStore,
+        }).ServeHTTP)
+
+        r.Route("/comments/{postId}", func(r chi.Router) {
+            r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
+                CommentStore: commentStore,
+            }).ServeHTTP)
+            r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
+                CommentStore: commentStore,
+            }).ServeHTTP)
+            r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
+                CommentStore: commentStore,
+            }).ServeHTTP)
+        })
+
 
 		//Need to be logged in to access these routes
 		r.Group(func(r chi.Router) {
@@ -139,21 +163,6 @@ func main() {
 					GroupUserStore: groupUserStore,
 				}).ServeHTTP)
 			})
-            r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
-                MenuStore: menuStore,
-            }).ServeHTTP)
-
-            r.Route("/comments/{postId}", func(r chi.Router) {
-                r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
-                    CommentStore: commentStore,
-                }).ServeHTTP)
-                r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
-                    CommentStore: commentStore,
-                }).ServeHTTP)
-                r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
-                    CommentStore: commentStore,
-                }).ServeHTTP)
-            })
 		})
 
 		r.Route("/admin", func(r chi.Router) {

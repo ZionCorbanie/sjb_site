@@ -35,9 +35,18 @@ func (s *PostStore) GetPost(postId string) (*store.Post, error){
 	return &post, err
 }
 
-func (s *PostStore) GetPostsRange(start int, length int) ([]*store.Post, error){
+func (s *PostStore) GetPostsRange(start int, length int, admin bool, external bool) ([]*store.Post, error){
     var posts []*store.Post
-    err := s.db.Preload("Author").Order("date desc").Offset(start).Limit(length).Find(&posts).Error
+    db := s.db.Preload("Author")
+
+    if !admin{
+        if external{
+            db = db.Where("external = True")
+        }
+        db = db.Where("published = True")
+    }
+
+    err := db.Order("date desc").Offset(start).Limit(length).Find(&posts).Error
 
     return posts, err
 }
