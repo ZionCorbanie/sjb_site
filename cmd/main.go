@@ -172,10 +172,10 @@ func main() {
 			r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
 				MenuStore: menuStore,
 			}).ServeHTTP)
-      r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
-      r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
-              PostStore: postStore,
-        }).ServeHTTP)
+            r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
+            r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
+                    PostStore: postStore,
+            }).ServeHTTP) 
 			r.Route("/leden", func(r chi.Router) {
 				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
 				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
