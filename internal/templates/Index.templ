@@ -33,13 +33,22 @@ templ Index(user *store.User, posts []*store.Post) {
     <hr>
     <div>
         <h1>Laatste nieuws</h1>
-        <div class="flex flex-wrap justify-normal">
+        <div class="flex flex-wrap justify-around mt-5">
             for _, post := range posts {
-                <a class="flex-none w-44 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/post/%d", post.ID)) }>
-                    <image class="rounded-md" src="/static/img/placeholder-group.png" alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
-                    <div class="text-center text-wrap">{ post.Title }</div>
-                </a>
+                <div class="flex-none w-64 mx-2">
+                    <a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
+                        { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
+                    </a>
+                    <div>{ post.Date.Format("02-01-2006") }</div>
+                    <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) }>
+                        <image class="rounded-md" src="/static/img/placeholder-group.png" alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                        <div class="text-center text-wrap">{ post.Title }</div>
+                    </a>
+                </div>
             }
+        </div>
+        <div class="flex justify-center mt-5">
+            <a href="/posts">Bekijk alle posts</a>
         </div>
     </div>
 }

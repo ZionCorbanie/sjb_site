@@ -39,12 +39,20 @@ type Group struct {
 
 type GroupUser struct {
 	GroupID  uint   `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
-	Group    Group  `gorm:"foreignKey:GroupID" json:"group"`
+	Group    Group  `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
 	UserID   uint   `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
 	User     User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
 	Status   string `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
 	Title    string `json:"title" gorm:"type:varchar(255)"`
 	Function string `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester')"`
+}
+
+type Parent struct {
+	UserID       uint   `json:"user_id"`
+	User         User   `gorm:"foreignKey:UserID" json:"user"`
+	Title        string `json:"title" gorm:"type:varchar(255)"`
+	Adres        string `json:"adres" gorm:"type:varchar(255)"`
+	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
 }
 
 type ParentGroup struct {
@@ -61,6 +69,18 @@ type Post struct {
 	Date     time.Time `json:"date"`
 	AuthorID uint      `json:"author_id"`
 	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
+    Published   bool      `gorm:"default:False" json:"public"`
+    External bool      `gorm:"default:False" json:"external"`
+    Comments []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE;" json:"comments"`
+}
+
+type Comment struct {
+    ID      uint      `gorm:"primaryKey" json:"id"`
+    Content string    `json:"content"`
+    Date    time.Time `json:"date"`
+    AuthorID uint     `json:"author_id"`
+    Author   User     `gorm:"foreignKey:AuthorID;constraint:OnDelete:CASCADE;" json:"author"`
+    PostID   uint      `json:"post_id"`
 }
 
 type Menu struct {
@@ -109,4 +129,17 @@ type MenuStore interface {
 	GetMenu(id string) (*Menu, error)
 	GetMenuRange(start string, length string) ([]*Menu, error)
 	CreateMenu(menu *Menu) error
+}
+
+type PostStore interface {
+    CreatePost(post *Post) error
+    GetPost(id string) (*Post, error)
+    GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
+}
+
+type CommentStore interface {
+    CreateComment(comment *Comment) error
+    GetCommentsByPost(postId string) ([]*Comment, error)
+    GetComment(commentId string) (*Comment, error)
+    DeleteComment(commentId string) error
 }

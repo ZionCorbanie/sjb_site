@@ -7,21 +7,35 @@ import (
 	"sjb_site/internal/templates"
 )
 
-type HomeHandler struct{}
+type HomeHandler struct{
+    postStore store.PostStore
+}
 
-func NewHomeHandler() *HomeHandler {
-	return &HomeHandler{}
+type HomeHandlerParams struct {
+    PostStore store.PostStore
+}
+
+func NewHomeHandler(params *HomeHandlerParams) *HomeHandler {
+	return &HomeHandler{
+        postStore: params.PostStore,
+    }
 }
 
 func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	user, _ := r.Context().Value(middleware.UserKey).(*store.User)
 
-    // get alle posts ffe hier
-    posts := make([]*store.Post, 0)
+    admin := middleware.IsAdmin(r.Context())
+    external := user == nil
+
+    posts, err := h.postStore.GetPostsRange(0, 3, admin, external)
+    if err != nil {
+        http.Error(w, "Error getting posts", http.StatusInternalServerError)
+        return
+    }
 
 	c := templates.Index(user, posts)
-	err := templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
+	err = templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
