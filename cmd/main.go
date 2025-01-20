@@ -192,6 +192,10 @@ func main() {
 					}).ServeHTTP)
 				})
 			})
+			r.Get("/groep", handlers.NewGetCreateGroupHandler().ServeHTTP)
+			r.Post("/groep", handlers.NewPostCreateGroupHandler(handlers.PostCreateGroupHandlerParams{
+				GroupStore: groupStore,
+			}).ServeHTTP)
 			r.Get("/groep/{groupId}", handlers.NewAdminGroupEditHandler(handlers.GetAdminGroupEditHandlerParams{
 				GroupStore: groupStore,
 			}).ServeHTTP)
