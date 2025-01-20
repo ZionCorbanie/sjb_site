@@ -33,12 +33,6 @@ func (h *PatchAdminGroupEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Re
 	}
 
 	name := r.FormValue("name")
-	validateErr := h.GroupStore.ValidateInput(name, groupId)
-	if validateErr != nil {
-		templates.GroupError(validateErr).Render(r.Context(), w)
-		return
-	}
-
 	email := r.FormValue("email")
 	description := r.FormValue("description")
 	website := r.FormValue("website")
@@ -52,12 +46,16 @@ func (h *PatchAdminGroupEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Re
 		Description: description,
 	}
 
+	validateErr := h.GroupStore.ValidateInput(GroupPatch)
+	if validateErr != nil {
+		templates.GroupError(validateErr).Render(r.Context(), w)
+		return
+	}
+
 	err := h.GroupStore.PatchGroup(GroupPatch)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		c := templates.RegisterError()
-		c.Render(r.Context(), w)
+		templates.GroupError(err).Render(r.Context(), w)
 		return
 	}
 

@@ -23,22 +23,21 @@ func NewPostCreateGroupHandler(params PostCreateGroupHandlerParams) *PostCreateG
 func (h *PostCreateGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
-	name := r.Form.Get("name")
-	validateErr := h.groupStore.ValidateInput(name, 0)
-	if validateErr != nil {
-		templates.GroupError(validateErr).Render(r.Context(), w)
-		return
-	}
-
-	group := &store.Group{
+	group := store.Group{
 		GroupType:   r.Form.Get("groupType"),
-		Name:        name,
+		Name:        r.Form.Get("name"),
 		Description: r.Form.Get("description"),
 		Email:       r.Form.Get("email"),
 		Website:     r.Form.Get("website"),
 	}
 
-	err := h.groupStore.CreateGroup(group)
+	validateErr := h.groupStore.ValidateInput(group)
+	if validateErr != nil {
+		templates.GroupError(validateErr).Render(r.Context(), w)
+		return
+	}
+
+	err := h.groupStore.CreateGroup(&group)
 	if err != nil {
 		templates.GroupError(err).Render(r.Context(), w)
 		return

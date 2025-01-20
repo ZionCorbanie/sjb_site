@@ -54,10 +54,10 @@ func (s *GroupStore) DeleteGroup(groupId string) error {
 	return s.db.Delete(&store.Group{}, "id = ?", groupId).Error
 }
 
-func (s *GroupStore) ValidateInput(name string, groupId uint64) error {
-	err := s.db.Model(&store.Group{}).Where("name = ? AND id != ?", name, groupId).First(&store.Group{}).Error
+func (s *GroupStore) ValidateInput(group store.Group) error {
+	err := s.db.Model(&store.Group{}).Where("name = ? AND id != ?", group.Name, group.ID).First(&store.Group{}).Error
 	if err == nil {
-		return fmt.Errorf("groep met naam %s bestaat al", name)
+		return fmt.Errorf("groep met naam %s bestaat al", group.Name)
 	}
 	return nil
 }

@@ -112,7 +112,7 @@ type GroupStore interface {
 	GetGroup(groupId string) (*Group, error)
 	PatchGroup(group Group) error
 	DeleteGroup(groupId string) error
-	ValidateInput(name string, groupId uint64) error
+	ValidateInput(group Group) error
 }
 
 type GroupUserStore interface {
