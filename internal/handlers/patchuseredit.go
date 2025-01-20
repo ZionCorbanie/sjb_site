@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"fmt"
-	"github.com/go-chi/chi/v5"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type PatchUserEditHandler struct {
@@ -36,10 +36,16 @@ func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 	address := r.FormValue("address")
 	phone := r.FormValue("phone")
 
+	validateErr := h.userStore.ValidateInput(email, address, userId)
+	if validateErr != nil {
+		templates.UserError(validateErr).Render(r.Context(), w)
+		return
+	}
+
 	userPatch := store.User{
-		ID:           uint(userId),
-		Email:        email,
-		Adres:        address,
+		ID:          uint(userId),
+		Email:       email,
+		Adres:       address,
 		PhoneNumber: phone,
 	}
 
@@ -52,5 +58,6 @@ func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	w.Header().Add("Hx-Redirect", fmt.Sprintf("/webalmanak/leden/%d", userId))
+	templates.UserError(nil).Render(r.Context(), w)
+	// w.Header().Add("Hx-Redirect", fmt.Sprintf("/webalmanak/leden/%d", userId))
 }

@@ -40,6 +40,12 @@ func (h *PatchAdminUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Req
 	username := r.FormValue("username")
 	//image := r.FormValue("image")
 
+	validateErr := h.userStore.ValidateInput(email, address, userId)
+	if validateErr != nil {
+		templates.UserError(validateErr).Render(r.Context(), w)
+		return
+	}
+
 	userPatch := store.User{
 		ID:          uint(userId),
 		Email:       email,
@@ -59,5 +65,6 @@ func (h *PatchAdminUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	w.Header().Add("Hx-Redirect", "/admin/leden/")
+	//w.Header().Add("Hx-Redirect", "/admin/leden/")
+	templates.UserError(validateErr).Render(r.Context(), w)
 }

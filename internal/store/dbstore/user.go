@@ -75,6 +75,17 @@ func (s *UserStore) PatchUser(user store.User) error {
 	return s.db.Model(&store.User{}).Where("id = ?", user.ID).Updates(user).Error
 }
 
+func (s *UserStore) ValidateInput(email, address string, userId uint64) error {
+	if err := s.db.Model(&store.User{}).Where("email = ? AND id != ?", email, userId).First(&store.User{}).Error; err == nil {
+		return fmt.Errorf("email %s is al in gebruik", email)
+	}
+
+	if err := s.db.Model(&store.User{}).Where("adres = ? AND id != ?", address, userId).First(&store.User{}).Error; err == nil {
+		return fmt.Errorf("adres %s is al in gebruik", address)
+	}
+
+	return nil
+}
 func (s *UserStore) DeleteUser(userId string) error {
 	return s.db.Delete(&store.User{}, userId).Error
 }
