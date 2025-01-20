@@ -1,0 +1,56 @@
+package templates
+
+import (
+    "sjb_site/internal/store"
+    "fmt"
+)
+
+templ UserEditAdmin(user *store.User) {
+    <image class="rounded-full" src={ user.Image } alt={ fmt.Sprintf("Foto van %s", user.Username) }/>
+    <form
+        hx-patch={ fmt.Sprintf("/admin/leden/%d", user.ID) }
+        hx-trigger="submit"
+        hx-target-401="#register-error"
+    >
+        <div id="register-error"></div>
+        <div>
+            <label for="firstname">Voornaam:</label>
+            <input type="text" name="firstname" id="firstname" placeholder="Voornaam" required="" value={ user.FirstName }/>
+        </div>
+        <div>
+            <label for="lastname">Achternaam:</label>
+            <input type="text" name="lastname" id="lastname" placeholder="Achternaam" required="" value={ user.LastName }/>
+        </div>
+        <div>
+            <label for="email">Email: </label>
+            <input type="email" name="email" id="email" placeholder="naam@mail.com" required="" value={ user.Email }/>
+        </div>
+        <div>
+            <label for="phone">Telefoon: </label>
+            <input type="phone" name="phone" id="phone" placeholder="+31 xxxxxx" required="" value={ user.PhoneNumber }/>
+        </div>
+        <div>
+            <label for="address">Adres: </label>
+            <input type="address" name="address" id="address" placeholder="waar woon je?" value={ user.Adres }/>
+        </div>
+        <div>
+            <label for="username">Gebruiksernaam:</label>
+            <input type="text" name="username" id="username" placeholder="voornaam.achternaam" value={ user.Username }/>
+        </div>
+        <div>
+            //TODO: Image upload
+        </div>
+        <button type="submit">
+            Aanpassen
+        </button>
+    </form>
+}
+
+templ AdminSidebarUser(user *store.User) {
+    //Todo implement user list and search
+    <h3 class="text-2xl">Lid bewerken</h3>
+    <div class="flex flex-col space-y-5">
+        <a class="text-red-600" href="/admin/leden">Leden</a>
+        <button class="text-red-600" hx-delete={ fmt.Sprintf("/admin/leden/%d/delete", user.ID) } hx-confirm="Weet je zeker dat je dit lid wilt verwijderen?">Lid verwijderen</button>
+    </div>
+}

@@ -97,3 +97,6 @@ func (s *UserStore) ValidateInput(email, address string, userId uint64) error {
 
 	return nil
 }
+func (s *UserStore) DeleteUser(userId string) error {
+	return s.db.Delete(&store.User{}, userId).Error
+}
