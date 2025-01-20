@@ -48,7 +48,7 @@ docker-up:
 
 .PHONY: docker-dev
 docker-dev:
-	docker-compose -f ./dev/docker-compose.dev.yml up --build --force-recreate
+	docker-compose -f ./dev/docker-compose.dev.yml up
 
 .PHONY: docker-down
 docker-down:
