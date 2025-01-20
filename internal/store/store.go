@@ -17,14 +17,6 @@ type User struct {
 	Image       string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-150x150.png'"`
 }
 
-type Parent struct {
-	UserID      uint   `json:"user_id"`
-	User        User   `gorm:"foreignKey:UserID" json:"user"`
-	Title       string `json:"title" gorm:"type:varchar(255)"`
-	Adres       string `json:"adres" gorm:"type:varchar(255)"`
-	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
-}
-
 type Group struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
 	Name        string    `json:"name"`
@@ -48,10 +40,10 @@ type GroupUser struct {
 }
 
 type Parent struct {
-	UserID       uint   `json:"user_id"`
-	User         User   `gorm:"foreignKey:UserID" json:"user"`
-	Title        string `json:"title" gorm:"type:varchar(255)"`
-	Adres        string `json:"adres" gorm:"type:varchar(255)"`
+	UserID      uint   `json:"user_id"`
+	User        User   `gorm:"foreignKey:UserID" json:"user"`
+	Title       string `json:"title" gorm:"type:varchar(255)"`
+	Adres       string `json:"adres" gorm:"type:varchar(255)"`
 	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
 }
 
@@ -63,24 +55,24 @@ type ParentGroup struct {
 }
 
 type Post struct {
-	ID       uint      `gorm:"primaryKey" json:"id"`
-	Title    string    `json:"title" gorm:"type:varchar(255)"`
-	Content  string    `json:"content"`
-	Date     time.Time `json:"date"`
-	AuthorID uint      `json:"author_id"`
-	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
-    Published   bool      `gorm:"default:False" json:"public"`
-    External bool      `gorm:"default:False" json:"external"`
-    Comments []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE;" json:"comments"`
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	Title     string    `json:"title" gorm:"type:varchar(255)"`
+	Content   string    `json:"content"`
+	Date      time.Time `json:"date"`
+	AuthorID  uint      `json:"author_id"`
+	Author    User      `gorm:"foreignKey:AuthorID" json:"author"`
+	Published bool      `gorm:"default:False" json:"public"`
+	External  bool      `gorm:"default:False" json:"external"`
+	Comments  []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE;" json:"comments"`
 }
 
 type Comment struct {
-    ID      uint      `gorm:"primaryKey" json:"id"`
-    Content string    `json:"content"`
-    Date    time.Time `json:"date"`
-    AuthorID uint     `json:"author_id"`
-    Author   User     `gorm:"foreignKey:AuthorID;constraint:OnDelete:CASCADE;" json:"author"`
-    PostID   uint      `json:"post_id"`
+	ID       uint      `gorm:"primaryKey" json:"id"`
+	Content  string    `json:"content"`
+	Date     time.Time `json:"date"`
+	AuthorID uint      `json:"author_id"`
+	Author   User      `gorm:"foreignKey:AuthorID;constraint:OnDelete:CASCADE;" json:"author"`
+	PostID   uint      `json:"post_id"`
 }
 
 type Menu struct {
@@ -133,14 +125,14 @@ type MenuStore interface {
 }
 
 type PostStore interface {
-    CreatePost(post *Post) error
-    GetPost(id string) (*Post, error)
-    GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
+	CreatePost(post *Post) error
+	GetPost(id string) (*Post, error)
+	GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
 }
 
 type CommentStore interface {
-    CreateComment(comment *Comment) error
-    GetCommentsByPost(postId string) ([]*Comment, error)
-    GetComment(commentId string) (*Comment, error)
-    DeleteComment(commentId string) error
+	CreateComment(comment *Comment) error
+	GetCommentsByPost(postId string) ([]*Comment, error)
+	GetComment(commentId string) (*Comment, error)
+	DeleteComment(commentId string) error
 }

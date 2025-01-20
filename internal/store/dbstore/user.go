@@ -76,23 +76,12 @@ func (s *UserStore) PatchUser(user store.User) error {
 }
 
 func (s *UserStore) ValidateInput(email, address string, userId uint64) error {
-	var emailCount, addressCount int64
-
-	if err := s.db.Model(&store.User{}).Where("email = ? AND id != ?", email, userId).Count(&emailCount).Error; err != nil {
-		return err
+	if err := s.db.Model(&store.User{}).Where("email = ? AND id != ?", email, userId).First(&store.User{}).Error; err == nil {
+		return fmt.Errorf("email %s is al in gebruik", email)
 	}
 
-	if err := s.db.Model(&store.User{}).Where("adres = ? AND id != ?", address, userId).Count(&addressCount).Error; err != nil {
-		return err
-	}
-
-	// If we found any users with the same email or address, return an error
-	if emailCount > 0 {
-		return fmt.Errorf("email")
-	}
-
-	if addressCount > 0 {
-		return fmt.Errorf("address")
+	if err := s.db.Model(&store.User{}).Where("adres = ? AND id != ?", address, userId).First(&store.User{}).Error; err == nil {
+		return fmt.Errorf("adres %s is al in gebruik", address)
 	}
 
 	return nil

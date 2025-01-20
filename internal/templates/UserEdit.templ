@@ -11,6 +11,7 @@ templ UserEdit(user *store.User) {
         hx-patch={ fmt.Sprintf("/webalmanak/leden/%d/edit", user.ID) }
         hx-trigger="submit"
         hx-target-401="#register-error"
+        hx-target="#user-error"
     >
         <div id="register-error"></div>
         <div>
@@ -29,4 +30,6 @@ templ UserEdit(user *store.User) {
             Aanpassen
         </button>
     </form>
+
+    <div id="user-error"></div>
 }

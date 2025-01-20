@@ -11,6 +11,7 @@ templ UserEditAdmin(user *store.User) {
         hx-patch={ fmt.Sprintf("/admin/leden/%d", user.ID) }
         hx-trigger="submit"
         hx-target-401="#register-error"
+        hx-target="#user-error"
     >
         <div id="register-error"></div>
         <div>
@@ -43,6 +44,8 @@ templ UserEditAdmin(user *store.User) {
         <button type="submit">
             Aanpassen
         </button>
+
+        <div id="user-error"></div>
     </form>
 }
 
@@ -53,4 +56,12 @@ templ AdminSidebarUser(user *store.User) {
         <a class="text-red-600" href="/admin/leden">Leden</a>
         <button class="text-red-600" hx-delete={ fmt.Sprintf("/admin/leden/%d/delete", user.ID) } hx-confirm="Weet je zeker dat je dit lid wilt verwijderen?">Lid verwijderen</button>
     </div>
+}
+
+templ UserError(err error) {
+    if err != nil {
+        <div class="mt-4 text-red-600">{ err.Error() }</div>
+    } else {
+        <div class="mt-4 text-green-600">Handeling succesvol uitgevoerd</div>
+    }
 }

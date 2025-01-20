@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
@@ -39,9 +38,7 @@ func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 
 	validateErr := h.userStore.ValidateInput(email, address, userId)
 	if validateErr != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		c := templates.RegisterError()
-		c.Render(r.Context(), w)
+		templates.UserError(validateErr).Render(r.Context(), w)
 		return
 	}
 
@@ -61,5 +58,6 @@ func (h *PatchUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	w.Header().Add("Hx-Redirect", fmt.Sprintf("/webalmanak/leden/%d", userId))
+	templates.UserError(nil).Render(r.Context(), w)
+	// w.Header().Add("Hx-Redirect", fmt.Sprintf("/webalmanak/leden/%d", userId))
 }
