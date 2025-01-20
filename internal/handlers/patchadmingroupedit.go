@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
@@ -33,8 +32,14 @@ func (h *PatchAdminGroupEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	email := r.FormValue("email")
 	name := r.FormValue("name")
+	validateErr := h.GroupStore.ValidateInput(name, groupId)
+	if validateErr != nil {
+		templates.GroupError(validateErr).Render(r.Context(), w)
+		return
+	}
+
+	email := r.FormValue("email")
 	description := r.FormValue("description")
 	website := r.FormValue("website")
 	//image := r.FormValue("image")
@@ -56,5 +61,5 @@ func (h *PatchAdminGroupEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	w.Header().Add("Hx-Redirect", fmt.Sprintf("/admin/groep/%d", groupId))
+	templates.GroupError(nil).Render(r.Context(), w)
 }

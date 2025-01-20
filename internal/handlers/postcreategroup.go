@@ -24,7 +24,7 @@ func (h *PostCreateGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 	r.ParseForm()
 
 	name := r.Form.Get("name")
-	validateErr := h.groupStore.ValidateInput(name)
+	validateErr := h.groupStore.ValidateInput(name, 0)
 	if validateErr != nil {
 		templates.GroupError(validateErr).Render(r.Context(), w)
 		return
