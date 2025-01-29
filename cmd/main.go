@@ -156,11 +156,40 @@ func main() {
 					r.Get("/", handlers.NewGroupsHandler(handlers.GetGroupsHandlerParams{
 						GroupStore: groupStore,
 					}).ServeHTTP)
+					r.Route("/{groupId}", func(r chi.Router) {
+						r.Get("/", handlers.NewGroupHandler(handlers.GetGroupHandlerParams{
+							GroupStore:     groupStore,
+							GroupUserStore: groupUserStore,
+						}).ServeHTTP)
+						r.Route("/edit", func(r chi.Router) {
+							// r.Get("/", handlers.NewGroupEditHandler(handlers.GetGroupEditHandlerParams{
+							// 	GroupStore: groupStore,
+							// }).ServeHTTP)
+							r.Route("/personen", func(r chi.Router) {
+								r.Get("/", handlers.NewGroupPersonenHandler(handlers.GetGroupPersonenHandlerParams{
+									GroupStore:     groupStore,
+									GroupUserStore: groupUserStore,
+								}).ServeHTTP)
+								r.Post("/", handlers.NewPostUserSearcGrouphHandler(handlers.PostUserSearchGroupHandlerParams{
+									UserStore: userStore,
+								}).ServeHTTP)
+								r.Patch("/", handlers.NewPatchGroupMembersHandler(handlers.PatchGroupMembersHandlerParams{
+									GroupUserStore: groupUserStore,
+									GroupStore:     groupStore,
+								}).ServeHTTP)
+								r.Delete("/delete/{userId}", handlers.NewDeleteGroupMemberHandler(handlers.DeleteGroupMemberHandlerParams{
+									GroupUserStore: groupUserStore,
+									GroupStore:     groupStore,
+								}).ServeHTTP)
+								r.Post("/add/{userId}", handlers.NewPostGroupMemberHandler(handlers.PostGroupMemberHandlerParams{
+									GroupUserStore: groupUserStore,
+									UserStore:      userStore,
+									GroupStore:     groupStore,
+								}).ServeHTTP)
+							})
+						})
+					})
 				})
-				r.Get("/groep/{groupId}", handlers.NewGroupHandler(handlers.GetGroupHandlerParams{
-					GroupStore:     groupStore,
-					GroupUserStore: groupUserStore,
-				}).ServeHTTP)
 			})
 		})
 
@@ -192,19 +221,23 @@ func main() {
 					}).ServeHTTP)
 				})
 			})
-			r.Get("/groep", handlers.NewGetCreateGroupHandler().ServeHTTP)
-			r.Post("/groep", handlers.NewPostCreateGroupHandler(handlers.PostCreateGroupHandlerParams{
-				GroupStore: groupStore,
-			}).ServeHTTP)
-			r.Get("/groep/{groupId}", handlers.NewAdminGroupEditHandler(handlers.GetAdminGroupEditHandlerParams{
-				GroupStore: groupStore,
-			}).ServeHTTP)
-			r.Patch("/groep/{groupId}", handlers.NewPatchAdminGroupEditHandler(handlers.PatchAdminGroupEditHandlerParams{
-				GroupStore: groupStore,
-			}).ServeHTTP)
-			r.Delete("/groep/{groupId}", handlers.NewDeleteGroupHandler(handlers.DeleteGroupHandlerParams{
-				GroupStore: groupStore,
-			}).ServeHTTP)
+			r.Route("/groep", func(r chi.Router) {
+				r.Get("/", handlers.NewGetCreateGroupHandler().ServeHTTP)
+				r.Post("/", handlers.NewPostCreateGroupHandler(handlers.PostCreateGroupHandlerParams{
+					GroupStore: groupStore,
+				}).ServeHTTP)
+				r.Route("/{groupId}", func(r chi.Router) {
+					r.Get("/", handlers.NewAdminGroupEditHandler(handlers.GetAdminGroupEditHandlerParams{
+						GroupStore: groupStore,
+					}).ServeHTTP)
+					r.Patch("/", handlers.NewPatchAdminGroupEditHandler(handlers.PatchAdminGroupEditHandlerParams{
+						GroupStore: groupStore,
+					}).ServeHTTP)
+					r.Delete("/", handlers.NewDeleteGroupHandler(handlers.DeleteGroupHandlerParams{
+						GroupStore: groupStore,
+					}).ServeHTTP)
+				})
+			})
 			r.Route("/groepen", func(r chi.Router) {
 				r.Get("/{groupType}", handlers.NewGroupManagementHandler(handlers.GetGroupManagementHandlerParams{
 					GroupStore: groupStore,

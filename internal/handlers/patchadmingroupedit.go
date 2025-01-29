@@ -6,6 +6,7 @@ import (
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -36,6 +37,8 @@ func (h *PatchAdminGroupEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Re
 	email := r.FormValue("email")
 	description := r.FormValue("description")
 	website := r.FormValue("website")
+	startdate, _ := time.Parse("2006-01-02", r.Form.Get("startdate")) // Error handling zou niet nodig moeten zijn
+	enddate, _ := time.Parse("2006-01-02", r.Form.Get("enddate"))     // want de datepicker zorgt ervoor dat de datum altijd goed is
 	//image := r.FormValue("image")
 
 	GroupPatch := store.Group{
@@ -44,6 +47,8 @@ func (h *PatchAdminGroupEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Re
 		Website:     website,
 		Name:        name,
 		Description: description,
+		StartDate:   startdate,
+		EndDate:     enddate,
 	}
 
 	validateErr := h.GroupStore.ValidateInput(GroupPatch)

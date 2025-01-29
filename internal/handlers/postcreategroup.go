@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
+	"time"
 )
 
 type PostCreateGroupHandler struct {
@@ -29,6 +30,7 @@ func (h *PostCreateGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Reques
 		Description: r.Form.Get("description"),
 		Email:       r.Form.Get("email"),
 		Website:     r.Form.Get("website"),
+		StartDate:   time.Now(),
 	}
 
 	validateErr := h.groupStore.ValidateInput(group)

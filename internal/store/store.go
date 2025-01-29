@@ -22,7 +22,7 @@ type Group struct {
 	Name        string    `json:"name"`
 	Email       string    `json:"email"`
 	Website     string    `json:"website"`
-	GroupType   string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep')"`
+	GroupType   string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep', 'ondervereniging')"`
 	StartDate   time.Time `json:"start_date;default:current_timestamp;not null"`
 	EndDate     time.Time `json:"end_date"`
 	Description string    `json:"description" gorm:"type:varchar(2048)"`
@@ -30,13 +30,15 @@ type Group struct {
 }
 
 type GroupUser struct {
-	GroupID  uint   `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
-	Group    Group  `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
-	UserID   uint   `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
-	User     User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
-	Status   string `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
-	Title    string `json:"title" gorm:"type:varchar(255)"`
-	Function string `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester')"`
+	GroupID   uint      `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
+	Group     Group     `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
+	UserID    uint      `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
+	User      User      `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
+	Status    string    `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
+	Title     string    `json:"title" gorm:"type:varchar(255)"`
+	Function  string    `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester');default:null"`
+	StartDate time.Time `json:"start_date;default:current_timestamp;"`
+	EndDate   time.Time `json:"end_date"`
 }
 
 type ParentGroup struct {
@@ -116,8 +118,11 @@ type GroupStore interface {
 }
 
 type GroupUserStore interface {
-	AddUserToGroup(userId uint, groupId uint) error
+	AddUserToGroup(userId, groupId uint) error
 	GetUsersByGroup(groupId string) ([]*User, error)
+	GetGroupUsersByGroup(gropuId string) ([]*GroupUser, error)
+	DeleteGroupUser(userId, groupId uint) error
+	UpdateGroupUser(groupUser GroupUser) error
 }
 
 type MenuStore interface {

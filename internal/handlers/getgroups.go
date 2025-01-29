@@ -34,7 +34,7 @@ func (h *GetGroupsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := templates.Groups(groups)
+	c := templates.Groups(groupType, groups)
 	err = templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
