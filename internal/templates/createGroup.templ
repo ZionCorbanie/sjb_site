@@ -1,0 +1,41 @@
+package templates
+
+import ()
+
+templ CreateGroup(){
+    <div>
+        <form class="space-y-6"
+            hx-post="/admin/groep"
+            hx-trigger="submit"
+            hx-target="#group-error"
+            hx-swap="innerHTML"
+            >
+            <label for="name">Naam:</label><br>
+            <input type="text" id="name" name="name"><br>
+            <label for="groupType">Soort groep</label><br>
+            <select id="groupType" name="groupType">
+                <option value="gilde">Gilde</option>
+                <option value="jaarclub">Jaarclub</option>
+                <option value="commissie">Commissie</option>
+            </select><br>
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description"></textarea><br>
+            <label for="website">Website:</label><br>
+            <input type="text" id="website" name="website"><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email"><br>
+            <button type="submit" class="border border-red-600 rounded hover:bg-red-100 text-red-600">Aanmaken</button>
+        </form>
+    </div>
+
+    <div id="group-error"></div>
+}
+
+templ GroupError(err error){
+    if err != nil {
+        <div class="mt-4 text-red-600">{ err.Error() }</div>
+    }
+    else{
+        <div class="mt-4 text-green-600">Handeling succesvol uitgevoerd</div>
+    }
+}

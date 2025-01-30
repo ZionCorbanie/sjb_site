@@ -1,6 +1,7 @@
 package dbstore
 
 import (
+	"fmt"
 	"sjb_site/internal/store"
 
 	"gorm.io/gorm"
@@ -21,7 +22,7 @@ func NewGroupStore(params NewGroupStoreParams) *GroupStore {
 }
 
 func (s *GroupStore) CreateGroup(group *store.Group) error {
-	return s.db.Create(group).Error
+	return s.db.Save(group).Error
 }
 
 func (s *GroupStore) GetGroup(groupId string) (*store.Group, error) {
@@ -43,4 +44,20 @@ func (s *GroupStore) GetGroupsByType(groupType string) ([]*store.Group, error) {
 		return nil, err
 	}
 	return groups, err
+}
+
+func (s *GroupStore) PatchGroup(group store.Group) error {
+	return s.db.Model(&store.Group{}).Where("id = ?", group.ID).Updates(group).Error
+}
+
+func (s *GroupStore) DeleteGroup(groupId string) error {
+	return s.db.Delete(&store.Group{}, "id = ?", groupId).Error
+}
+
+func (s *GroupStore) ValidateInput(group store.Group) error {
+	err := s.db.Model(&store.Group{}).Where("name = ? AND id != ?", group.Name, group.ID).First(&store.Group{}).Error
+	if err == nil {
+		return fmt.Errorf("groep met naam %s bestaat al", group.Name)
+	}
+	return nil
 }

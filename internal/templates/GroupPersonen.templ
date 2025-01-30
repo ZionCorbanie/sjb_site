@@ -1,0 +1,172 @@
+package templates
+
+import (
+    "sjb_site/internal/store"
+    "sjb_site/internal/middleware"
+    "fmt"
+    "strconv"
+)
+
+templ GroupPersonen(table templ.Component, groupType, groupId string){
+    if middleware.IsAdmin(ctx) || false {
+        <h2 class="text-2xl text-red-600 mb-3">Groepsleden beheren</h2>
+        <div>Op deze pagina kun je je leden van de groep en groepfuncties beheren. Het invullen van een voorzitter en penningmeester is verplicht; een secretaris (en/of andere functienamen in de tabel daaronder) zijn optioneel.</div>
+        <form
+        hx-patch={ fmt.Sprintf("/webalmanak/%s/%s/edit/personen", groupType, groupId) }
+        hx-target="table"
+        hx-swap="innerHTML">
+            <div class="overflow-auto mt-5">
+                @table
+            </div>
+
+        <button type="submit" class="text-red-600 hover:bg-red-100 border-red-600 border-2 rounded px-2">Opslaan</button>
+    </form>
+    } else {
+        <div>Geen toegang</div>
+    }
+    
+
+}
+
+templ RenderUsersGroup(leden []*store.User, groupId, groupType string) {
+    for _, lid := range leden {
+        <tr class="m-0 p-0">
+            <td>{ lid.FirstName } { lid.LastName } </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <button type="button" hx-post={ fmt.Sprintf( "/webalmanak/%s/%s/edit/personen/add/%d", groupType, groupId, lid.ID)}
+                hx-target="table"
+                hx-swap="innerHTMLa">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </button>
+            </td>
+        </tr>
+    }
+}
+
+templ UserTable(leden []*store.GroupUser, group *store.Group){
+     <table class="w-full table-auto">
+        <thead>
+            <tr>
+                <td class="font-bold">Voorzitter</td>
+                <td colspan="2">
+                    <select class="w-full p-1" name="voorzitter" required="">
+                        for _, lid := range leden {
+                            if (lid.Function == "voorzitter") {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)} selected>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            } else {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)}>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-bold">Secretaris</td>
+                <td colspan="2">
+                    <select class="w-full p-1" name="secretaris">
+                        <option value=""></option>
+                        for _, lid := range leden {
+                            if (lid.Function == "secretaris") {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)} selected>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            } else {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)}>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-bold">Penningmeester</td>
+                <td colspan="2">
+                    <select class="w-full p-1" name="penningmeester" required="">
+                        for _, lid := range leden {
+                            if (lid.Function == "penningmeester") {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)} selected>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            } else {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)}>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr><td class="h-10"></td></tr>
+        </thead>
+        <thead>
+            <tr class="font-bold border-black border-b-2">
+                <td>Naam</td>
+                <td>Type</td>
+                <td>Functienaam</td>
+                <td>Datum vanaf</td>
+                <td>Datum tot</td>
+                <td>Actie</td>
+            </tr>
+            <tr>
+                <td>
+                    <input class="form-control border-none" type="search" placeholder="Zoek een lid"
+                        name="search"
+                        hx-post={ fmt.Sprintf("/webalmanak/%s/%d/edit/personen", group.GroupType, group.ID) }
+                        hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+                        hx-target="#leden"
+                        hx-swap="innerHTML">
+                </td>
+            </tr>
+        </thead>
+        <tbody id="leden"></tbody>
+        <tbody>
+            for _, lid := range leden {
+                <tr>
+                    <td class="hover:underline">
+                        <a href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", lid.UserID)) }>
+                            { lid.User.FirstName } { lid.User.LastName }
+                        </a>
+                    </td>
+                    <td> 
+                        <input type="hidden" name="id" value={ strconv.FormatUint(uint64(lid.User.ID), 10) }>
+                        <select name="status" class="border p-1 rounded">
+                            if lid.Status == "lid" {
+                                <option value="lid" selected>Lid</option>
+                                <option value="oud_lid">Oud-lid</option>
+                                <option value="meeloper">Meeloper</option>
+                            } else if lid.Status == "oud_lid" {
+                                <option value="lid">Lid</option>
+                                <option value="oud_lid" selected>Oud-lid</option>
+                                <option value="meeloper">Meeloper</option>
+                            } else {
+                                <option value="lid">Lid</option>
+                                <option value="oud_lid">Oud-lid</option>
+                                <option value="meeloper" selected>Meeloper</option>
+                            }                            
+                        </select>
+                    </td>
+                    <td>
+                        <input class="!outline-none p-1 focus:ring-0 border-b-2" type="text" value={ lid.Title } name="title">
+                    </td>
+                    <td> 
+                        <input class="border-none" type="date" value={ lid.StartDate.Format("2006-01-02")} name="startDate">
+                    </td>
+                    if lid.EndDate.IsZero() {
+                        <td> <input class="border-none" type="date" placeholder="dd-mm-yyyy" value="" name="endDate"> </td>
+                    } else {
+                        <td> <input class="border-none" type="date" placeholder="dd-mm-yyyy" value={ lid.StartDate.Format("2006-01-02") } name="endDate"></td>
+                    }
+                    <td>
+                            <button type="button"
+                            hx-delete={ fmt.Sprintf( "/webalmanak/%s/%d/edit/personen/delete/%d", group.GroupType, group.ID, lid.User.ID)}
+                            hx-confirm="Lid uit groep verwijderen?"
+                            hx-target="table">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

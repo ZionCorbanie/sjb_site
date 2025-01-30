@@ -1,0 +1,30 @@
+package templates
+
+import "sjb_site/internal/store"
+import "fmt"
+
+templ GroupManagement(groups []*store.Group) {
+    <div class="flex flex-wrap justify-normal">
+        for _, group := range groups {
+            <a class="flex-none w-44 mr-5" href={ templ.URL(fmt.Sprintf("/admin/groep/%d", group.ID)) }>
+                <image class="rounded-md" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
+                <div class="text-center text-wrap">{ group.Name }</div>
+            </a>
+        }
+    </div>
+}
+
+templ GroupManagementSidebar() {
+    <h3 class="text-2xl mb-3">Groepsbeheer</h3>
+    <div class="flex flex-col space-y-1">
+        <a class="text-red-600" href="/admin/groepen/jaarclub">Jaarclubs</a>
+        <a class="text-red-600" href="/admin/groepen/gilde">Gildes</a>
+        <a class="text-red-600" href="/admin/groepen/bestuur">Besturen</a>
+        <a class="text-red-600" href="/admin/groepen/commissie">Commissies</a>
+        <a class="text-red-600" href="/admin/groepen/werkgroep">Werkgroepen</a>
+        <a class="text-red-600" href="/admin/groepen/barploeg">Barploegen</a>
+        <a class="text-red-600" href="/admin/groepen/ondervereniging">Onderverenigingen</a>
+        <a class="text-red-600" href="/admin/groepen/huis">Huizen</a>
+    </div>
+}
+

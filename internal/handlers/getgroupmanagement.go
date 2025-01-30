@@ -8,21 +8,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type GetGroupsHandler struct {
+type GetGroupManagementHandler struct {
 	GroupStore store.GroupStore
 }
 
-type GetGroupsHandlerParams struct {
+type GetGroupManagementHandlerParams struct {
 	GroupStore store.GroupStore
 }
 
-func NewGroupsHandler(params GetGroupsHandlerParams) *GetGroupsHandler {
-	return &GetGroupsHandler{
+func NewGroupManagementHandler(params GetGroupManagementHandlerParams) *GetGroupManagementHandler {
+	return &GetGroupManagementHandler{
 		GroupStore: params.GroupStore,
 	}
 }
 
-func (h *GetGroupsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *GetGroupManagementHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	groupType := chi.URLParam(r, "groupType")
 	groups, err := h.GroupStore.GetGroupsByType(groupType)
 	if err != nil {
@@ -34,8 +34,9 @@ func (h *GetGroupsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := templates.Groups(groupType, groups)
-	err = templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
+	s := templates.GroupManagementSidebar()
+	c := templates.GroupManagement(groups)
+	err = templates.Layout(templates.Sidebar(c, s), "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

@@ -22,7 +22,7 @@ type Group struct {
 	Name        string    `json:"name"`
 	Email       string    `json:"email"`
 	Website     string    `json:"website"`
-	GroupType   string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep')"`
+	GroupType   string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep', 'ondervereniging')"`
 	StartDate   time.Time `json:"start_date;default:current_timestamp;not null"`
 	EndDate     time.Time `json:"end_date"`
 	Description string    `json:"description" gorm:"type:varchar(2048)"`
@@ -30,13 +30,15 @@ type Group struct {
 }
 
 type GroupUser struct {
-	GroupID  uint   `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
-	Group    Group  `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
-	UserID   uint   `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
-	User     User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
-	Status   string `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
-	Title    string `json:"title" gorm:"type:varchar(255)"`
-	Function string `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester')"`
+	GroupID   uint       `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
+	Group     Group      `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
+	UserID    uint       `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
+	User      User       `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
+	Status    string     `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
+	Title     string     `json:"title" gorm:"type:varchar(255)"`
+	Function  string     `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester', '');default:null"`
+	StartDate time.Time  `json:"start_date;default:current_timestamp;"`
+	EndDate   *time.Time `json:"end_date" gorm:"default:null"`
 }
 
 type ParentGroup struct {
@@ -47,32 +49,32 @@ type ParentGroup struct {
 }
 
 type Parent struct {
-	UserID       uint   `json:"user_id"`
-	User         User   `gorm:"foreignKey:UserID" json:"user"`
-	Title        string `json:"title" gorm:"type:varchar(255)"`
-	Adres        string `json:"adres" gorm:"type:varchar(255)"`
+	UserID      uint   `json:"user_id"`
+	User        User   `gorm:"foreignKey:UserID" json:"user"`
+	Title       string `json:"title" gorm:"type:varchar(255)"`
+	Adres       string `json:"adres" gorm:"type:varchar(255)"`
 	PhoneNumber string `json:"phone_number" gorm:"type:varchar(255)"`
 }
 
 type Post struct {
-	ID       uint      `gorm:"primaryKey" json:"id"`
-	Title    string    `json:"title" gorm:"type:varchar(255)"`
-	Content  string    `json:"content"`
-	Date     time.Time `json:"date"`
-	AuthorID uint      `json:"author_id"`
-	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
-    Published   bool      `gorm:"default:False" json:"public"`
-    External bool      `gorm:"default:False" json:"external"`
-    Comments []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE;" json:"comments"`
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	Title     string    `json:"title" gorm:"type:varchar(255)"`
+	Content   string    `json:"content"`
+	Date      time.Time `json:"date"`
+	AuthorID  uint      `json:"author_id"`
+	Author    User      `gorm:"foreignKey:AuthorID" json:"author"`
+	Published bool      `gorm:"default:False" json:"public"`
+	External  bool      `gorm:"default:False" json:"external"`
+	Comments  []Comment `gorm:"foreignKey:PostID;constraint:OnDelete:CASCADE;" json:"comments"`
 }
 
 type Comment struct {
-    ID      uint      `gorm:"primaryKey" json:"id"`
-    Content string    `json:"content"`
-    Date    time.Time `json:"date"`
-    AuthorID uint     `json:"author_id"`
-    Author   User     `gorm:"foreignKey:AuthorID;constraint:OnDelete:CASCADE;" json:"author"`
-    PostID   uint      `json:"post_id"`
+	ID       uint      `gorm:"primaryKey" json:"id"`
+	Content  string    `json:"content"`
+	Date     time.Time `json:"date"`
+	AuthorID uint      `json:"author_id"`
+	Author   User      `gorm:"foreignKey:AuthorID;constraint:OnDelete:CASCADE;" json:"author"`
+	PostID   uint      `json:"post_id"`
 }
 
 type Menu struct {
@@ -110,11 +112,17 @@ type GroupStore interface {
 	CreateGroup(group *Group) error
 	GetGroupsByType(groupType string) ([]*Group, error)
 	GetGroup(groupId string) (*Group, error)
+	PatchGroup(group Group) error
+	DeleteGroup(groupId string) error
+	ValidateInput(group Group) error
 }
 
 type GroupUserStore interface {
-	AddUserToGroup(userId uint, groupId uint) error
+	AddUserToGroup(userId, groupId uint) error
 	GetUsersByGroup(groupId string) ([]*User, error)
+	GetGroupUsersByGroup(gropuId string) ([]*GroupUser, error)
+	DeleteGroupUser(userId, groupId uint) error
+	UpdateGroupUser(groupUser GroupUser) error
 }
 
 type MenuStore interface {
@@ -124,14 +132,14 @@ type MenuStore interface {
 }
 
 type PostStore interface {
-    CreatePost(post *Post) error
-    GetPost(id string) (*Post, error)
-    GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
+	CreatePost(post *Post) error
+	GetPost(id string) (*Post, error)
+	GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
 }
 
 type CommentStore interface {
-    CreateComment(comment *Comment) error
-    GetCommentsByPost(postId string) ([]*Comment, error)
-    GetComment(commentId string) (*Comment, error)
-    DeleteComment(commentId string) error
+	CreateComment(comment *Comment) error
+	GetCommentsByPost(postId string) ([]*Comment, error)
+	GetComment(commentId string) (*Comment, error)
+	DeleteComment(commentId string) error
 }

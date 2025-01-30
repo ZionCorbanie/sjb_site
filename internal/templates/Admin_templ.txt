@@ -1,1 +1,0 @@
-<div id=\"content\">Admin pagina met admin dingen</div><div><a href=\"/admin/menu\">Menu maken</a> <a href=\"/admin/post\">Post maken</a></div><div><a href=\"/admin/leden\">Gebruikers beheren</a></div>

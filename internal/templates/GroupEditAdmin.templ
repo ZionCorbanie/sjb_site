@@ -1,0 +1,71 @@
+package templates
+
+import (
+    "sjb_site/internal/store"
+    "fmt"
+)
+
+templ GroupEditAdmin(group *store.Group) {
+    <image class="rounded-3xl mb-5" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
+    <form
+        hx-patch={ fmt.Sprintf("/admin/groep/%d", group.ID) }
+        hx-trigger="submit"
+        hx-target="#group-error"
+    >
+        <div id="register-error"></div>
+        <div>
+            <label for="name">Naam:</label>
+            <input type="text" name="name" id="name" placeholder="Naam" required="" value={ group.Name }/>
+        </div>
+        <div>
+            <label for="email">Email: </label>
+            <input type="email" name="email" id="email" placeholder="naam@mail.com" value={ group.Email }/>
+        </div>
+        <div>
+            <label for="website">Website: </label>
+            <input type="text" name="website" id="website" placeholder="www.site.nl" value={ group.Website }/>
+        </div>
+        <div>
+            <label for="description">Beschrijving: </label>
+            <textarea name="description" id="description" placeholder="Gaafste groepering van SJB" value={ group.Description }/>
+        </div>
+        <div>
+            <label for="startdate">Begindatum: </label>
+            <input type="date" name="startdate" id="startdate" placeholder="01-01-2000" value={ group.StartDate.Local().String() }/>
+        </div>
+        <div>
+            <label for="enddate">Einddatum:</label>
+            <input type="date" name="enddate" id="enddate" placeholder="01-01-2000" value={ group.EndDate.Local().String() }/>
+        </div>
+        <div>
+            //TODO: Image upload
+        </div>
+        <button type="submit">
+            Aanpassen
+        </button>
+    </form>
+    <button class="border border-red-600 p-1 rounded hover:bg-red-100 text-red-600" hx-delete={ fmt.Sprintf("/admin/groep/%d", group.ID) } hx-confirm="Weet je zeker dat je deze groep wilt verwijderen?">Groep verwijderen</button>
+
+    <div id="group-error"></div>
+}
+
+templ AdminSidebarGroup(group *store.Group, groups []*store.Group) {
+    <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/webalmanak/%s/%d/edit/personen", group.GroupType, group.ID)) }>Groepsleden en -functies beheren</a>
+    <h3 class="text-2xl">Groep bewerken</h3>
+    <div class="flex flex-col space-y-1">
+        <a class="text-red-600" href="/admin/groepen/jaarclub">Jaarclubs</a>
+        <a class="text-red-600" href="/admin/groepen/gilde">Gildes</a>
+        <a class="text-red-600" href="/admin/groepen/bestuur">Besturen</a>
+        <a class="text-red-600" href="/admin/groepen/commissie">Commissies</a>
+        <a class="text-red-600" href="/admin/groepen/werkgroep">Werkgroepen</a>
+        <a class="text-red-600" href="/admin/groepen/barploeg">Barploegen</a>
+        <a class="text-red-600" href="/admin/groepen/ondervereniging">Onderverenigingen</a>
+        <a class="text-red-600" href="/admin/groepen/huis">Huizen</a>
+    </div>
+    <div class="flex flex-col space-y-1">
+        <h3 class="text-2xl pt-5">Meer { group.GroupType }:</h3>
+        for _, group := range groups {
+            <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/admin/groep/%d", group.ID)) }>{ group.Name }</a>
+        }
+    </div>
+}
