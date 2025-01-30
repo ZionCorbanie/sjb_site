@@ -6,7 +6,7 @@ import (
     "sjb_site/internal/middleware"
 )
 
-templ User(User *store.User) {
+templ User(User *store.User, Groups []*store.Group) {
     <div>
         <image class="rounded-full" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
         if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
@@ -20,6 +20,19 @@ templ User(User *store.User) {
         if !User.EndDate.IsZero() {
             <div> uitgeschreven: { User.EndDate.Format("02/01/2006") }</div>
         }
+
+        <div>
+            <div class="flex flex-col mt-5">
+                {{ groupType := "" }}
+                for _, group := range Groups {
+                    if groupType != group.GroupType {
+                        <div class="text-secondary-600"> { group.GroupType } </div>
+                        {{ groupType = group.GroupType }}
+                    }
+                    <a href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }> { group.Name } </a>
+                }
+            </div>
+        </div>
     </div>
 }
 

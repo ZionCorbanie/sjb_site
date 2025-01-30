@@ -36,3 +36,14 @@ func (s *GroupUserStore) GetUsersByGroup(groupId string) ([]*store.User, error) 
 
 	return users, err
 }
+
+func (s *GroupUserStore) GetGroupsByUser(userId string) ([]*store.Group, error) {
+    var groups []*store.Group
+
+    err := s.db.Joins("JOIN group_users ON group_users.group_id = groups.id").
+        Where("group_users.user_id = ?", userId).
+        Order("groups.group_type").
+        Find(&groups).Error
+
+    return groups, err
+}
