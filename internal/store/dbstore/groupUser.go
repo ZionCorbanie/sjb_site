@@ -47,3 +47,12 @@ func (s *GroupUserStore) GetGroupsByUser(userId string) ([]*store.Group, error) 
 
     return groups, err
 }
+
+func (s *GroupUserStore) GetGroupUserByUser(userId string) ([]*store.GroupUser, error) {
+    var groupUsers []*store.GroupUser
+
+    err := s.db.Preload("Group").Where("user_id = ?", userId).Find(&groupUsers).Error
+
+    return groupUsers, err
+}
+

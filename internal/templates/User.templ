@@ -6,32 +6,36 @@ import (
     "sjb_site/internal/middleware"
 )
 
-templ User(User *store.User, Groups []*store.Group) {
+templ User(User *store.User, Groups []*store.GroupUser) {
     <div>
         <image class="rounded-full" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
         if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
             <a href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }> wijzig </a>
         }
-        <div> naam: { User.FirstName } { User.LastName } </div>
-        <div> email: { User.Email } </div>
-        <div> telefoon: { User.PhoneNumber } </div>
-        <div> adres: { User.Adres } </div>
         <div> lid sinds: { User.StartDate.Format("02/01/2006") }</div>
         if !User.EndDate.IsZero() {
             <div> uitgeschreven: { User.EndDate.Format("02/01/2006") }</div>
         }
+        <div> naam: { User.FirstName } { User.LastName } </div>
+        <div> email: { User.Email } </div>
+        <div> telefoon: { User.PhoneNumber } </div>
+        <div> adres: <a class="text-secondary-600" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
 
-        <div>
-            <div class="flex flex-col mt-5">
-                {{ groupType := "" }}
-                for _, group := range Groups {
-                    if groupType != group.GroupType {
-                        <div class="text-secondary-600"> { group.GroupType } </div>
-                        {{ groupType = group.GroupType }}
-                    }
-                    <a href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }> { group.Name } </a>
+        <div class="flex flex-col mt-5">
+            {{ groupType := "" }}
+            for _, groupUser := range Groups {
+                if groupType != groupUser.Group.GroupType {
+                    <div > { groupUser.Group.GroupType } </div>
+                        {{ groupType = groupUser.Group.GroupType }}
+                    <span class="flex space-x-4">
+                        <a class="text-secondary-600" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
+                        if groupUser.Function != "" {
+                            <p>{ groupUser.Function },</p>
+                        }
+                        <p>{ groupUser.Title }</p>
+                    </span>
                 }
-            </div>
+            }
         </div>
     </div>
 }

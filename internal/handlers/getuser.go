@@ -37,7 +37,7 @@ func (h *GetUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    groups, err:= h.groupUserStore.GetGroupsByUser(userId)
+    groups, err:= h.groupUserStore.GetGroupUserByUser(userId)
 	if err != nil {
 		err = templates.NotFound().Render(r.Context(), w)
 		if err != nil {
