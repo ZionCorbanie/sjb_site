@@ -48,6 +48,8 @@ func (h *PatchGroupMembersHandler) ServeHTTP(w http.ResponseWriter, r *http.Requ
 			endDate = time.Time{}
 		} else if !endDate.IsZero() {
 			status = "oud_lid"
+		} else if status == "oud_lid" {
+			status = "lid"
 		} else {
 			endDate = time.Now()
 		}
@@ -56,11 +58,12 @@ func (h *PatchGroupMembersHandler) ServeHTTP(w http.ResponseWriter, r *http.Requ
 		function := ""
 		if voorzitter == id {
 			function = "voorzitter"
-		} else if secretaris == id {
-			function = "secretaris"
 		} else if penningmeester == id {
 			function = "penningmeester"
+		} else if secretaris == id {
+			function = "secretaris"
 		}
+
 		groupUserPatch := store.GroupUser{
 			UserID:   uint(id),
 			GroupID:  uint(groupId),
