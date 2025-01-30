@@ -2,23 +2,29 @@ package templates
 
 import (
     "sjb_site/internal/store"
+    "sjb_site/internal/middleware"
     "fmt"
     "strconv"
 )
 
 templ GroupPersonen(table templ.Component, groupType, groupId string){
-    <h2 class="text-2xl text-red-600 mb-3">Groepsleden beheren</h2>
-    <div>Op deze pagina kun je je leden van de groep en groepfuncties beheren. Het invullen van een voorzitter en penningmeester is verplicht; een secretaris (en/of andere functienamen in de tabel daaronder) zijn optioneel.</div>
-    <form
+    if middleware.IsAdmin(ctx) || false {
+        <h2 class="text-2xl text-red-600 mb-3">Groepsleden beheren</h2>
+        <div>Op deze pagina kun je je leden van de groep en groepfuncties beheren. Het invullen van een voorzitter en penningmeester is verplicht; een secretaris (en/of andere functienamen in de tabel daaronder) zijn optioneel.</div>
+        <form
         hx-patch={ fmt.Sprintf("/webalmanak/%s/%s/edit/personen", groupType, groupId) }
         hx-target="table"
         hx-swap="innerHTML">
-        <div class="overflow-auto mt-5">
-            @table
-        </div>
+            <div class="overflow-auto mt-5">
+                @table
+            </div>
 
         <button type="submit" class="text-red-600 hover:bg-red-100 border-red-600 border-2 rounded px-2">Opslaan</button>
     </form>
+    } else {
+        <div>Geen toegang</div>
+    }
+    
 
 }
 
