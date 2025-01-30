@@ -30,15 +30,15 @@ type Group struct {
 }
 
 type GroupUser struct {
-	GroupID   uint      `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
-	Group     Group     `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
-	UserID    uint      `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
-	User      User      `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
-	Status    string    `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
-	Title     string    `json:"title" gorm:"type:varchar(255)"`
-	Function  string    `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester');default:null"`
-	StartDate time.Time `json:"start_date;default:current_timestamp;"`
-	EndDate   time.Time `json:"end_date"`
+	GroupID   uint       `json:"group_id" gorm:"primaryKey;autoIncrement:false"`
+	Group     Group      `gorm:"foreignKey:GroupID;constraint:OnDelete:CASCADE;" json:"group"`
+	UserID    uint       `json:"user_id" gorm:"primaryKey;autoIncrement:false"`
+	User      User       `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE;" json:"user"`
+	Status    string     `json:"status" gorm:"type:enum('lid','oud_lid','meeloper')"`
+	Title     string     `json:"title" gorm:"type:varchar(255)"`
+	Function  string     `json:"function" gorm:"type:enum('voorzitter','secretaris','penningmeester', '');default:null"`
+	StartDate time.Time  `json:"start_date;default:current_timestamp;"`
+	EndDate   *time.Time `json:"end_date" gorm:"default:null"`
 }
 
 type ParentGroup struct {

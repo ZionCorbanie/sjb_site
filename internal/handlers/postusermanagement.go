@@ -23,6 +23,7 @@ func NewPostUserManagementHandler(params PostUserManagementHandlerParams) *PostU
 func (h *PostUserManagementHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	search := r.FormValue("search")
 	users, err := h.userStore.SearchUsers(search)
+	users = users[:10] // Alleen eerste 10 users getten
 
 	if err != nil {
 		return

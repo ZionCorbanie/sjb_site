@@ -13,7 +13,9 @@ templ GroupPersonen(table templ.Component, groupType, groupId string){
         hx-patch={ fmt.Sprintf("/webalmanak/%s/%s/edit/personen", groupType, groupId) }
         hx-target="table"
         hx-swap="innerHTML">
-        @table
+        <div class="overflow-auto mt-5">
+            @table
+        </div>
 
         <button type="submit" class="text-red-600 hover:bg-red-100 border-red-600 border-2 rounded px-2">Opslaan</button>
     </form>
@@ -42,9 +44,55 @@ templ RenderUsersGroup(leden []*store.User, groupId, groupType string) {
 }
 
 templ UserTable(leden []*store.GroupUser, group *store.Group){
-     <table class="w-full mt-5">
+     <table class="w-full table-auto">
         <thead>
-            <tr class="border-black border-b-2">
+            <tr>
+                <td class="font-bold">Voorzitter</td>
+                <td colspan="2">
+                    <select class="w-full p-1" name="voorzitter" required="">
+                        for _, lid := range leden {
+                            if (lid.Function == "voorzitter") {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)} selected>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            } else {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)}>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-bold">Secretaris</td>
+                <td colspan="2">
+                    <select class="w-full p-1" name="secretaris">
+                        <option value=""></option>
+                        for _, lid := range leden {
+                            if (lid.Function == "secretaris") {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)} selected>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            } else {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)}>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="font-bold">Penningmeester</td>
+                <td colspan="2">
+                    <select class="w-full p-1" name="penningmeester" required="">
+                        for _, lid := range leden {
+                            if (lid.Function == "penningmeester") {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)} selected>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            } else {
+                                <option value={strconv.FormatUint( uint64(lid.UserID), 10)}>{ lid.User.FirstName} { lid.User.LastName }</option>
+                            }
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr><td class="h-10"></td></tr>
+        </thead>
+        <thead>
+            <tr class="font-bold border-black border-b-2">
                 <td>Naam</td>
                 <td>Type</td>
                 <td>Functienaam</td>
@@ -81,17 +129,17 @@ templ UserTable(leden []*store.GroupUser, group *store.Group){
                                 <option value="meeloper">Meeloper</option>
                             } else if lid.Status == "oud_lid" {
                                 <option value="lid">Lid</option>
-                                <option selected value="oud_lid">Oud-lid</option>
+                                <option value="oud_lid" selected>Oud-lid</option>
                                 <option value="meeloper">Meeloper</option>
                             } else {
                                 <option value="lid">Lid</option>
                                 <option value="oud_lid">Oud-lid</option>
-                                <option selected value="meeloper">Meeloper</option>
+                                <option value="meeloper" selected>Meeloper</option>
                             }                            
                         </select>
                     </td>
                     <td>
-                        <input class="border-b-2" type="text" value={ lid.Title } name="title">
+                        <input class="!outline-none p-1 focus:ring-0 border-b-2" type="text" value={ lid.Title } name="title">
                     </td>
                     <td> 
                         <input class="border-none" type="date" value={ lid.StartDate.Format("2006-01-02")} name="startDate">
@@ -99,7 +147,7 @@ templ UserTable(leden []*store.GroupUser, group *store.Group){
                     if lid.EndDate.IsZero() {
                         <td> <input class="border-none" type="date" placeholder="dd-mm-yyyy" value="" name="endDate"> </td>
                     } else {
-                        <td> <input class="border-none" type="date" placeholder="dd-mm-yyyy" value={ lid.StartDate.Format("01-02-2006") } name="endDate"></td>
+                        <td> <input class="border-none" type="date" placeholder="dd-mm-yyyy" value={ lid.StartDate.Format("2006-01-02") } name="endDate"></td>
                     }
                     <td>
                             <button type="button"
