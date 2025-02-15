@@ -32,10 +32,11 @@ func (h *GetMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         menuIdInt, _ := strconv.ParseInt(menuId, 10, 64)
         menu.ID = uint(menuIdInt)
         menu.Name = "Menu onbekend"
-        if time.Now().Weekday() == time.Saturday || time.Now().Weekday() == time.Sunday {
-            menu.Name = "Gesloten"
-        }
+
         menu.Date = time.Unix(menuIdInt*60*60*24, 0)
+        if menu.Date.Weekday() == time.Saturday || menu.Date.Weekday() == time.Sunday {
+            menu.Name = "Eettafel gesloten"
+        }
 	}
 
 	err = templates.MenuDay(menu).Render(r.Context(), w)

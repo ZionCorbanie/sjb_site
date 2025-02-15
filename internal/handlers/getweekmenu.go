@@ -30,7 +30,6 @@ func (h *GetWeekMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if err != nil {
     }
 
-
 	menus, err := h.WeekMenuStore.GetMenuRange(pageInt, 5)
     for i, menu := range menus {
         if menu.ID == 0 {
