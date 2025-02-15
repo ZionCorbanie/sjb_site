@@ -150,6 +150,7 @@ func main() {
 
 					r.Get("/{userId}", handlers.NewUserHandler(handlers.GetUserHandlerParams{
 						UserStore: userStore,
+                        GroupUserStore: groupUserStore,
 					}).ServeHTTP)
 					r.Get("/{userId}/edit", handlers.NewUserEditHandler(handlers.GetUserEditHandlerParams{
 						UserStore: userStore,

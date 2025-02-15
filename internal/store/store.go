@@ -115,6 +115,8 @@ type GroupStore interface {
 type GroupUserStore interface {
 	AddUserToGroup(userId uint, groupId uint) error
 	GetUsersByGroup(groupId string) ([]*User, error)
+    GetGroupsByUser(userId string) ([]*Group, error)
+    GetGroupUserByUser(userId string) ([]*GroupUser, error)
 }
 
 type MenuStore interface {
