@@ -119,7 +119,7 @@ type GroupUserStore interface {
 
 type MenuStore interface {
 	GetMenu(id string) (*Menu, error)
-	GetMenuRange(start string, length string) ([]*Menu, error)
+	GetMenuRange(start int, length int) ([]*Menu, error)
 	CreateMenu(menu *Menu) error
 }
 

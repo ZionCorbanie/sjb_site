@@ -2,7 +2,6 @@ package dbstore
 
 import (
 	"sjb_site/internal/store"
-	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -33,20 +32,16 @@ func (s *MenuStore) GetMenu(menuId string) (*store.Menu, error) {
 	return &menu, err
 }
 
-func (s *MenuStore) GetMenuRange(start string, length string) ([]*store.Menu, error) {
-    startInt, err := strconv.ParseInt(start, 10, 32)
-    if err != nil {
-        return nil, err
-    }
-    lengthInt, err := strconv.ParseInt(length, 10, 32)
-    if err != nil {
-        return nil, err
+func (s *MenuStore) GetMenuRange(start int, length int) ([]*store.Menu, error) {
+    menus := make([]*store.Menu, length)
+
+    for i := 0; i < length; i++ {
+        var menu store.Menu
+        _ = s.db.Where("id = ?", start+i).Find(&menu).Error
+        menus[i] = &menu
     }
 
-    var menus []*store.Menu
-    err = s.db.Where("id >= ?", start).Where("id < ?", startInt+lengthInt).Find(&menus).Error
-
-    return menus, err
+    return menus, nil
 }
 
 func (s *MenuStore) CreateMenu(menu *store.Menu) error {

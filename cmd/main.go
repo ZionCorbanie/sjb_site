@@ -120,6 +120,11 @@ func main() {
             MenuStore: menuStore,
         }).ServeHTTP)
 
+        r.Get("/eettafel", handlers.NewEettafelHandler().ServeHTTP)
+        r.Get("/eettafel/{pageId}", handlers.NewWeekMenuHandler(handlers.GetWeekMenuHandlerParams{
+            WeekMenuStore: menuStore,
+        }).ServeHTTP)
+
         r.Route("/comments/{postId}", func(r chi.Router) {
             r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
                 CommentStore: commentStore,
