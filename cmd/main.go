@@ -152,10 +152,10 @@ func main() {
 						UserStore: userStore,
                         GroupUserStore: groupUserStore,
 					}).ServeHTTP)
-					r.Get("/{userId}/edit", handlers.NewUserEditHandler(handlers.GetUserEditHandlerParams{
+					r.Get("/{userId}/edit", handlers.NewUserHandler(handlers.GetUserHandlerParams{
 						UserStore: userStore,
 					}).ServeHTTP)
-					r.Patch("/{userId}/edit", handlers.NewPatchtUserEditHandler(handlers.PatchUserEditHandlerParams{
+					r.Patch("/{userId}/edit", handlers.NewPatchtUserHandler(handlers.PatchUserHandlerParams{
 						UserStore: userStore,
 					}).ServeHTTP)
 				})
@@ -175,7 +175,7 @@ func main() {
 			r.Use(authMiddleware.IsAdmin)
 			r.Get("/", handlers.NewAdminHandler().ServeHTTP)
 			r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
-			r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
+			r.Post("/menu", handlers.NewPostMenuHandler(handlers.PostMenuHandlerParams{
 				MenuStore: menuStore,
 			}).ServeHTTP)
             r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
@@ -188,10 +188,10 @@ func main() {
 					UserStore: userStore,
 				}).ServeHTTP)
 				r.Route("/{userId}", func(r chi.Router) {
-					r.Get("/", handlers.NewAdminUserEditHandler(handlers.GetAdminUserEditHandlerParams{
+					r.Get("/", handlers.NewAdminUserHandler(handlers.GetAdminUserHandlerParams{
 						UserStore: userStore,
 					}).ServeHTTP)
-					r.Patch("/", handlers.NewPatchAdminUserEditHandler(handlers.PatchAdminUserEditHandlerParams{
+					r.Patch("/", handlers.NewPatchAdminUserHandler(handlers.PatchAdminUserHandlerParams{
 						UserStore: userStore,
 					}).ServeHTTP)
 					r.Delete("/delete", handlers.NewDeleteUserHandler(handlers.DeleteUserHandlerParams{

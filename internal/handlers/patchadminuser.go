@@ -10,21 +10,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type PatchAdminUserEditHandler struct {
+type PatchAdminUserHandler struct {
 	userStore store.UserStore
 }
 
-type PatchAdminUserEditHandlerParams struct {
+type PatchAdminUserHandlerParams struct {
 	UserStore store.UserStore
 }
 
-func NewPatchAdminUserEditHandler(params PatchAdminUserEditHandlerParams) *PatchAdminUserEditHandler {
-	return &PatchAdminUserEditHandler{
+func NewPatchAdminUserHandler(params PatchAdminUserHandlerParams) *PatchAdminUserHandler {
+	return &PatchAdminUserHandler{
 		userStore: params.UserStore,
 	}
 }
 
-func (h *PatchAdminUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *PatchAdminUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	userId, _ := strconv.ParseUint(chi.URLParam(r, "userId"), 10, 64)
 
 	if middleware.GetUser(r.Context()).ID != uint(userId) && !middleware.IsAdmin(r.Context()) {

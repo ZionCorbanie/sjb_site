@@ -8,21 +8,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type GetAdminUserEditHandler struct {
+type GetAdminUserHandler struct {
 	userStore store.UserStore
 }
 
-type GetAdminUserEditHandlerParams struct {
+type GetAdminUserHandlerParams struct {
 	UserStore store.UserStore
 }
 
-func NewAdminUserEditHandler(params GetAdminUserEditHandlerParams) *GetAdminUserEditHandler {
-	return &GetAdminUserEditHandler{
+func NewAdminUserHandler(params GetAdminUserHandlerParams) *GetAdminUserHandler {
+	return &GetAdminUserHandler{
 		userStore: params.UserStore,
 	}
 }
 
-func (h *GetAdminUserEditHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *GetAdminUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, "userId")
 	user, err := h.userStore.GetUserById(userId)
 	if err != nil {

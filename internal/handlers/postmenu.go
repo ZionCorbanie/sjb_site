@@ -8,21 +8,21 @@ import (
 	"time"
 )
 
-type PostCreateMenuHandler struct{
+type PostMenuHandler struct{
     store *dbstore.MenuStore
 }
 
-type PostCreateMenuHandlerParams struct {
+type PostMenuHandlerParams struct {
     MenuStore *dbstore.MenuStore
 }
 
-func NewPostCreateMenuHandler(params PostCreateMenuHandlerParams) *PostCreateMenuHandler {
-    return &PostCreateMenuHandler{
+func NewPostMenuHandler(params PostMenuHandlerParams) *PostMenuHandler {
+    return &PostMenuHandler{
         store: params.MenuStore,
     }
 }
 
-func (h *PostCreateMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *PostMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     date, err := time.Parse("2006-01-02", r.Form.Get("date"))
     if err != nil {
