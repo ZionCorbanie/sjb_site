@@ -3,9 +3,11 @@ package templates
 import (
 	"sjb_site/internal/middleware"
 	"fmt"
+	"os"
 )
 
 templ header(title string) {
+    <!DOCTYPE html>
 	<head>
 		<title>{ title }</title>
 		<meta charset="UTF-8"/>
@@ -13,19 +15,19 @@ templ header(title string) {
 		<!--<script src="/static/script/htmx.min.js" nonce={ middleware.GetHtmxNonce(ctx) }></script>-->
         <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>		
         <script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
-        <script src="code.iconify.design/1/1.0.6/iconify.min.js"></script>
+        <!-- <script src="code.iconify.design/1/1.0.6/iconify.min.js"></script> -->
         <!--<script src="/static/script/response-targets.js" nonce={ middleware.GetResponseTargetsNonce(ctx) }></script>-->
 		<!--<link rel="stylesheet" href="/static/css/style.min.css" nonce={ middleware.GetTwNonce(ctx) }/>-->
-		<link rel="stylesheet" href="/static/css/style.min.css"/>
         <link rel="icon" type="image/x-icon" href="/static/img/favicon-16x16.png"/>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
-        // if os.Getenv("env") == "production" {
-		// 	<link rel="stylesheet" href="static/css/style.min.css" nonce={ middleware.GetTwNonce(ctx) }/>
-		// } else {
-		// 	<link rel="stylesheet" href="static/css/style.css" nonce={ middleware.GetTwNonce(ctx) }/>
-		// }
+        if os.Getenv("env") == "production" {
+			<link rel="stylesheet" href="/static/css/style.min.css"/>
+		} else {
+			<link rel="stylesheet" href="/static/css/style.css"/>
+        }
+		
 	</head>
 }
 

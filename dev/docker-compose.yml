@@ -3,7 +3,7 @@ services:
     volumes:
       - ..:/app
     environment:
-      - ENVIRONMENT=development
+      - ENVIRONMENT=production
       - TZ=Europe/Amsterdam
     depends_on:
       db:
