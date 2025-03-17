@@ -9,9 +9,23 @@ import (
 templ Post(post *store.Post){
     <a class="underline" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>{ post.Author.FirstName } { post.Author.LastName }</a>
     <p class="text-neutral-600">{ post.Date.Format("02-01-2006") }</p>
-    <div class="mt-5 md:mx-10">
-        <p class="text-justify">{ post.Content }</p>
+    
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <div id="editor" class="mt-5 md:mx-10">
+        {{ content := templ.Raw(post.Content) }}
+        @content
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script type="module">
+        const quill = new Quill('#editor', {
+            modules: {
+                toolbar: false
+              },
+            theme: 'snow'
+        });
+        quill.disable()
+    </script>
+
     if middleware.GetUser(ctx) != nil{
         <hr class="my-5">
 

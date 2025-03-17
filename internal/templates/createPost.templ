@@ -4,18 +4,52 @@ import (
 )
 
 templ CreatePost(){
-    <div>
-        <form hx-post="/admin/post">
-            <label for="title">Title:</label><br>
-            <input type="text" id="title" name="title"><br>
-            <label for="image">afbeelding:</label><br>
-            <input type="text" id="image" name="image"><br>
-            <label for="content">Content:</label><br>
-            <textarea id="content" name="content"></textarea><br>
-            <label for="public">Post publiek maken:</label><br>
-            <input type="checkbox" id="public" name="public" value="public">
-            <br>
-            <input type="submit" value="Submit">
-        </form>
-    </div>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <form hx-post="/admin/post" hx-target="#post-status">
+        <input type="text" name="title" placeholder="Post Title" required />
+        <input type="text" class="hidden" name="content"/>
+
+        <div id="editor"></div>
+
+        <button type="submit">Publish</button>
+    </form>
+    <div id="post-status"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+    <script type="module">
+        var toolbarOptions = [
+            ['bold', 'italic', 'underline', 'strike'],   
+            ['blockquote', 'code-block'],
+
+            [{ 'header': 1 }, { 'header': 2 }],           
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],   
+            [{ 'indent': '-1'}, { 'indent': '+1' }],        
+            [{ 'direction': 'rtl' }],                        
+
+            [{ 'size': ['small', false, 'large', 'huge'] }], 
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [ 'link', 'image', 'video', 'formula' ],         
+            [{ 'color': [] }, { 'background': [] }],         
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+
+            ['clean']                                         
+        ];
+
+        var quill = new Quill('#editor', {
+            modules: {
+                toolbar: toolbarOptions
+            },
+
+            theme: 'snow'
+        });
+
+        let form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            let content = quill.root.innerHTML;
+            document.querySelector('input[name="content"]').value = content;
+        });
+    </script>
 }

@@ -1,10 +1,11 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
-    "time"
+	"time"
 )
 
 type PostCreatePostHandler struct{
@@ -25,8 +26,14 @@ func (h *PostCreatePostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 	author, _ := r.Context().Value(middleware.UserKey).(*store.User)
     date := time.Now()
     r.ParseForm()
-    title := r.Form.Get("title")
-    content := r.Form.Get("content")
+
+    title := r.FormValue("title")
+    content := r.FormValue("content")
+
+    if title == "" || content == "" {
+        http.Error(w, "Title and content are required", http.StatusBadRequest)
+        return
+    }
 
     post := &store.Post{
         Author: *author,
@@ -40,4 +47,11 @@ func (h *PostCreatePostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
         http.Error(w, "Error creating post", http.StatusInternalServerError)
         return
     }
+
+    if r.Method != http.MethodPost {
+        http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+        return
+    }
+
+    fmt.Fprintf(w, "<p>Post created successfully!</p>")
 }
