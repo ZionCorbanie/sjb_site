@@ -3,7 +3,6 @@ package templates
 import (
 	"sjb_site/internal/middleware"
 	"fmt"
-	"os"
 )
 
 templ header(title string) {
@@ -22,11 +21,11 @@ templ header(title string) {
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
-        if os.Getenv("env") == "production" {
+        //if os.Getenv("env") == "production" {
 			<link rel="stylesheet" href="/static/css/style.min.css"/>
-		} else {
-			<link rel="stylesheet" href="/static/css/style.css"/>
-        }
+	//	} else {
+	//		<link rel="stylesheet" href="/static/css/style.css"/>
+    //   }
 		
 	</head>
 }
@@ -136,11 +135,11 @@ templ Layout(contents templ.Component, title string) {
 	@header(title)
 	<body class="bg-fixed" style="background-image: url('/static/img/delft_background.jpg');">
         <div class="w-full">
-            <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
+            <div class="flex flex-col h-full w-full lg:w-[1024px] mx-auto">
                 <div class="bg-primary shadow-xl">
                     @nav()
                 </div>
-                <main class="rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
+                <main class="h-full rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
                     @contents
                 </main>
                 @footer()
