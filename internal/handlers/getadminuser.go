@@ -8,24 +8,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type GetUserHandler struct {
+type GetAdminUserHandler struct {
 	userStore store.UserStore
-	groupUserStore store.GroupUserStore
 }
 
-type GetUserHandlerParams struct {
+type GetAdminUserHandlerParams struct {
 	UserStore store.UserStore
-	GroupUserStore store.GroupUserStore
 }
 
-func NewUserHandler(params GetUserHandlerParams) *GetUserHandler {
-	return &GetUserHandler{
+func NewAdminUserHandler(params GetAdminUserHandlerParams) *GetAdminUserHandler {
+	return &GetAdminUserHandler{
 		userStore: params.UserStore,
-        groupUserStore: params.GroupUserStore,
 	}
 }
 
-func (h *GetUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *GetAdminUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	userId := chi.URLParam(r, "userId")
 	user, err := h.userStore.GetUserById(userId)
 	if err != nil {
@@ -37,18 +34,8 @@ func (h *GetUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    groups, err:= h.groupUserStore.GetGroupUserByUser(userId)
-	if err != nil {
-		err = templates.NotFound().Render(r.Context(), w)
-		if err != nil {
-			http.Error(w, "Error rendering template", http.StatusInternalServerError)
-			return
-		}
-		return
-	}
-
-	c := templates.User(user, groups)
-	s := templates.SidebarUser()
+	s := templates.AdminSidebarUser(user)
+	c := templates.UserEditAdmin(user)
 	err = templates.Layout(templates.Sidebar(c, s), "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {

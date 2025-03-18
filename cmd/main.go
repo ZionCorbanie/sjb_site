@@ -120,6 +120,11 @@ func main() {
             MenuStore: menuStore,
         }).ServeHTTP)
 
+        r.Get("/eettafel", handlers.NewEettafelHandler().ServeHTTP)
+        r.Get("/eettafel/{pageId}", handlers.NewWeekMenuHandler(handlers.GetWeekMenuHandlerParams{
+            WeekMenuStore: menuStore,
+        }).ServeHTTP)
+
         r.Route("/comments/{postId}", func(r chi.Router) {
             r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
                 CommentStore: commentStore,
@@ -145,11 +150,12 @@ func main() {
 
 					r.Get("/{userId}", handlers.NewUserHandler(handlers.GetUserHandlerParams{
 						UserStore: userStore,
+                        GroupUserStore: groupUserStore,
 					}).ServeHTTP)
-					r.Get("/{userId}/edit", handlers.NewUserEditHandler(handlers.GetUserEditHandlerParams{
+					r.Get("/{userId}/edit", handlers.NewUserHandler(handlers.GetUserHandlerParams{
 						UserStore: userStore,
 					}).ServeHTTP)
-					r.Patch("/{userId}/edit", handlers.NewPatchtUserEditHandler(handlers.PatchUserEditHandlerParams{
+					r.Patch("/{userId}/edit", handlers.NewPatchtUserHandler(handlers.PatchUserHandlerParams{
 						UserStore: userStore,
 					}).ServeHTTP)
 				})
@@ -168,18 +174,32 @@ func main() {
 		r.Route("/admin", func(r chi.Router) {
 			r.Use(authMiddleware.IsAdmin)
 			r.Get("/", handlers.NewAdminHandler().ServeHTTP)
-            r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
-            r.Post("/menu", handlers.NewPostCreateMenuHandler(handlers.PostCreateMenuHandlerParams{
-                MenuStore: menuStore,
-            }).ServeHTTP)
+			r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
+			r.Post("/menu", handlers.NewPostMenuHandler(handlers.PostMenuHandlerParams{
+				MenuStore: menuStore,
+			}).ServeHTTP)
             r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
             r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
                     PostStore: postStore,
-                }).ServeHTTP)
-			r.Get("/users", handlers.NewGetUserManagementHandler().ServeHTTP)
-			r.Post("/users", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
-				UserStore: userStore,
-			}).ServeHTTP)
+            }).ServeHTTP) 
+            r.Post("/upload", handlers.NewUploadHandler().ServeHTTP)
+			r.Route("/leden", func(r chi.Router) {
+				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
+				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
+					UserStore: userStore,
+				}).ServeHTTP)
+				r.Route("/{userId}", func(r chi.Router) {
+					r.Get("/", handlers.NewAdminUserHandler(handlers.GetAdminUserHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Patch("/", handlers.NewPatchAdminUserHandler(handlers.PatchAdminUserHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+					r.Delete("/delete", handlers.NewDeleteUserHandler(handlers.DeleteUserHandlerParams{
+						UserStore: userStore,
+					}).ServeHTTP)
+				})
+			})
 		})
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)

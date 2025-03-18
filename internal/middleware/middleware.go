@@ -162,7 +162,8 @@ func (m *AuthMiddleware) IsAdmin(next http.Handler) http.Handler {
 		user, ok := r.Context().Value(UserKey).(*store.User)
 
 		if !ok {
-			http.Redirect(w, r, "/login", http.StatusFound)
+            target := r.URL.Path
+            http.Redirect(w, r, fmt.Sprintf("/login?redirect=%s", target), http.StatusFound)
 			return
 		}
 		if user.UserType != "admin" {
@@ -179,7 +180,8 @@ func (m *AuthMiddleware) LoggedIn(next http.Handler) http.Handler {
 		_, ok := r.Context().Value(UserKey).(*store.User)
 
 		if !ok {
-			http.Redirect(w, r, "/login", http.StatusFound)
+            target := r.URL.Path
+            http.Redirect(w, r, fmt.Sprintf("/login?redirect=%s", target), http.StatusFound)
 			return
 		}
 

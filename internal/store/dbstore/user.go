@@ -33,7 +33,7 @@ func (s *UserStore) CreateUser(username string, password string) error {
 	}
 
 	return s.db.Create(&store.User{
-		Username:    username,
+		Username: username,
 		Password: hashedPassword,
 	}).Error
 }
@@ -73,4 +73,8 @@ func (s *UserStore) SearchUsers(search string) ([]*store.User, error) {
 
 func (s *UserStore) PatchUser(user store.User) error {
 	return s.db.Model(&store.User{}).Where("id = ?", user.ID).Updates(user).Error
+}
+
+func (s *UserStore) DeleteUser(userId string) error {
+	return s.db.Delete(&store.User{}, userId).Error
 }
