@@ -182,7 +182,7 @@ func main() {
             r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
                     PostStore: postStore,
             }).ServeHTTP) 
-            //r.Post("/upload", handlers.NewUploadHandler().ServeHTTP)
+            r.Post("/upload", handlers.NewPostUploadHandler().ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {
 				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
 				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{

@@ -53,5 +53,6 @@ func (h *PostCreatePostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
         return
     }
 
-    fmt.Fprintf(w, "<p>Post created successfully!</p>")
+	w.Header().Set("HX-Redirect", fmt.Sprintf("/post/%d", post.ID))
+	w.WriteHeader(http.StatusOK)
 }

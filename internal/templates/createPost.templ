@@ -4,8 +4,8 @@ import (
 )
 
 templ CreatePost(){
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
-    <form hx-post="/admin/post" hx-target="#post-status">
+    <link href="/static/css/quill.snow.css" rel="stylesheet" />
+    <form hx-post="/admin/post" hx-target-500="#post-status">
         <input type="text" name="title" placeholder="Post Title" required />
         <input type="text" class="hidden" name="content"/>
 
@@ -15,7 +15,7 @@ templ CreatePost(){
     </form>
     <div id="post-status"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="/static/script/quill.js"></script>
     <script src="/static/script/quill.imageUploader.min.js"></script>
 
     <script type="module">
@@ -34,7 +34,7 @@ templ CreatePost(){
                 }
 
                 const data = await response.json();
-                return data.url;
+                return data.path;
             } catch (error) {
                 console.error("Upload error:", error);
                 return null;
@@ -44,7 +44,6 @@ templ CreatePost(){
         var toolbarOptions = [
             ["bold", "italic", "underline", "strike"],
             ["blockquote", "code-block"],
-            [{ header: 1 }, { header: 2 }],
             [{ list: "ordered" }, { list: "bullet" }],
             [{ script: "sub" }, { script: "super" }],
             [{ indent: "-1" }, { indent: "+1" }],
