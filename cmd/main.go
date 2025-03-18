@@ -152,7 +152,7 @@ func main() {
 						UserStore: userStore,
                         GroupUserStore: groupUserStore,
 					}).ServeHTTP)
-					r.Get("/{userId}/edit", handlers.NewUserHandler(handlers.GetUserHandlerParams{
+					r.Get("/{userId}/edit", handlers.NewUserEditHandler(handlers.GetUserEditHandlerParams{
 						UserStore: userStore,
 					}).ServeHTTP)
 					r.Patch("/{userId}/edit", handlers.NewPatchtUserHandler(handlers.PatchUserHandlerParams{
@@ -182,7 +182,7 @@ func main() {
             r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
                     PostStore: postStore,
             }).ServeHTTP) 
-            r.Post("/upload", handlers.NewUploadHandler().ServeHTTP)
+            //r.Post("/upload", handlers.NewUploadHandler().ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {
 				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
 				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
