@@ -50,3 +50,11 @@ func (s *PostStore) GetPostsRange(start int, length int, admin bool, external bo
 
     return posts, err
 }
+
+func (s *PostStore) PatchPost(post store.Post) error{
+	return s.db.Model(&store.Post{}).Where("id = ?", post.ID).Updates(post).Error
+}
+
+func (s *PostStore) DeletePost(postId string) error {
+	return s.db.Delete(&store.Post{}, postId).Error
+}

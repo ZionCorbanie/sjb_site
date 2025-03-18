@@ -129,6 +129,8 @@ type PostStore interface {
     CreatePost(post *Post) error
     GetPost(id string) (*Post, error)
     GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
+    PatchPost(post Post) error
+    DeletePost(postId string) error
 }
 
 type CommentStore interface {

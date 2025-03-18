@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"sjb_site/internal/middleware"
+
+	"github.com/google/uuid"
 )
 
 type PostUploadHandler struct{}
@@ -35,7 +37,8 @@ func (h *PostUploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         os.MkdirAll(uploadDir, os.ModePerm)
     }
 
-    filePath := filepath.Join(uploadDir, header.Filename)
+    fileName := fmt.Sprintf("%d%s",uuid.New().ID(),filepath.Ext(header.Filename))
+    filePath := filepath.Join(uploadDir, fileName)
 
     dst, err := os.Create(filePath)
     if err != nil {

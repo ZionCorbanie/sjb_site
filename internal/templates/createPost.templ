@@ -1,6 +1,8 @@
 package templates
 
 import (
+	"sjb_site/internal/store"
+	"fmt"
 )
 
 templ CreatePost(){
@@ -9,12 +11,38 @@ templ CreatePost(){
         <input type="text" name="title" placeholder="Post Title" required />
         <input type="text" class="hidden" name="content"/>
 
-        <div id="editor"></div>
+        <div class="border border-[#ccc]">
+            <div id="editor" ></div>
+        </div>
 
         <button type="submit">Publish</button>
     </form>
     <div id="post-status"></div>
 
+    @Editor()
+}
+
+templ EditPost(post *store.Post){
+    <link href="/static/css/quill.snow.css" rel="stylesheet" />
+    <form hx-patch={ fmt.Sprintf("/admin/post/%d", post.ID) } hx-target-500="#post-status">
+        <input type="text" name="title" placeholder="Post Title" value={post.Title} required />
+        <input type="text" class="hidden" name="content" value=""/>
+
+        <div class="border border-[#ccc]">
+            <div id="editor" >
+                {{ content := templ.Raw(post.Content) }}
+                @content
+            </div>
+        </div>
+
+        <button type="submit">Publish</button>
+    </form>
+    <div id="post-status"></div>
+
+    @Editor()
+}
+
+templ Editor(){
     <script src="/static/script/quill.js"></script>
     <script src="/static/script/quill.imageUploader.min.js"></script>
 

@@ -9,6 +9,10 @@ import (
 templ Post(post *store.Post){
     <a class="underline" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>{ post.Author.FirstName } { post.Author.LastName }</a>
     <p class="text-neutral-600">{ post.Date.Format("02-01-2006") }</p>
+    if middleware.IsAdmin(ctx){
+        <a class="text-secondary-600" href={templ.SafeURL(fmt.Sprintf("/admin/post/%d", post.ID))}>Edit</a>
+        <button type="button" hx-delete={fmt.Sprintf("/admin/post/%d", post.ID)}>Verwijderen</button>
+    }
     
     <link href="/static/css/quill.snow.css" rel="stylesheet" />
     <div id="editor" class="mt-5 md:mx-10">

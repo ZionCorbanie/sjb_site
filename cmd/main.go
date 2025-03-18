@@ -178,10 +178,18 @@ func main() {
 			r.Post("/menu", handlers.NewPostMenuHandler(handlers.PostMenuHandlerParams{
 				MenuStore: menuStore,
 			}).ServeHTTP)
-            r.Get("/post", handlers.NewGetCreatePostHandler().ServeHTTP)
-            r.Post("/post", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
+            r.Route("/post", func(r chi.Router) {
+                r.Get("/", handlers.NewGetCreatePostHandler().ServeHTTP)
+                r.Post("/", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
                     PostStore: postStore,
-            }).ServeHTTP) 
+                }).ServeHTTP) 
+                r.Get("/{postId}", handlers.NewPostEditHandler(handlers.GetPostEditHandlerParams{
+                    PostStore: postStore,
+                }).ServeHTTP)
+                r.Patch("/{postId}", handlers.NewPatchPostHandler(handlers.PatchPostHandlerParams{
+                    PostStore: postStore,
+                }).ServeHTTP)
+            })
             r.Post("/upload", handlers.NewPostUploadHandler().ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {
 				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
