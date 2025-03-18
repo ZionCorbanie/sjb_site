@@ -16,38 +16,69 @@ templ CreatePost(){
     <div id="post-status"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="/static/script/quill.imageUploader.min.js"></script>
 
     <script type="module">
+        const uploadImage = async (file) => {
+            try {
+                const formData = new FormData();
+                formData.append("image", file);
+
+                const response = await fetch("/admin/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error("Image upload failed");
+                }
+
+                const data = await response.json();
+                return data.url;
+            } catch (error) {
+                console.error("Upload error:", error);
+                return null;
+            }
+        };
+
         var toolbarOptions = [
-            ['bold', 'italic', 'underline', 'strike'],   
-            ['blockquote', 'code-block'],
-
-            [{ 'header': 1 }, { 'header': 2 }],           
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],   
-            [{ 'indent': '-1'}, { 'indent': '+1' }],        
-            [{ 'direction': 'rtl' }],                        
-
-            [{ 'size': ['small', false, 'large', 'huge'] }], 
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [ 'link', 'image', 'video', 'formula' ],         
-            [{ 'color': [] }, { 'background': [] }],         
-            [{ 'font': [] }],
-            [{ 'align': [] }],
-
-            ['clean']                                         
+            ["bold", "italic", "underline", "strike"],
+            ["blockquote", "code-block"],
+            [{ header: 1 }, { header: 2 }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            [{ script: "sub" }, { script: "super" }],
+            [{ indent: "-1" }, { indent: "+1" }],
+            [{ direction: "rtl" }],
+            [{ size: ["small", false, "large", "huge"] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ["link", "image", "video", "formula"],
+            [{ color: [] }, { background: [] }],
+            [{ font: [] }],
+            [{ align: [] }],
+            ["clean"],
         ];
 
-        var quill = new Quill('#editor', {
-            modules: {
-                toolbar: toolbarOptions
-            },
+        Quill.register("modules/imageUploader", ImageUploader);
 
-            theme: 'snow'
+        var quill = new Quill("#editor", {
+            modules: {
+                toolbar: toolbarOptions,
+                imageUploader: {
+                    upload: async (file) => {
+                        const imageUrl = await uploadImage(file);
+                        if (!imageUrl) {
+                            console.error("Failed to upload image");
+                            return;
+                        }
+                        return imageUrl;
+                    },
+                },
+            },
+            theme: "snow",
         });
 
-        let form = document.querySelector('form');
-        form.addEventListener('submit', function(event) {
+        let form = document.querySelector("form");
+        form.addEventListener("submit", function (event) {
             let content = quill.root.innerHTML;
             document.querySelector('input[name="content"]').value = content;
         });
