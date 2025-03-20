@@ -58,6 +58,7 @@ type Post struct {
 	ID       uint      `gorm:"primaryKey" json:"id"`
 	Title    string    `json:"title" gorm:"type:varchar(255)"`
 	Content  string    `json:"content"`
+    Image    string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-group.png'"`
 	Date     time.Time `json:"date"`
 	AuthorID uint      `json:"author_id"`
 	Author   User      `gorm:"foreignKey:AuthorID" json:"author"`
@@ -89,7 +90,7 @@ type Session struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
 	SessionID string `json:"session_id" gorm:"type:varchar(255)"`
 	UserID    uint   `json:"user_id"`
-	User      User   `gorm:"foreignKey:UserID" json:"user"`
+	User      User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE" json:"user"`
 }
 
 type UserStore interface {

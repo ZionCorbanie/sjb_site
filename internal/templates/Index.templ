@@ -40,8 +40,11 @@ templ Index(user *store.User, posts []*store.Post) {
                         { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
                     </a>
                     <div>{ post.Date.Format("02-01-2006") }</div>
-                    <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) }>
-                        <image class="rounded-md" src="/static/img/placeholder-group.png" alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                    <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
+                        <div class="h-40 w-60 overflow-hidden">
+                            <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                        </div>
+
                         <div class="text-center text-wrap">{ post.Title }</div>
                     </a>
                 </div>

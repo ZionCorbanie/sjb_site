@@ -189,6 +189,9 @@ func main() {
                 r.Patch("/{postId}", handlers.NewPatchPostHandler(handlers.PatchPostHandlerParams{
                     PostStore: postStore,
                 }).ServeHTTP)
+                r.Delete("/{postId}", handlers.NewDeletePostHandler(handlers.DeletePostHandlerParams{
+                    PostStore: postStore,
+                }).ServeHTTP)
             })
             r.Post("/upload", handlers.NewPostUploadHandler().ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {

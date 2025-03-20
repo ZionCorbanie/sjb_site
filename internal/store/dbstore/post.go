@@ -51,8 +51,16 @@ func (s *PostStore) GetPostsRange(start int, length int, admin bool, external bo
     return posts, err
 }
 
-func (s *PostStore) PatchPost(post store.Post) error{
-	return s.db.Model(&store.Post{}).Where("id = ?", post.ID).Updates(post).Error
+func (s *PostStore) PatchPost(post store.Post) error {
+	updateData := map[string]interface{}{
+		"Title":     post.Title,
+		"Content":   post.Content,
+		"Image":     post.Image,
+		"Published": post.Published,
+		"External":  post.External,
+	}
+
+	return s.db.Model(&store.Post{}).Where("id = ?", post.ID).Updates(updateData).Error
 }
 
 func (s *PostStore) DeletePost(postId string) error {

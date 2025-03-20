@@ -88,7 +88,6 @@ func (h *PatchUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         }
 
         userPatch.Image = "/"+filePath
-        fmt.Printf("File uploaded successfully: %s\n", filePath)
     }
 
 

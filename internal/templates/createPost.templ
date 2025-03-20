@@ -7,16 +7,50 @@ import (
 
 templ CreatePost(){
     <link href="/static/css/quill.snow.css" rel="stylesheet" />
-    <form hx-post="/admin/post" hx-target-500="#post-status">
-        <input type="text" name="title" placeholder="Post Title" required />
-        <input type="text" class="hidden" name="content"/>
+    <div x-data="{
+        image: null,
+        previewUrl: '',
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.image = file;
+                this.previewUrl = URL.createObjectURL(file);
+            }
+        }
+    }" x-init={ fmt.Sprintf("previewUrl = '%s'", "/static/img/placeholder-group.png") } >
+        <form hx-post="/admin/post" hx-target-500="#post-status" enctype="multipart/form-data">
+            <label for="publiek">publiek</label>
+            <input type="checkbox" id="publiek" name="publiek" />
 
-        <div class="border border-[#ccc]">
-            <div id="editor" ></div>
-        </div>
+            <label for="extern">extern</label>
+            <input type="checkbox" id="extern" name="extern" />
 
-        <button type="submit">Publish</button>
-    </form>
+            <label for="post-image" class="cursor-pointer">
+                <div class="h-72 overflow-hidden">
+                    <img 
+                        class="w-full h-full object-cover object-center" 
+                        :src="previewUrl"
+                        alt={ fmt.Sprintf("Foto van %s", "deze post") }
+                    />
+                </div>
+            </label>
+            <input 
+                id="post-image" 
+                type="file" 
+                name="image" 
+                class="hidden" 
+                @change="handleFileChange"
+            />
+            <input type="text" name="title" placeholder="Post Title" required />
+            <input type="text" class="hidden" name="content"/>
+
+            <div class="border border-[#ccc]">
+                <div id="editor" ></div>
+            </div>
+
+            <button type="submit">Publish</button>
+        </form>
+    </div>
     <div id="post-status"></div>
 
     @Editor()
@@ -24,7 +58,45 @@ templ CreatePost(){
 
 templ EditPost(post *store.Post){
     <link href="/static/css/quill.snow.css" rel="stylesheet" />
-    <form hx-patch={ fmt.Sprintf("/admin/post/%d", post.ID) } hx-target-500="#post-status">
+    <button class="text-secondary-600" type="button" hx-delete={fmt.Sprintf("/admin/post/%d", post.ID)} hx-confirm="Ben je zeker dat je deze post wil verwijderen?">Verwijderen</button>
+    <div x-data="{
+        image: null,
+        previewUrl: '',
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.image = file;
+                this.previewUrl = URL.createObjectURL(file);
+            }
+        }
+    }" x-init={ fmt.Sprintf("previewUrl = '%s'", post.Image) } >
+    <form hx-patch={ fmt.Sprintf("/admin/post/%d", post.ID) } hx-target-500="#post-status" enctype="multipart/form-data"> 
+        <label for="publiek">publiek</label>
+        <input type="checkbox" id="publiek" name="publiek" if post.Published { 
+            checked="" 
+        }/>
+
+        <label for="extern">extern</label>
+        <input type="checkbox" id="extern" name="extern"  if post.External { 
+            checked="" 
+        }/>
+
+        <label for="post-image" class="cursor-pointer">
+            <div class="h-72 overflow-hidden">
+                <img 
+                    class="w-full h-full object-cover object-center" 
+                    :src="previewUrl"
+                    alt={ fmt.Sprintf("Foto van %s", post.Title) }
+                />
+            </div>
+        </label>
+        <input 
+            id="post-image" 
+            type="file" 
+            name="image" 
+            class="hidden" 
+            @change="handleFileChange"
+        />
         <input type="text" name="title" placeholder="Post Title" value={post.Title} required />
         <input type="text" class="hidden" name="content" value=""/>
 
@@ -37,6 +109,7 @@ templ EditPost(post *store.Post){
 
         <button type="submit">Publish</button>
     </form>
+    </div>
     <div id="post-status"></div>
 
     @Editor()
