@@ -40,10 +40,13 @@ templ nav() {
 		<div class="container flex justify-between">
 			<ol class="flex space-x-4">
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-4 items-center" href="/"><span class="iconify mdi-light--home size-6"></span></a>
+					<a class="flex text-red-600 gap-2 p-2 items-center" href="/"><span class="icon-[material-symbols-light--home-outline-rounded]"></span></a>
 				</li>
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-2 items-center" href="/eettafel"><span class="iconify mdi-light--account"></span></a>
+					<a class="flex text-red-600 gap-2 p-2 items-center" href="/eettafel">
+                        <span class="icon-[material-symbols-light--restaurant-menu]"></span>
+                        <div class="-ml-1">Eettafel</div>
+                    </a>
 				</li>
 				if user != nil {
                     <li x-data="{
@@ -77,7 +80,7 @@ templ nav() {
                             type="button"
                             class="flex items-center gap-2 p-2 text-red-600"
                             >
-                            Webalmanak
+                            Webalmanak<span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
                         </a>
                         <!-- Panel -->
                         <div
@@ -108,20 +111,20 @@ templ nav() {
 			</ol>
 			<ol class="flex space-x-4">
 				if user != nil {
-                    <li>
-                        <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="iconify mdi-light--account size-6"></span></a>
+                    <li class="relative">
+                        <a class="flex text-red-600 py-2 items-center" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
                     </li>
                     if middleware.IsAdmin(ctx) {
-                        <li>
-                            <a class="text-red-600" href="/admin"><span class="iconify mdi-light--settings size-6"></span></a>
+                        <li class="relative">
+                            <a class="flex text-red-600 py-2 items-center" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
                         </li>
                     }
-                    <li>
-                        <button class="text-red-600" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="iconify mdi-light--logout size-6"></span></button>
+                    <li class="relative">
+                        <button class="flex text-red-600 py-2 items-center" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
                     </li>
 				} else {
-					<li>
-						<a class="text-red-600" href="/login">Login</a>
+					<li class="relative">
+						<a class="flex text-red-600 py-2 items-center" href="/login">Login</a>
 					</li>
 				}
 			</ol>
@@ -131,38 +134,41 @@ templ nav() {
 
 templ Layout(contents templ.Component, title string) {
 	@header(title)
-	<body class="bg-fixed h-full bg-gradient-to-br from-primary to-red-400">
-        <div class="flex flex-col justify-between h-full w-full lg:w-[1024px] mx-auto">
-            <div class="bg-primary shadow-xl rounded-b-lg">
+	<body class="bg-fixed bg-linear-to-br from-primary to-red-400">
+        <div class="flex flex-col justify-between h-screen w-full lg:w-[1024px] mx-auto">
+            <header class="bg-primary shadow-xl rounded-b-lg">
                 @nav()
+            </header>
+            <div class="flex-1 overflow-y-auto">
+                <main class="h-full rounded-t-lg bg-primary shadow-xl mt-5 p-7">
+                    @contents
+                </main>
+                @footer()
             </div>
-            <main class="h-full rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
-                @contents
-            </main>
-            @footer()
         </div>
 	</body>
 }
 
 templ BannerLayout(contents templ.Component, banner string, title string) {
 	@header(title)
-        <body class="bg-fixed" style="">
+    <body class="bg-fixed" style="">
         <div class="w-full">
-            <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
-                <div class="bg-primary shadow-xl">
+            <div class="flex flex-col h-screen w-full lg:w-[1024px] mx-auto">
+                <header class="bg-primary shadow-xl">
                     @nav()
-                </div>
-                <div class="rounded-b-lg bg-primary shadow-xl ">
-                    <div class="w-full h-80">
-                        <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
+                </header>
+                <div class="flex-1 overflow-y-auto">
+                    <div class="rounded-b-lg bg-primary shadow-xl">
+                        <div class="w-full h-80">
+                            <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
+                        </div>
+                        <h1 class="text-secondary-600 text-2xl p-3 pl-5">{ title }</h1>
                     </div>
-                    <h1 class="text-secondary-600 text-2xl p-3 pl-5">{ title }</h1>
+                    <main class="rounded-t-lg bg-primary shadow-xl mt-5 p-7">
+                        @contents
+                    </main>
+                    @footer()
                 </div>
-
-                <main class="rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
-                    @contents
-                </main>
-                @footer()
             </div>
         </div>
 	</body>

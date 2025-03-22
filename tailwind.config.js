@@ -1,6 +1,4 @@
 const colors = require("tailwindcss/colors");
-const { addIconSelectors } = require("@iconify/tailwind");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["internal/templates/*.templ", "internal/templates/*.go"],
@@ -25,6 +23,5 @@ module.exports = {
   plugins: [
       require("@tailwindcss/forms"), 
       require("@tailwindcss/typography"),
-      addIconSelectors(["mdi-light", "vscode-icons"]),
   ],
 };
