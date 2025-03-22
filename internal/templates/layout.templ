@@ -14,14 +14,13 @@ templ header(title string) {
 		<!--<script src="/static/script/htmx.min.js" nonce={ middleware.GetHtmxNonce(ctx) }></script>-->
         <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>		
         <script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
-        <!-- <script src="code.iconify.design/1/1.0.6/iconify.min.js"></script> -->
         <!--<script src="/static/script/response-targets.js" nonce={ middleware.GetResponseTargetsNonce(ctx) }></script>-->
 		<!--<link rel="stylesheet" href="/static/css/style.min.css" nonce={ middleware.GetTwNonce(ctx) }/>-->
         <link rel="icon" type="image/x-icon" href="/static/img/favicon-16x16.png"/>
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         //if os.Getenv("env") == "production" {
-			<link rel="stylesheet" href="/static/css/style.min.css"/>
+			<link rel="stylesheet" href="/static/css/style.css"/>
 	//	} else {
 	//		<link rel="stylesheet" href="/static/css/style.css"/>
     //   }
@@ -37,14 +36,14 @@ templ footer() {
 
 templ nav() {
     {{ user := middleware.GetUser(ctx) }}
-	<nav class="p-4 bg-[url('/static/img/header_background_lijn.png')]">
+	<nav class="p-4">
 		<div class="container flex justify-between">
 			<ol class="flex space-x-4">
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-2 items-center" href="/">Home</a>
+					<a class="flex text-red-600 gap-2 p-4 items-center" href="/"><span class="iconify mdi-light--home size-6"></span></a>
 				</li>
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-2 items-center" href="/eettafel">Eettafel</a>
+					<a class="flex text-red-600 gap-2 p-2 items-center" href="/eettafel"><span class="iconify mdi-light--account"></span></a>
 				</li>
 				if user != nil {
                     <li x-data="{
@@ -110,15 +109,15 @@ templ nav() {
 			<ol class="flex space-x-4">
 				if user != nil {
                     <li>
-                        <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>Profiel</a>
+                        <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="iconify mdi-light--account size-6"></span></a>
                     </li>
                     if middleware.IsAdmin(ctx) {
                         <li>
-                            <a class="text-red-600" href="/admin">Admin</a>
+                            <a class="text-red-600" href="/admin"><span class="iconify mdi-light--settings size-6"></span></a>
                         </li>
                     }
                     <li>
-                        <button class="text-red-600" hx-target="body" hx-swap="innerHTML" hx-post="/logout">Uitloggen</button>
+                        <button class="text-red-600" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="iconify mdi-light--logout size-6"></span></button>
                     </li>
 				} else {
 					<li>
@@ -132,24 +131,22 @@ templ nav() {
 
 templ Layout(contents templ.Component, title string) {
 	@header(title)
-	<body class="bg-fixed" style="background-image: url('/static/img/delft_background.jpg');">
-        <div class="w-full">
-            <div class="flex flex-col h-full w-full lg:w-[1024px] mx-auto">
-                <div class="bg-primary shadow-xl">
-                    @nav()
-                </div>
-                <main class="h-full rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
-                    @contents
-                </main>
-                @footer()
+	<body class="bg-fixed h-full bg-gradient-to-br from-primary to-red-400">
+        <div class="flex flex-col justify-between h-full w-full lg:w-[1024px] mx-auto">
+            <div class="bg-primary shadow-xl rounded-b-lg">
+                @nav()
             </div>
+            <main class="h-full rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
+                @contents
+            </main>
+            @footer()
         </div>
 	</body>
 }
 
 templ BannerLayout(contents templ.Component, banner string, title string) {
 	@header(title)
-        <body class="bg-fixed" style="background-image: url('/static/img/delft_background.jpg');">
+        <body class="bg-fixed" style="">
         <div class="w-full">
             <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
                 <div class="bg-primary shadow-xl">

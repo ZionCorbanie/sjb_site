@@ -7,3 +7,5 @@ static/uploads/
 static/css/style.min.css
 internal/templates/*.go
 internal/templates/*.txt
+node_modules/
+.pnpm-store/

@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@tailwindcss/upgrade": "^4.0.15",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.319",
+    "@iconify/tailwind": "^1.2.0",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16"
+  },
+  "scripts": {
+    "build": "pnpm tailwindcss --watch -i ./static/css/input.css -o ./static/css/style.css"
+  }
+}
