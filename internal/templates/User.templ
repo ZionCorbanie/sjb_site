@@ -8,10 +8,12 @@ import (
 
 templ User(User *store.User, Groups []*store.GroupUser) {
     <div>
-        <image class="rounded-full w-36 h-36 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
-        if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
-            <a href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }> wijzig </a>
-        }
+        <div class="flex justify-between">
+            <image class="rounded-full w-36 h-36 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
+            if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
+                <a href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }><span class="text-red-600 icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
+            }
+        </div>
         <div> lid sinds: { User.StartDate.Format("02/01/2006") }</div>
         if !User.EndDate.IsZero() {
             <div> uitgeschreven: { User.EndDate.Format("02/01/2006") }</div>

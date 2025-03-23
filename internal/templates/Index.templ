@@ -42,9 +42,10 @@ templ Index(user *store.User, posts []*store.Post) {
                     <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 border-red-500">Stem</button>
                 </form>
             </div>
-        }else{
+        } 
+        else {
             <div class="lg:-mr-8 lg:ml-8 lg:flex-1 lg:w-auto lg:min-h-full h-80 w-full mb-4 overflow-hidden lg:rounded-l-lg">
-                <img class="object-cover w-full h-full" src="/static/img/placeholder-group.png" alt="banner"/>
+                @carrousel()
             </div>
         }
     </div>
@@ -54,7 +55,7 @@ templ Index(user *store.User, posts []*store.Post) {
     </div>
 }
 
-templ recentPosts(posts []*store.Post) {
+templ recentPosts(posts []*store.Post){
     <div class="mt-5">
         <h1 class="text-red-500 text-xl">Laatste nieuws</h1>
         <div class="flex flex-wrap justify-around mt-5">
@@ -78,4 +79,25 @@ templ recentPosts(posts []*store.Post) {
             <a href="/posts">Bekijk alle posts</a>
         </div>
     </div>
+}
+
+templ carrousel(){
+    <div class="relative w-full lg:flex-1 h-80 lg:min-h-full overflow-hidden">
+        <!-- Carousel Wrapper -->
+        <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
+            <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/delft_background.jpg" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
+        </div>
+
+        <!-- Pagination Buttons -->
+        <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
+        </button>
+        <button id="nextBtn" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span>
+        </button>
+    </div>
+    <script src="/static/script/carrousel.js"></script>
 }
