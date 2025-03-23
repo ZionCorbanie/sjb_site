@@ -15,7 +15,7 @@ if [ "$ENVIRONMENT" = "development" ]; then
     echo "Starting templ watch..."
     make templ-watch &
 
-    npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/style.css --watch --poll
+    npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/style.css --watch
 
     wait
 else

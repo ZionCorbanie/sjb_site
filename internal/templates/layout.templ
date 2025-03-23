@@ -36,16 +36,34 @@ templ footer() {
 
 templ nav() {
     {{ user := middleware.GetUser(ctx) }}
-	<nav class="p-4">
-		<div class="container flex justify-between">
-			<ol class="flex space-x-4">
+	<nav class="px-4 lg:pb-2 border-t-4 border-red-600 mt-4">
+		<div class="flex container justify-between lg:py-4">
+            <a class="static lg:ml-5" href="/">
+                <img class="h-26 absolute top-2 hidden lg:block" src="/static/img/logo.png" alt="logo"/>
+                <img class="h-18 absolute top-2 lg:hidden" src="/static/img/logo-small.png" alt="logo"/>
+                <div class="ml-14 lg:ml-20 px-2 font-serif text-xl lg:text-3xl font-weight-medium">D.S.V. Sint Jansbrug</div>
+            </a>
+			<ol class="hidden lg:flex space-x-4">
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-2 items-center" href="/"><span class="icon-[material-symbols-light--home-outline-rounded]"></span></a>
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/">
+                        <div class="-ml-1">Vereniging</div>
+                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+                    </a>
 				</li>
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-2 items-center" href="/eettafel">
-                        <span class="icon-[material-symbols-light--restaurant-menu]"></span>
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
                         <div class="-ml-1">Eettafel</div>
+                    </a>
+				</li>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
+                        <div class="-ml-1">Contact</div>
+                    </a>
+				</li>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
+                        <div class="-ml-1">Extra</div>
+                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
                     </a>
 				</li>
 				if user != nil {
@@ -78,7 +96,7 @@ templ nav() {
                             :aria-expanded="open"
                             :aria-controls="$id('dropdown-button')"
                             type="button"
-                            class="flex items-center gap-2 p-2 text-red-600"
+                            class="flex items-center gap-2 px-2 text-red-600 hover:underline"
                             >
                             Webalmanak<span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
                         </a>
@@ -109,38 +127,41 @@ templ nav() {
                     </li>
                 }
 			</ol>
-			<ol class="flex space-x-4">
+			<ol class="hidden lg:flex space-x-4">
 				if user != nil {
                     <li class="relative">
-                        <a class="flex text-red-600 py-2 items-center" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
+                        <a class="flex text-red-600 items-center" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
                     </li>
                     if middleware.IsAdmin(ctx) {
                         <li class="relative">
-                            <a class="flex text-red-600 py-2 items-center" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
+                            <a class="flex text-red-600 items-center" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
                         </li>
                     }
                     <li class="relative">
-                        <button class="flex text-red-600 py-2 items-center" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
+                        <button class="flex text-red-600 items-center" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
                     </li>
 				} else {
 					<li class="relative">
-						<a class="flex text-red-600 py-2 items-center" href="/login">Login</a>
+						<a class="flex text-red-600 items-center" href="/login"><span class="icon-[material-symbols-light--login-rounded]"></span></a>
 					</li>
 				}
 			</ol>
+            <button class="lg:hidden text-red-600" onclick="document.getElementById('menu').classList.toggle('hidden')">
+                <span class="icon-[material-symbols-light--menu]"></span>
+            </button>
 		</div>
 	</nav>
 }
 
 templ Layout(contents templ.Component, title string) {
 	@header(title)
-	<body class="bg-fixed bg-linear-to-br from-primary to-red-400">
-        <div class="flex flex-col justify-between h-screen w-full lg:w-[1024px] mx-auto">
-            <header class="bg-primary shadow-xl rounded-b-lg">
+	<body class="bg-fixed bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75%">
+        <div class="flex flex-col min-h-screen w-full max-w-6xl mx-auto">
+            <header class="sticky top-0 bg-primary shadow-xl z-50 lg:rounded-b-lg">
                 @nav()
             </header>
-            <div class="flex-1 overflow-y-auto">
-                <main class="h-full rounded-t-lg bg-primary shadow-xl mt-5 p-7">
+            <div class="flex-grow flex flex-col justify-between overflow-y-auto no-scrollbar">
+                <main class="flex-grow h-full lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-7">
                     @contents
                 </main>
                 @footer()
@@ -151,24 +172,22 @@ templ Layout(contents templ.Component, title string) {
 
 templ BannerLayout(contents templ.Component, banner string, title string) {
 	@header(title)
-    <body class="bg-fixed" style="">
-        <div class="w-full">
-            <div class="flex flex-col h-screen w-full lg:w-[1024px] mx-auto">
-                <header class="bg-primary shadow-xl">
-                    @nav()
-                </header>
-                <div class="flex-1 overflow-y-auto">
-                    <div class="rounded-b-lg bg-primary shadow-xl">
-                        <div class="w-full h-80">
-                            <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
-                        </div>
-                        <h1 class="text-secondary-600 text-2xl p-3 pl-5">{ title }</h1>
+    <body class="bg-fixed bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75%">
+        <div class="flex flex-col min-h-screen w-full max-w-6xl mx-auto">
+            <header class="sticky top-0 bg-primary shadow-xl z-50">
+                @nav()
+            </header>
+            <div class="flex-grow flex flex-col justify-between overflow-y-auto no-scrollbar">
+                <div class="lg:rounded-b-lg bg-primary lg:shadow-xl">
+                    <div class="w-full h-80">
+                        <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
                     </div>
-                    <main class="rounded-t-lg bg-primary shadow-xl mt-5 p-7">
-                        @contents
-                    </main>
-                    @footer()
+                    <h1 class="text-secondary-600 text-2xl p-3 pl-5">{ title }</h1>
                 </div>
+                <main class="flex-grow lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-7">
+                    @contents
+                </main>
+                @footer()
             </div>
         </div>
 	</body>

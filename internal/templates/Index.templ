@@ -7,7 +7,9 @@ import "time"
 templ Index(user *store.User, posts []*store.Post) {
     if user == nil {
         <div>
-            Ding voor niet ingelogde gebruikers om naar te kijken
+            <h1>Welkom bij D.S.V. Sint Jansbrug</h1>
+            <p>De gezelligste studentenvereniging van Delft</p>
+            <a href="/inschrijven"> Word lid </a>
         </div>
         <hr>
     }
@@ -32,26 +34,30 @@ templ Index(user *store.User, posts []*store.Post) {
     </div>
     <hr>
     <div>
-        <h1>Laatste nieuws</h1>
-        <div class="flex flex-wrap justify-around mt-5">
-            for _, post := range posts {
-                <div class="flex-none w-64 mx-2">
-                    <a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
-                        { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
-                    </a>
-                    <div>{ post.Date.Format("02-01-2006") }</div>
-                    <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
-                        <div class="h-40 w-60 overflow-hidden">
-                            <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
-                        </div>
+        @recentPosts(posts)
+    </div>
+}
 
-                        <div class="text-center text-wrap">{ post.Title }</div>
-                    </a>
-                </div>
-            }
-        </div>
-        <div class="flex justify-center mt-5">
-            <a href="/posts">Bekijk alle posts</a>
-        </div>
+templ recentPosts(posts []*store.Post) {
+    <h1>Laatste nieuws</h1>
+    <div class="flex flex-wrap justify-around mt-5">
+        for _, post := range posts {
+            <div class="flex-none w-64 mx-2">
+                <a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
+                    { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
+                </a>
+                <div>{ post.Date.Format("02-01-2006") }</div>
+                <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
+                    <div class="h-40 w-60 overflow-hidden">
+                        <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                    </div>
+
+                    <div class="text-center text-wrap">{ post.Title }</div>
+                </a>
+            </div>
+        }
+    </div>
+    <div class="flex justify-center mt-5">
+        <a href="/posts">Bekijk alle posts</a>
     </div>
 }
