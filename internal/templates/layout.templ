@@ -3,6 +3,7 @@ package templates
 import (
 	"sjb_site/internal/middleware"
 	"fmt"
+	"os"
 )
 
 templ header(title string) {
@@ -11,19 +12,17 @@ templ header(title string) {
 		<title>{ title }</title>
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<!--<script src="/static/script/htmx.min.js" nonce={ middleware.GetHtmxNonce(ctx) }></script>-->
-        <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>		
-        <script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
-        <!--<script src="/static/script/response-targets.js" nonce={ middleware.GetResponseTargetsNonce(ctx) }></script>-->
+		<script src="/static/script/htmx.min.js"></script>
+        <script src="/static/script/response-targets.min.js"></script>
 		<!--<link rel="stylesheet" href="/static/css/style.min.css" nonce={ middleware.GetTwNonce(ctx) }/>-->
         <link rel="icon" type="image/x-icon" href="/static/img/favicon-16x16.png"/>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="/static/script/alpine.min.js"></script>
 
-        //if os.Getenv("env") == "production" {
+        if os.Getenv("env") == "production" {
+			<link rel="stylesheet" href="/static/css/style.min.css"/>
+		} else {
 			<link rel="stylesheet" href="/static/css/style.css"/>
-	//	} else {
-	//		<link rel="stylesheet" href="/static/css/style.css"/>
-    //   }
+        }
 		
 	</head>
 }
@@ -43,7 +42,7 @@ templ nav() {
                 <img class="h-18 absolute top-2 lg:hidden" src="/static/img/logo-small.png" alt="logo"/>
                 <div class="ml-14 lg:ml-20 px-2 font-serif text-xl lg:text-3xl font-weight-medium">D.S.V. Sint Jansbrug</div>
             </a>
-			<ol class="hidden lg:flex space-x-4">
+			<ol class="hidden lg:flex space-x-4 items-center">
 				<li class="relative">
 					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/">
                         <div class="-ml-1">Vereniging</div>
@@ -51,7 +50,7 @@ templ nav() {
                     </a>
 				</li>
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
+					<a class="flex items-center text-red-600 gap-2 px-2 hover:underline" href="/eettafel">
                         <div class="-ml-1">Eettafel</div>
                     </a>
 				</li>

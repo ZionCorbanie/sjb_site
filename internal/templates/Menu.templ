@@ -6,49 +6,35 @@ import (
 )
 
 templ MenuDay(menu *store.Menu) {
-    <div id="menu" class="flex flex-col justify-between">
-        <div>
-            <h3>
-                {menu.Name}
-            </h3>
-            <div>
+    <div id="menu" class="bg-[url(/static/img/eettafelbord.jpg)] bg-cover bg-clip-border bg-clip-border m-2 shadow-2xl rounded-lg overflow-hidden">
+        <div class="bg-white/60 backdrop-blur-xs px-4 min-w-72 min-h-48 h-full flex flex-col justify-between font-medium">
+            <div class="my-2 text-xl">
+                <span>Menu: </span><span class="underline text-red-700 font-normal">{menu.Name}</span>
+            </div>
+            <div class="grid grid-cols-3 gap-x-4">
                 if menu.Basis != "" {
-                    <div>
-                        Basis: {menu.Basis}
-                    </div>
+                    <div class="font-semibold">Basis:</div> <div>{menu.Basis}</div> <div class="text-xs place-self-end">bevat: aids</div>
                 }
-            </div>
-            <div>
                 if menu.Vlees != "" {
-                    <div>
-                        Vlees: {menu.Vlees}
-                    </div>
+                    <div class="font-semibold">Vlees:</div> <div>{menu.Vlees}</div> <div class="text-xs place-self-end">bevat: aids</div>
                 }
-            </div>
-            <div>
                 if menu.Vega != "" {
-                    <div>
-                        Vega: {menu.Vega}
-                    </div>
+                    <div class="font-semibold">Vega:</div> <div>{menu.Vega}</div> <div class="text-xs place-self-end">bevat: aids</div>
                 }
-            </div>
-            <div>
                 if menu.Toe != "" {
-                    <div>
-                        Toe: {menu.Toe}
-                    </div>
+                    <div class="font-semibold">Toe:</div> <div>{menu.Toe}</div> <div class="text-xs place-self-end">bevat: aids</div>
                 }
             </div>
-        </div>
 
-        <div>
-            <button hx-get={ fmt.Sprintf("/menu/%d",menu.ID-1) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
-                vorige
-            </button>
-            { menu.Date.Format("02-01-2006") }
-            <button hx-get={ fmt.Sprintf("/menu/%d",menu.ID+1)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
-                volgende
-            </button>
+            <div class="flex items-center justify-center w-full">
+                <button class="cursor-pointer" hx-get={ fmt.Sprintf("/menu/%d",menu.ID-1) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                    <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
+                </button>
+                <div>{ menu.Date.Format("02-01-2006") }</div>
+                <button class="cursor-pointer" hx-get={ fmt.Sprintf("/menu/%d",menu.ID+1)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                    <span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span>
+                </button>
+            </div>
         </div>
     </div>
 }

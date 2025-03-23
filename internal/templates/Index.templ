@@ -13,7 +13,15 @@ templ Index(user *store.User, posts []*store.Post) {
         </div>
         <hr>
     }
-    <div class="flex justify-evenly">
+    <div class="flex justify-evenly flex-wrap">
+        <div id="menu"
+            hx-trigger="load" 
+            hx-get={ fmt.Sprintf("/menu/%d", time.Now().Unix()/(60*60*24)) }
+            hx-target="#menu"
+            hx-swap="outerHTML"
+            >
+            Eettafelmenu
+        </div>
         if user != nil {
             <div>
                 Sjaarsch van de dag
@@ -23,14 +31,6 @@ templ Index(user *store.User, posts []*store.Post) {
                 </a>
             </div>
         }
-        <div id="menu"
-            hx-trigger="load" 
-            hx-get={ fmt.Sprintf("/menu/%d", time.Now().Unix()/(60*60*24)) }
-            hx-target="#menu"
-            hx-swap="outerHTML"
-            >
-            Eettafelmenu
-        </div>
     </div>
     <hr>
     <div>
