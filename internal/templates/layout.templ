@@ -3,6 +3,7 @@ package templates
 import (
 	"sjb_site/internal/middleware"
 	"fmt"
+	"os"
 )
 
 templ header(title string) {
@@ -11,20 +12,17 @@ templ header(title string) {
 		<title>{ title }</title>
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<!--<script src="/static/script/htmx.min.js" nonce={ middleware.GetHtmxNonce(ctx) }></script>-->
-        <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>		
-        <script src="https://unpkg.com/htmx-ext-response-targets@2.0.0/response-targets.js"></script>
-        <!-- <script src="code.iconify.design/1/1.0.6/iconify.min.js"></script> -->
-        <!--<script src="/static/script/response-targets.js" nonce={ middleware.GetResponseTargetsNonce(ctx) }></script>-->
+		<script src="/static/script/htmx.min.js"></script>
+        <script src="/static/script/response-targets.min.js"></script>
 		<!--<link rel="stylesheet" href="/static/css/style.min.css" nonce={ middleware.GetTwNonce(ctx) }/>-->
         <link rel="icon" type="image/x-icon" href="/static/img/favicon-16x16.png"/>
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="/static/script/alpine.min.js"></script>
 
-        //if os.Getenv("env") == "production" {
+        if os.Getenv("env") == "production" {
 			<link rel="stylesheet" href="/static/css/style.min.css"/>
-	//	} else {
-	//		<link rel="stylesheet" href="/static/css/style.css"/>
-    //   }
+		} else {
+			<link rel="stylesheet" href="/static/css/style.css"/>
+        }
 		
 	</head>
 }
@@ -37,14 +35,35 @@ templ footer() {
 
 templ nav() {
     {{ user := middleware.GetUser(ctx) }}
-	<nav class="p-4 bg-[url('/static/img/header_background_lijn.png')]">
-		<div class="container flex justify-between">
-			<ol class="flex space-x-4">
+	<nav class="px-4 lg:pb-2 border-t-4 border-red-600 mt-4">
+		<div class="flex container justify-between lg:py-4">
+            <a class="static lg:ml-5" href="/">
+                <img class="h-26 absolute top-2 hidden lg:block" src="/static/img/logo.png" alt="logo"/>
+                <img class="h-18 absolute top-2 lg:hidden" src="/static/img/logo-small.png" alt="logo"/>
+                <div class="ml-14 lg:ml-20 px-2 font-serif text-xl lg:text-3xl font-weight-medium">D.S.V. Sint Jansbrug</div>
+            </a>
+			<ol class="hidden lg:flex space-x-4 items-center">
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-2 items-center" href="/">Home</a>
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/">
+                        <div class="-ml-1">Vereniging</div>
+                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+                    </a>
 				</li>
 				<li class="relative">
-					<a class="flex text-red-600 gap-2 p-2 items-center" href="/eettafel">Eettafel</a>
+					<a class="flex items-center text-red-600 gap-2 px-2 hover:underline" href="/eettafel">
+                        <div class="-ml-1">Eettafel</div>
+                    </a>
+				</li>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
+                        <div class="-ml-1">Contact</div>
+                    </a>
+				</li>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
+                        <div class="-ml-1">Extra</div>
+                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+                    </a>
 				</li>
 				if user != nil {
                     <li x-data="{
@@ -76,9 +95,9 @@ templ nav() {
                             :aria-expanded="open"
                             :aria-controls="$id('dropdown-button')"
                             type="button"
-                            class="flex items-center gap-2 p-2 text-red-600"
+                            class="flex items-center gap-2 px-2 text-red-600 hover:underline"
                             >
-                            Webalmanak
+                            Webalmanak<span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
                         </a>
                         <!-- Panel -->
                         <div
@@ -107,38 +126,41 @@ templ nav() {
                     </li>
                 }
 			</ol>
-			<ol class="flex space-x-4">
+			<ol class="hidden lg:flex space-x-4">
 				if user != nil {
-                    <li>
-                        <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>Profiel</a>
+                    <li class="relative">
+                        <a class="flex text-red-600 items-center" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
                     </li>
                     if middleware.IsAdmin(ctx) {
-                        <li>
-                            <a class="text-red-600" href="/admin">Admin</a>
+                        <li class="relative">
+                            <a class="flex text-red-600 items-center" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
                         </li>
                     }
-                    <li>
-                        <button class="text-red-600" hx-target="body" hx-swap="innerHTML" hx-post="/logout">Uitloggen</button>
+                    <li class="relative">
+                        <button class="flex text-red-600 items-center" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
                     </li>
 				} else {
-					<li>
-						<a class="text-red-600" href="/login">Login</a>
+					<li class="relative">
+						<a class="flex text-red-600 items-center" href="/login"><span class="icon-[material-symbols-light--login-rounded]"></span></a>
 					</li>
 				}
 			</ol>
+            <button class="lg:hidden text-red-600" onclick="document.getElementById('menu').classList.toggle('hidden')">
+                <span class="icon-[material-symbols-light--menu]"></span>
+            </button>
 		</div>
 	</nav>
 }
 
 templ Layout(contents templ.Component, title string) {
 	@header(title)
-	<body class="bg-fixed" style="background-image: url('/static/img/delft_background.jpg');">
-        <div class="w-full">
-            <div class="flex flex-col h-full w-full lg:w-[1024px] mx-auto">
-                <div class="bg-primary shadow-xl">
-                    @nav()
-                </div>
-                <main class="h-full rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
+	<body class="bg-fixed bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75%">
+        <div class="flex flex-col min-h-screen w-full max-w-6xl mx-auto">
+            <header class="sticky top-0 bg-primary shadow-xl z-50 lg:rounded-b-lg">
+                @nav()
+            </header>
+            <div class="flex-grow flex flex-col justify-between overflow-y-auto no-scrollbar">
+                <main class="flex-grow h-full lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-8">
                     @contents
                 </main>
                 @footer()
@@ -149,20 +171,19 @@ templ Layout(contents templ.Component, title string) {
 
 templ BannerLayout(contents templ.Component, banner string, title string) {
 	@header(title)
-        <body class="bg-fixed" style="background-image: url('/static/img/delft_background.jpg');">
-        <div class="w-full">
-            <div class="flex flex-col h-full  w-full lg:w-[1024px] mx-auto">
-                <div class="bg-primary shadow-xl">
-                    @nav()
-                </div>
-                <div class="rounded-b-lg bg-primary shadow-xl ">
+    <body class="bg-fixed bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75%">
+        <div class="flex flex-col min-h-screen w-full max-w-6xl mx-auto">
+            <header class="sticky top-0 bg-primary shadow-xl z-50">
+                @nav()
+            </header>
+            <div class="flex-grow flex flex-col justify-between overflow-y-auto no-scrollbar">
+                <div class="lg:rounded-b-lg bg-primary lg:shadow-xl">
                     <div class="w-full h-80">
                         <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
                     </div>
                     <h1 class="text-secondary-600 text-2xl p-3 pl-5">{ title }</h1>
                 </div>
-
-                <main class="rounded-t-lg bg-primary flex-1 shadow-xl mt-5 p-7">
+                <main class="flex-grow lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-8">
                     @contents
                 </main>
                 @footer()

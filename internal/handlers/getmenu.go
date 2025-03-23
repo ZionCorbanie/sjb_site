@@ -31,7 +31,7 @@ func (h *GetMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         menu = &store.Menu{}
         menuIdInt, _ := strconv.ParseInt(menuId, 10, 64)
         menu.ID = uint(menuIdInt)
-        menu.Name = "Menu onbekend"
+        menu.Name = "Onbekend"
 
         menu.Date = time.Unix(menuIdInt*60*60*24, 0)
         if menu.Date.Weekday() == time.Saturday || menu.Date.Weekday() == time.Sunday {

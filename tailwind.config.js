@@ -1,5 +1,4 @@
 const colors = require("tailwindcss/colors");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["internal/templates/*.templ", "internal/templates/*.go"],
@@ -21,5 +20,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")],
+  plugins: [
+      require("@tailwindcss/forms"), 
+      require("@tailwindcss/typography"),
+  ],
 };

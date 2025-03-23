@@ -6,15 +6,7 @@ import (
 )
 
 templ Posts(posts []*store.Post, page int) {
-    <div class="flex flex-row justify-center text-secondary-600">
-        if page > 0 {
-            <a class="underline" href={ templ.URL(fmt.Sprintf("/posts/%d", page-1)) }>Vorige</a>
-        }
-        <div class="mx-5"> { fmt.Sprintf("%d",page) } </div> 
-        if len(posts) == 5 {
-            <a class="underline" href={ templ.URL(fmt.Sprintf("/posts/%d", page+1)) }>Volgende</a>
-        }
-    </div>
+    @pagination(posts, page)
 
     for _, post := range posts {
         <div class="flex flex-col md:flex-row md:mx-10 mt-10">
@@ -34,16 +26,19 @@ templ Posts(posts []*store.Post, page int) {
         </div>
     }
     
-    // Pagination buttons 
-    <div class="flex flex-row justify-center text-secondary-600">
+    @pagination(posts, page)
+}
+
+templ pagination(posts []*store.Post, page int){
+    <div class="flex flex-row justify-center items-center text-secondary-600">
         if page > 0 {
-            <a class="underline" href={ templ.URL(fmt.Sprintf("/posts/%d", page-1)) }>Vorige</a>
+            <a class="" href={ templ.URL(fmt.Sprintf("/posts/%d", page-1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span></a>
         }
-        <div class="mx-5">
+        <div class="">
         { fmt.Sprintf("%d",page) }
         </div> 
         if len(posts) == 5 {
-            <a class="underline" href={ templ.URL(fmt.Sprintf("/posts/%d", page+1)) }>Volgende</a>
+            <a class="" href={ templ.URL(fmt.Sprintf("/posts/%d", page+1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span></a>
         }
     </div>
 }

@@ -34,7 +34,7 @@ func (h *GetWeekMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     for i, menu := range menus {
         if menu.ID == 0 {
             menu.ID = uint(pageInt+i)
-            menu.Name = "Menu onbekend"
+            menu.Name = "Onbekend"
             menu.Date = time.Unix(int64((pageInt+i)*60*60*24), 0)
         }
     }
