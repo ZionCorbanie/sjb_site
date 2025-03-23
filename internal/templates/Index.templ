@@ -44,9 +44,7 @@ templ Index(user *store.User, posts []*store.Post) {
             </div>
         } 
         else {
-            <div class="lg:-mr-8 lg:ml-8 lg:flex-1 lg:w-auto lg:min-h-full h-80 w-full mb-4 overflow-hidden lg:rounded-l-lg">
-                @carrousel()
-            </div>
+            @carrousel()
         }
     </div>
     <hr>
@@ -82,16 +80,14 @@ templ recentPosts(posts []*store.Post){
 }
 
 templ carrousel(){
-    <div class="relative w-full lg:flex-1 h-80 lg:min-h-full overflow-hidden">
-        <!-- Carousel Wrapper -->
+    <div class="lg:-mr-8 lg:ml-8 relative w-full lg:flex-1 h-80 lg:min-h-full overflow-hidden mb-4 overflow-hidden lg:rounded-l-lg">
         <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
             <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
-            <img src="/static/img/delft_background.jpg" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/eettafelbord.jpg" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
             <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
-            <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/eettafelbord.jpg" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
         </div>
 
-        <!-- Pagination Buttons -->
         <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">
             <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
         </button>
