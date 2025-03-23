@@ -13,7 +13,7 @@ templ Index(user *store.User, posts []*store.Post) {
         </div>
         <hr>
     }
-    <div class="flex justify-evenly flex-wrap">
+    <div class="flex lg:justify-between flex-wrap -mx-8 lg:mr-0">
         <div id="menu"
             hx-trigger="load" 
             hx-get={ fmt.Sprintf("/menu/%d", time.Now().Unix()/(60*60*24)) }
@@ -23,12 +23,28 @@ templ Index(user *store.User, posts []*store.Post) {
             Eettafelmenu
         </div>
         if user != nil {
-            <div>
-                Sjaarsch van de dag
-                <a href="/webalmanak/leden/1">
-                    <image class="rounded-full" src="/static/img/placeholder-150x150.png" alt="Foto van sjaarsch van de dag"/>
-                    Je moeder
+            <div class="mb-4 rounded-lg shadow-xl max-sm:w-screen">
+                <div class="underline text-xl mx-4 font-medium text-red-600">Sjaarsch van de dag</div>
+                <a class="p-4 flex flex-col justify-center items-center" href="/webalmanak/leden/1">
+                    <image class="rounded-full w-40 h-40" src="/static/img/placeholder-150x150.png" alt="Foto van sjaarsch van de dag"/>
+                    <div class="text-center text-red-600">Naam</div>
+                    <div class="text-center">JC incest</div>
                 </a>
+            </div>
+            <div class="mb-4 min-w-64 h-full p-4 rounded-lg shadow-xl max-sm:w-screen">
+                <div class="text-xl">Meer of minder marokkanen</div>
+                <form action="/poll" method="post" class="flex flex-col justify-between h-full">
+                    <div class="mt-2">
+                        <div><input type="radio" name="poll" value="1"> Meer</div>
+                        <div><input type="radio" name="poll" value="2"> Minder</div>
+                        <div><input type="radio" name="poll" value="3"> Idk geef me bier</div>
+                    </div>
+                    <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 border-red-500">Stem</button>
+                </form>
+            </div>
+        }else{
+            <div class="lg:-mr-8 lg:ml-8 lg:flex-1 lg:w-auto lg:min-h-full h-80 w-full mb-4 overflow-hidden lg:rounded-l-lg">
+                <img class="object-cover w-full h-full" src="/static/img/placeholder-group.png" alt="banner"/>
             </div>
         }
     </div>
@@ -39,25 +55,27 @@ templ Index(user *store.User, posts []*store.Post) {
 }
 
 templ recentPosts(posts []*store.Post) {
-    <h1>Laatste nieuws</h1>
-    <div class="flex flex-wrap justify-around mt-5">
-        for _, post := range posts {
-            <div class="flex-none w-64 mx-2">
-                <a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
-                    { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
-                </a>
-                <div>{ post.Date.Format("02-01-2006") }</div>
-                <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
-                    <div class="h-40 w-60 overflow-hidden">
-                        <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
-                    </div>
+    <div class="mt-5">
+        <h1 class="text-red-500 text-xl">Laatste nieuws</h1>
+        <div class="flex flex-wrap justify-around mt-5">
+            for _, post := range posts {
+                <div class="flex-none w-64 mx-2">
+                    <a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
+                        { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
+                    </a>
+                    <div>{ post.Date.Format("02-01-2006") }</div>
+                    <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
+                        <div class="h-40 w-60 overflow-hidden">
+                            <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                        </div>
 
-                    <div class="text-center text-wrap">{ post.Title }</div>
-                </a>
-            </div>
-        }
-    </div>
-    <div class="flex justify-center mt-5">
-        <a href="/posts">Bekijk alle posts</a>
+                        <div class="text-center text-wrap">{ post.Title }</div>
+                    </a>
+                </div>
+            }
+        </div>
+        <div class="flex justify-center mt-5">
+            <a href="/posts">Bekijk alle posts</a>
+        </div>
     </div>
 }

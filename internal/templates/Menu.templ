@@ -6,23 +6,31 @@ import (
 )
 
 templ MenuDay(menu *store.Menu) {
-    <div id="menu" class="bg-[url(/static/img/eettafelbord.jpg)] bg-cover bg-clip-border bg-clip-border m-2 shadow-2xl rounded-lg overflow-hidden">
-        <div class="bg-white/60 backdrop-blur-xs px-4 min-w-72 min-h-48 h-full flex flex-col justify-between font-medium">
+    <div id="menu" class="bg-[url(/static/img/eettafelbord.jpg)] bg-cover bg-clip-border bg-clip-border mb-4 shadow-xl rounded-none lg:rounded-r-xl overflow-hidden">
+        <div class="bg-white/60 backdrop-blur-xs px-4 max-lg:w-screen lg:min-w-100 min-h-58 h-full flex flex-col justify-between align-end font-medium">
             <div class="my-2 text-xl">
                 <span>Menu: </span><span class="underline text-red-700 font-normal">{menu.Name}</span>
             </div>
-            <div class="grid grid-cols-3 gap-x-4">
+            <div class="grid grid-cols-[auto_auto_1fr] gap-x-6 gap-y-2">
                 if menu.Basis != "" {
-                    <div class="font-semibold">Basis:</div> <div>{menu.Basis}</div> <div class="text-xs place-self-end">bevat: aids</div>
+                    <div class="font-semibold">Basis:</div> 
+                    <div>{menu.Basis}</div> 
+                    <div class="text-xs break-words max-w-60">bevat: aidsenpis, kak, bonen, gluten, pizza, tomaat, olijven</div>
                 }
                 if menu.Vlees != "" {
-                    <div class="font-semibold">Vlees:</div> <div>{menu.Vlees}</div> <div class="text-xs place-self-end">bevat: aids</div>
+                    <div class="font-semibold">Vlees:</div> 
+                    <div>{menu.Vlees}</div> 
+                    <div class="text-xs break-words max-w-60">bevat: aids</div>
                 }
                 if menu.Vega != "" {
-                    <div class="font-semibold">Vega:</div> <div>{menu.Vega}</div> <div class="text-xs place-self-end">bevat: aids</div>
+                    <div class="font-semibold">Vega:</div> 
+                    <div>{menu.Vega}</div> 
+                    <div class="text-xs break-words max-w-60">bevat: aids</div>
                 }
                 if menu.Toe != "" {
-                    <div class="font-semibold">Toe:</div> <div>{menu.Toe}</div> <div class="text-xs place-self-end">bevat: aids</div>
+                    <div class="font-semibold">Toe:</div> 
+                    <div>{menu.Toe}</div> 
+                    <div class="text-xs break-words max-w-60">bevat: aids</div>
                 }
             </div>
 

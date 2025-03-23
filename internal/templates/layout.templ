@@ -160,7 +160,7 @@ templ Layout(contents templ.Component, title string) {
                 @nav()
             </header>
             <div class="flex-grow flex flex-col justify-between overflow-y-auto no-scrollbar">
-                <main class="flex-grow h-full lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-7">
+                <main class="flex-grow h-full lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-8">
                     @contents
                 </main>
                 @footer()
@@ -183,7 +183,7 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
                     </div>
                     <h1 class="text-secondary-600 text-2xl p-3 pl-5">{ title }</h1>
                 </div>
-                <main class="flex-grow lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-7">
+                <main class="flex-grow lg:rounded-t-lg bg-primary lg:shadow-xl mt-5 p-8">
                     @contents
                 </main>
                 @footer()
