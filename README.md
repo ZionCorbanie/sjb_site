@@ -1,55 +1,33 @@
 # Sjb site
-Een nieuwe site voor Sint Jansbrug gemaakt met Go, Tailwind, Templ en HTMX.
+Een nieuwe, snelle en veilige site voor Sint Jansbrug gemaakt met Go, Tailwind, Templ en HTMX.
 
 * Go - Backend
 * Tailwind - CSS
 * Templ - Templating
-* HTMX - Frontend zonder bullshit
-
+* HTMX - Simeple dynamische frontend
 
 ## Makefile
 De makefile zorgt ervoor dat je makkelijk de site kan draaien en bouwen. 
 
 `make docker-dev` zorgt ervoor dat je niet elke keer opnieuw moet builden bij veranderingen.
 
+Momenteel werkt alleen de dev omgeving, maar er is ook een productie omgeving.
+
 ## Ports
 
-* 4000 - Site
+* 4000 - Site (80 in de dev env)
 * 3333 - PhpMyAdmin (database shit)
 
 ## Dir structuur
 
 `internal/`: Hier staat alle code buiten de router
 `cmd/main.go`: Entrypoint van de site en waar de router staat
-`static/`: spreekt voor zichzelf, als je iets wil exposen doe hier
+`static/`: static fileserver gaat hieruit
 `dev/`: scriptjes en tools
 
-## Naming
+## Veiligheid
 
-Omdat computer science kut is en ik mn leven haat is alles wat de user zou kunnen zien nederlands en anders engels. Endpoints zijn dus nederlands en data ook. Verder alles engels.
+Met gorm en templ zijn we volledig beschermd tegen sql injection en xss attacks.
+Op alle niet-publieke routes staan middleware voor admin of leden privileges.
 
-Verder idk camelCase/PascalCase omdat dat conanical go is. Pas op met json en sql want daar is de norm snake_case.
-
-## Code style
-
-Dus ja canon go pls. Werk zoveel mogelijk met de go features van een functie attachen aan een struct, zo is mocking heel nice voor als we tests zouden schrijven. Goed voorbeeld hiervan is store.go en de files in dbstore/ in static/store/
-
-Verder in de handlers zie je voor elke endpoint een file, is winnen want anders kom je snel aan files met 1000+ lines.
-
-Liefst geen css maar altijd tailwind. Ook alpine.js als er geen andere optie is via html en tailwind.
-
-## Database
-
-We gebruiken GORM voor de database. Die doet dus automatisch de structures uit store.go in de db. Maak snel ook ffe een mock db aan via phpmyadmin is niet zo moeilijk (die van mij is ook nogsteeds heel klein dus eh).
-Je kan best 2 accounts registeren op de website en dan één admin maken via phpmyadmin.
-
-We kunnen later wel een betere db en static/uploads dir maken maar voor nu is dit prima aangezien nog niet alle reqs goed zijn uitgewerkt.
-
-## Hoe beginnen programmeren
-
-* Leer go
-* Leer htmx
-* Leer tailwind (focus op mobile first design)
-* Leer templ (ook niet moeilijk)
-* Kijk naar de code en probeer te begrijpen (begin bij cmd/main.go en volg de router)
-* Neem een van de (voor nu nog onbestaande) issues en maak branch
+Useruploads worden "beschermd" via uuid, een hacker zou dus miljarden requests moeten doen om er een te vinden. (eigenlijk moet dit door middleware)
