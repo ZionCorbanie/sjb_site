@@ -23,7 +23,7 @@ templ Index(user *store.User, posts []*store.Post) {
             Eettafelmenu
         </div>
         if user != nil {
-            <div class="mb-4 rounded-lg shadow-xl max-sm:w-screen">
+            <div class="mb-4 rounded-lg shadow-xl max-sm:w-screen border-t-2">
                 <div class="underline text-xl mx-4 font-medium text-red-600">Sjaarsch van de dag</div>
                 <a class="p-4 flex flex-col justify-center items-center" href="/webalmanak/leden/1">
                     <image class="rounded-full w-40 h-40" src="/static/img/placeholder-150x150.png" alt="Foto van sjaarsch van de dag"/>
@@ -31,7 +31,7 @@ templ Index(user *store.User, posts []*store.Post) {
                     <div class="text-center">JC incest</div>
                 </a>
             </div>
-            <div class="mb-4 min-w-64 h-full p-4 rounded-lg shadow-xl max-sm:w-screen">
+            <div class="mb-4 min-w-64 h-full p-4 rounded-lg border-t-2 shadow-xl max-sm:w-screen">
                 <div class="text-xl">Meer of minder marokkanen</div>
                 <form action="/poll" method="post" class="flex flex-col justify-between h-full">
                     <div class="mt-2">
@@ -55,25 +55,26 @@ templ Index(user *store.User, posts []*store.Post) {
 
 templ recentPosts(posts []*store.Post){
     <div class="mt-5">
-        <h1 class="text-red-500 text-xl">Laatste nieuws</h1>
+        <h1 class="text-red-500 text-2xl text-center">Laatste nieuws</h1>
         <div class="flex flex-wrap justify-around mt-5">
             for _, post := range posts {
-                <div class="flex-none w-64 mx-2">
+                <div class="flex-none w-72 m-2">
                     <a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
                         { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
                     </a>
                     <div>{ post.Date.Format("02-01-2006") }</div>
-                    <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
-                        <div class="h-40 w-60 overflow-hidden">
-                            <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
-                        </div>
-
-                        <div class="text-center text-wrap">{ post.Title }</div>
-                    </a>
+                    <div class="bg-stone-100 rounded-lg overflow-hidden shadow-2xl">
+                        <a href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
+                            <div class="rounded-t-lg h-48 overflow-hidden">
+                                <image class="w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                            </div>
+                            <div class="px-3 pb-2 pt-1 text-wrap text-xl text-red-500">{ post.Title }</div>
+                        </a>
+                    </div>
                 </div>
             }
         </div>
-        <div class="flex justify-center mt-5">
+        <div class="underline flex justify-center mt-5">
             <a href="/posts">Bekijk alle posts</a>
         </div>
     </div>

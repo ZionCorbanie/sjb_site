@@ -12,9 +12,8 @@ templ Post(post *store.Post){
             <a class="underline" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>{ post.Author.FirstName } { post.Author.LastName }</a>
             <p class="text-neutral-600">{ post.Date.Format("02-01-2006") }</p>
         </div>
-        <div>
+        <div class="flex">
             if middleware.IsAdmin(ctx){
-                <a class="text-secondary-600" href={templ.SafeURL(fmt.Sprintf("/admin/post/%d", post.ID))}><span class="icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
                 if post.Published{
                     <div><span class="icon-[material-symbols-light--lock-open-right-outline]"></span></div>
                 } else {
@@ -25,6 +24,7 @@ templ Post(post *store.Post){
                 } else {
                     <div><span class="icon-[tabler--world-off]"></span></div>
                 }
+                <a class="text-secondary-600" href={templ.SafeURL(fmt.Sprintf("/admin/post/%d", post.ID))}><span class="icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
             }
         </div>
     </div>
