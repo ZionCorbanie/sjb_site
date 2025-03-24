@@ -25,9 +25,11 @@ templ Index(user *store.User, posts []*store.Post) {
         if user != nil {
             <div class="mb-4 rounded-lg shadow-xl max-sm:w-screen border-t-2">
                 <div class="underline text-xl mx-4 font-medium text-red-600">Sjaarsch van de dag</div>
-                <a class="p-4 flex flex-col justify-center items-center" href="/webalmanak/leden/1">
-                    <image class="rounded-full w-40 h-40" src="/static/img/placeholder-150x150.png" alt="Foto van sjaarsch van de dag"/>
-                    <div class="text-center text-red-600">Naam</div>
+                <a class="p-4 flex flex-col justify-center items-center" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>
+                    <div class="rounded-full w-40 h-40 overflow-hidden">
+                        <image class="transition-transform duration-300 transform hover:scale-120 w-full h-full objec-cover" src={user.Image} alt="Foto van sjaarsch van de dag"/>
+                    </div>
+                    <div class="text-center text-red-600">{user.FirstName} {user.LastName}</div>
                     <div class="text-center">JC incest</div>
                 </a>
             </div>
@@ -39,7 +41,7 @@ templ Index(user *store.User, posts []*store.Post) {
                         <div><input type="radio" name="poll" value="2"> Minder</div>
                         <div><input type="radio" name="poll" value="3"> Idk geef me bier</div>
                     </div>
-                    <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 border-red-500">Stem</button>
+                    <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 transition duration-300 border-red-500 hover:border-neutral-200 hover:bg-red-500 hover:text-white">Stem</button>
                 </form>
             </div>
         } 
@@ -66,7 +68,7 @@ templ recentPosts(posts []*store.Post){
                     <div class="bg-stone-100 rounded-lg overflow-hidden shadow-2xl">
                         <a href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
                             <div class="rounded-t-lg h-48 overflow-hidden">
-                                <image class="w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                                <image class="transition-transform duration-300 transform hover:scale-125 peer w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
                             </div>
                             <div class="px-3 pb-2 pt-1 text-wrap text-xl text-red-500">{ post.Title }</div>
                         </a>

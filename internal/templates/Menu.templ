@@ -18,16 +18,19 @@ templ MenuDay(menu *store.Menu) {
                     <div class="text-xs break-words">bevat: aidsenpis, kak, bonen, gluten, pizza, tomaat, olijven</div>
                 }
                 if menu.Vlees != "" {
+                    <div class="col-span-3 border-t border-black/50"></div>
                     <div class="font-semibold">Vlees:</div> 
                     <div>{menu.Vlees}</div> 
                     <div class="text-xs break-words">bevat: aids</div>
                 }
                 if menu.Vega != "" {
+                    <div class="col-span-3 border-t border-black/50"></div>
                     <div class="font-semibold">Vega:</div> 
                     <div>{menu.Vega}</div> 
                     <div class="text-xs break-words">bevat: aids</div>
                 }
                 if menu.Toe != "" {
+                    <div class="col-span-3 border-t border-black/50"></div>
                     <div class="font-semibold">Toe:</div> 
                     <div>{menu.Toe}</div> 
                     <div class="text-xs break-words">bevat: aids</div>
