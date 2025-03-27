@@ -23,7 +23,7 @@ templ Index(user *store.User, posts []*store.Post) {
             Eettafelmenu
         </div>
         if user != nil {
-            <div class="mb-4 rounded-lg shadow-xl max-sm:w-screen border-t-2">
+            <div class="mb-4 bg-primary lg:rounded-xl shadow-xl max-sm:w-screen border-t-2">
                 <div class="underline text-xl mx-4 font-medium text-red-600">Sjaarsch van de dag</div>
                 <a class="p-4 flex flex-col justify-center items-center" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>
                     <div class="rounded-full w-40 h-40 overflow-hidden">
@@ -33,7 +33,7 @@ templ Index(user *store.User, posts []*store.Post) {
                     <div class="text-center">JC incest</div>
                 </a>
             </div>
-            <div class="mb-4 min-w-64 h-full p-4 rounded-lg border-t-2 shadow-xl max-sm:w-screen">
+            <div class="mb-4 bg-primary min-w-64 h-full p-4 lg:rounded-xl border-t-2 shadow-xl max-sm:w-screen">
                 <div class="text-xl">Meer of minder marokkanen</div>
                 <form action="/poll" method="post" class="flex flex-col justify-between h-full">
                     <div class="mt-2">
