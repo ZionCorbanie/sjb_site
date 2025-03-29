@@ -103,6 +103,7 @@ func main() {
 
 		r.Get("/", handlers.NewHomeHandler(&handlers.HomeHandlerParams{
             PostStore: postStore,
+            MenuStore: menuStore,
         }).ServeHTTP)
 
         r.Get("/post/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{

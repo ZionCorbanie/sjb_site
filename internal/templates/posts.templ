@@ -9,16 +9,16 @@ templ Posts(posts []*store.Post, page int) {
     @pagination(posts, page)
 
     for _, post := range posts {
-        <div class="flex flex-col md:flex-row md:mx-10 mt-10">
-            <a class="w-1/3 h-48 overflow-hidden" href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) }>
-                <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+        <div class="flex flex-col md:flex-row md:mx-10 my-5 shadow-xl rounded-md">
+            <a class="lg:w-1/3 h-48 overflow-hidden" href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) }>
+                <image class="lg:rounded-l-md max-md:rounded-t-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
             </a>
-            <div class="w-2/3">
-                <div class="ml-5">
+            <div class="lg:w-2/3">
+                <div class="ml-5 mt-2">
                     <a class="underline" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>{ post.Author.FirstName } { post.Author.LastName }</a>
                     <p class="text-neutral-600">{ post.Date.Format("02-01-2006") }</p>
                 </div>
-                <div class="ml-10">
+                <div class="px-8 py-4">
                     <a class="text-2xl text-secondary-600" href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >{ post.Title }</a>
                     <p class="text-justify">{ post.Content[:min(len(post.Content), 255)]+"..." }</p>
                 </div>
