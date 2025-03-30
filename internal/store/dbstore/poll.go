@@ -26,20 +26,24 @@ func (s *PollStore) CreatePoll(poll *store.Poll) error {
 
 func (s *PollStore) GetPoll(pollId string) (*store.Poll, error) {
     var poll store.Poll
-    err := s.db.First(&poll, pollId).Error
+    err := s.db.Preload("Options").First(&poll, pollId).Error
 
     return &poll, err
+}
+
+func (s *PollStore) GetPolls() ([]*store.Poll, error) {
+    var polls []*store.Poll
+    err := s.db.Find(&polls).Error
+    return polls, err
 }
 
 func (s *PollStore) DeletePoll(pollId string) error {
     return s.db.Delete(&store.Poll{}, pollId).Error
 }
 
-func (s *PollStore) PatchPoll(poll store.Poll) error {
-    updateData := map[string]interface{}{
-        "Title": poll.Title,
-        "Options": poll.Options,
-    }
-
-    return s.db.Model(&poll).Updates(updateData).Error
+func (s *PollStore) PutPoll(poll store.Poll) error {
+    //remove assodiated options
+    err := s.db.Where("poll_id = ?", poll.ID).Delete(store.PollOption{}).Error
+    err = s.db.Save(&poll).Error
+    return err
 }

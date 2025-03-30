@@ -1,45 +1,91 @@
 package templates
 
+import "sjb_site/internal/store"
+import "fmt"
+
 import ()
 
+templ Polls(polls []*store.Poll){
+    <div id="polls" class="flex w-full h-full space-x-4">
+        <div id="poll" class="w-full min-h-full border-r-1 border-black">
+            @CreatePoll()
+        </div>
+        <div id="list" class="w-full">
+            @PollList(polls)
+        </div>
+    </div>
+}
+
+templ PollList(polls []*store.Poll) {
+    <div class="flex flex-col space-y-4">
+        for _, poll := range polls {
+            <div class="flex flex-col space-y-2" 
+                hx-trigger="click" hx-get={ fmt.Sprintf("/admin/poll/%d", poll.ID) } 
+                hx-target="#poll" 
+                hx-swap="innerHTML">
+                <h2>{ poll.Title }</h2>
+                <div class="flex flex-col space-y-2">
+                    for _, answer := range poll.Options {
+                        <div class="flex justify-between">
+                            <p>{ answer.Option }</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
 templ CreatePoll(){
-    <div class="mt-10 sm:mx-auto sm:w-full" hx-ext="response-targets">
+    <div class="mt-10 flex justify-center" hx-ext="response-targets">
         <form class="space-y-6" 
             hx-post="/admin/poll"
             hx-trigger="submit"
-            hx-target="#menu-error"
-            hx-swap="innerHTML"
+            hx-target="#polls"
+            hx-swap="outerHTML"
             >
-            <div class="flex flex-row flex-wrap"> 
-                <div>
-                    <label for="titel" class="block text-sm/6 font-medium text-gray-900">Titel</label>
-                    <input type="text" name="titel" id="titel" >
-                </div>
-                <div id="answers">
-                    <div id="q1">
-                        <label for="q1" class="block text-sm/6 font-medium text-gray-900">Vraag 1</label>
-                        <input type="text" name="q1" id="q1" >
-                    </div>
-                </div>
-                <button id="addPoll">Voeg antwoord toe</button>
-                <script>
-                    let i = 1
-                    document.getElementById("addPoll").addEventListener("click", function(){
-                        i++
-                        var answers = document.getElementById("answers");
-                        var newInput = document.createElement("input");
-                        newInput.type = "text";
-                        newInput.name = "q"+i;
-                        newInput.id = "q"+i;
-                        newInput.placeholder = "Vraag "+i;
-                        answers.appendChild(newInput);
-                    });
-                </script>
+            <div id="answers" class="flex flex-col space-y-2 max-w-60">
+                <label for="title" class="block text-sm/6 font-medium text-gray-900">Titel</label>
+                <input type="text" name="title" id="title" >
+                <label for="0" class="block text-sm/6 font-medium text-gray-900">Vragen</label>
+                <input type="text" name="0" id="0" placeholder="Vraag 1">
             </div>
+            <div class="flex justify-between max-w-60 space-x-2">
+                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
+                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
+            </div>
+            <script src="/static/script/polls.js"/>
 
-            <div class="max-w-44">
-                <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Poll toevoegen</button>
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Poll opslaan</button>
+        </form>
+    </div>
+
+    <div id="poll-error"></div>
+}
+
+templ EditPoll(poll *store.Poll){
+    <div class="mt-10 flex justify-center" hx-ext="response-targets">
+        <form class="space-y-6" 
+            hx-put={ fmt.Sprintf("/admin/poll/%d", poll.ID)}
+            hx-trigger="submit"
+            hx-target="#polls"
+            hx-swap="outerHTML"
+            >
+            <div id="answers" class="flex flex-col space-y-2 max-w-60">
+                <label for="title" class="block text-sm/6 font-medium text-gray-900">Titel</label>
+                <input type="text" name="title" id="title" value={poll.Title} >
+                <label for="1" class="block text-sm/6 font-medium text-gray-900">Vragen</label>
+                for i, answer := range poll.Options {
+                    <input type="text" name={ fmt.Sprintf("%d", i) } id={ fmt.Sprintf("%d", i) } value={ answer.Option }>
+                }
             </div>
+            <div class="flex justify-between max-w-60 space-x-2">
+                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
+                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
+            </div>
+            <script src="/static/script/polls.js"/>
+
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Poll opslaan</button>
         </form>
     </div>
 

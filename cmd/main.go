@@ -86,11 +86,11 @@ func main() {
         },
     )
 
-    // pollStore := dbstore.NewPollStore(
-    //     dbstore.NewPollStoreParams{
-    //         DB: db,
-    //     },
-    // )
+    pollStore := dbstore.NewPollStore(
+        dbstore.NewPollStoreParams{
+            DB: db,
+        },
+    )
 
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
@@ -219,7 +219,18 @@ func main() {
 				})
 			})
             r.Route("/poll", func(r chi.Router) {
-                r.Get("/", handlers.NewGetCreatePollHandler().ServeHTTP)
+                r.Get("/", handlers.NewGetCreatePollHandler(handlers.GetCreatePollHandlerParams{
+                    PollStore: pollStore,
+                }).ServeHTTP)
+                r.Post("/", handlers.NewPostCreatePollHandler(handlers.PostCreatePollHandlerParams{
+                    PollStore: pollStore,
+                }).ServeHTTP)
+                r.Get("/{pollId}", handlers.NewGetPollEditHandler(handlers.GetPollEditHandlerParams{
+                    PollStore: pollStore,
+                }).ServeHTTP)
+                r.Put("/{pollId}", handlers.NewPutPollHandler(handlers.PutPollHandlerParams{
+                    PollStore: pollStore,
+                }).ServeHTTP)
             })
         })
 

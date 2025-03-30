@@ -99,19 +99,19 @@ templ nav() {
 			<ol class="hidden lg:flex space-x-4">
 				if user != nil {
                     <li class="relative">
-                        <a class="flex text-red-600 items-center" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
+                        <a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
                     </li>
                     if middleware.IsAdmin(ctx) {
                         <li class="relative">
-                            <a class="flex text-red-600 items-center" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
+                            <a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
                         </li>
                     }
                     <li class="relative">
-                        <button class="flex text-red-600 items-center" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
+                        <button class="cursor-pointer flex text-red-600 items-center hover:bg-stone-200 rounded-full" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
                     </li>
 				} else {
 					<li class="relative">
-						<a class="flex text-red-600 items-center" href="/login"><span class="icon-[material-symbols-light--login-rounded]"></span></a>
+						<a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href="/login"><span class="icon-[material-symbols-light--login-rounded]"></span></a>
 					</li>
 				}
 			</ol>

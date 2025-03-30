@@ -157,7 +157,8 @@ type CommentStore interface {
 type PollStore interface {
     CreatePoll(poll *Poll) error
     GetPoll(pollId string) (*Poll, error)
+    GetPolls() ([]*Poll, error)
     DeletePoll(pollId string) error
-    PatchPoll(poll Poll) error
+    PutPoll(poll Poll) error
 }
 
