@@ -1,1 +1,1 @@
-<div id=\"content\">Admin pagina met admin dingen</div><div><a href=\"/admin/menu\">Menu maken</a> <a href=\"/admin/post\">Post maken</a></div><div><a href=\"/admin/leden\">Gebruikers beheren</a></div>
+<div id=\"content\">Admin pagina met admin dingen</div><div class=\"flex flex-col text-neutral-600\"><a href=\"/admin/menu\" class=\"hover:underline\">Menu maken</a> <a href=\"/admin/post\" class=\"hover:underline\">Post maken</a> <a href=\"/admin/poll\" class=\"hover:underline\">Poll maken</a> <a href=\"/admin/leden\" class=\"hover:underline\">Gebruikers beheren</a></div>

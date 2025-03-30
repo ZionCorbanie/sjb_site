@@ -49,7 +49,7 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	c := templates.Group(group, users)
 	s := templates.SidebarUser()
-	err = templates.BannerLayout(templates.Card(templates.Sidebar(c, s)), group.Image, group.Name).Render(r.Context(), w)
+	err = templates.BannerLayout(templates.Sidebar(c, s), group.Image, group.Name).Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

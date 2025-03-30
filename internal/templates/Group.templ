@@ -5,27 +5,25 @@ import "sjb_site/internal/middleware"
 import "fmt"
 
 templ Group(group *store.Group, users []*store.User) {
+    if middleware.IsAdmin(ctx) || false {
+        <a href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d/edit", group.ID)) }> wijzig </a>
+    }
     <div>
-        if middleware.IsAdmin(ctx) || false {
-            <a href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d/edit", group.ID)) }> wijzig </a>
+        Email: { group.Email }
+        if group.Website != "" {
+            Website: { group.Website }
         }
-        <div>
-            Email: { group.Email }
-            if group.Website != "" {
-                Website: { group.Website }
-            }
-            Sinds: { group.StartDate.Format("02/01/2006") }
-            if !group.EndDate.IsZero() {
-                Einde: { group.EndDate.Format("02/01/2006") }
-            }
-        </div>
-        <div class="flex flex-wrap justify-normal">
-            for _, user := range users {
-                <a class="flex-none w-28 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>
-                    <image class="rounded-full" src={ user.Image } alt={ fmt.Sprintf("Foto van %s", user.FirstName) }/>
-                    <div> { user.FirstName } { user.LastName } </div>
-                </a>
-            }
-        </div>
+        Sinds: { group.StartDate.Format("02/01/2006") }
+        if !group.EndDate.IsZero() {
+            Einde: { group.EndDate.Format("02/01/2006") }
+        }
+    </div>
+    <div class="flex flex-wrap justify-normal">
+        for _, user := range users {
+            <a class="flex-none w-28 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>
+                <image class="rounded-full" src={ user.Image } alt={ fmt.Sprintf("Foto van %s", user.FirstName) }/>
+                <div> { user.FirstName } { user.LastName } </div>
+            </a>
+        }
     </div>
 }

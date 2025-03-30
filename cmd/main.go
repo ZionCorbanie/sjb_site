@@ -86,6 +86,12 @@ func main() {
         },
     )
 
+    // pollStore := dbstore.NewPollStore(
+    //     dbstore.NewPollStoreParams{
+    //         DB: db,
+    //     },
+    // )
+
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
@@ -212,7 +218,10 @@ func main() {
 					}).ServeHTTP)
 				})
 			})
-		})
+            r.Route("/poll", func(r chi.Router) {
+                r.Get("/", handlers.NewGetCreatePollHandler().ServeHTTP)
+            })
+        })
 
 		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)
 

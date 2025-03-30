@@ -73,10 +73,10 @@ templ Card(contents templ.Component) {
 
 templ Sidebar(main templ.Component, sidebar templ.Component) {
     <div class="flex-1 lg:h-full flex flex-col lg:flex-row">
-        <div class="w-full lg:min-h-full lg:w-3/4 lg:border-r-2 max-md:border-b-2 border-red-600">
+        <div class="w-full lg:min-h-full lg:w-3/4 max-md:pb-10 lg:border-r-2 max-md:border-b-2 border-red-600">
             @main
         </div>
-        <div class="w-full lg:min-h-full lg:w-1/4 max-md:mt-10 max-md:pt-5 lg:pl-5">
+        <div class="w-full lg:min-h-full lg:w-1/4 max-md:pt-5 lg:pl-5">
             @sidebar
         </div>
     </div>
