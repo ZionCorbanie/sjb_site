@@ -49,7 +49,7 @@ func (h *GetUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	c := templates.User(user, groups)
 	s := templates.SidebarUser()
-	err = templates.Layout(templates.Sidebar(c, s), "Sint Jansbrug").Render(r.Context(), w)
+	err = templates.Layout(templates.Card(templates.Sidebar(c, s)), "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

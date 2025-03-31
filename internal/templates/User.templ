@@ -8,38 +8,62 @@ import (
 
 templ User(User *store.User, Groups []*store.GroupUser) {
     <div>
-        <div class="flex justify-between">
-            <image class="rounded-full w-36 h-36 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
-            if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
-                <a href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }><span class="text-red-600 icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
-            }
-        </div>
-        <div> lid sinds: { User.StartDate.Format("02/01/2006") }</div>
-        if !User.EndDate.IsZero() {
-            <div> uitgeschreven: { User.EndDate.Format("02/01/2006") }</div>
-        }
-        <div> naam: { User.FirstName } { User.LastName } </div>
-        <div> email: { User.Email } </div>
-        <div> telefoon: { User.PhoneNumber } </div>
-        <div> adres: <a class="text-secondary-600" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
+        <div class="flex flex-col-reverse lg:flex-row justify-between">
+            <div class="flex flex-col lg:flex-row lg:space-x-8">
+                <image class="rounded-full w-36 h-36 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
+                <div class="space-y-2">
+                    <div class="text-3xl text-red-600 mb-10">{ User.FirstName } { User.LastName } </div>
+                    <div class="flex items-center space-x-4"> <span class="icon-[mingcute--cake-line]"></span> <div> { User.StartDate.Format("02/01/2006") } </div> </div> //TODO: verjaardag in database
+                    <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-top]"></span> <div> { User.StartDate.Format("02/01/2006") }</div> </div>
+                    if !User.EndDate.IsZero() {
+                        <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-top] rotate-180"></span> <div>{ User.EndDate.Format("02/01/2006") }</div> </div>
+                    }
+                    <div class="flex items-center space-x-4"> <span class="icon-[mdi--email-outline]"></span> <div>{ User.Email }</div> </div>
+                    <div class="flex items-center space-x-4"> <span class="icon-[mdi--phone]"></span> <div> { User.PhoneNumber } </div> </div>
+                    <div class="flex items-center space-x-4"> <span class="icon-[fluent--home-24-regular]"></span> <a class="text-secondary-600" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
 
-        <div class="flex flex-col mt-5">
-            {{ groupType := "" }}
-            for _, groupUser := range Groups {
-                if groupType != groupUser.Group.GroupType {
-                    <div > { groupUser.Group.GroupType } </div>
-                        {{ groupType = groupUser.Group.GroupType }}
-                    <span class="flex space-x-4">
-                        <a class="text-secondary-600" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
-                        if groupUser.Function != "" {
-                            <p>{ groupUser.Function },</p>
+                    <div class="flex flex-col mt-5">
+                        {{ groupType := "" }}
+                        for _, groupUser := range Groups {
+                            if groupType != groupUser.Group.GroupType {
+                                <span class="flex items-center space-x-4 text-stone-600 mt-4"> @groupEmoji(&groupUser.Group) <div>{ groupUser.Group.GroupType }</div> </span>
+                                {{ groupType = groupUser.Group.GroupType }}
+                            }
+                            <span class="flex items-center space-x-4">
+                                <a class="text-secondary-600 ml-10 hover:underline" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
+                                if groupUser.Function != "" {
+                                    <p>{ groupUser.Function },</p>
+                                }
+                                <p>{ groupUser.Title }</p>
+                            </span>
                         }
-                        <p>{ groupUser.Title }</p>
-                    </span>
-                }
+                    </div>
+                </div>
+            </div>
+            if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
+                <a class="max-md:self-end" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }><span class="text-red-600 icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
             }
         </div>
     </div>
+}
+
+templ groupEmoji(Group *store.Group) {
+    switch Group.GroupType {
+    case "barploeg":
+        <span class="icon-[lucide--beer]"></span>
+    case "bestuur":
+        <span class="icon-[fluent--people-team-24-regular]"></span>
+    case "commissie":
+        <span class="icon-[fluent--settings-cog-multiple-24-regular]"></span>
+    case "gilde":
+        <span class="icon-[mynaui--move-vertical]"></span>
+    case "huis":
+        <span class="icon-[fluent--home-24-regular]"></span>
+    case "jaarclub":
+        <span class="icon-[mynaui--move-horizontal]"></span>
+    case "werkgroep":
+        <span class="icon-[fluent--settings-cog-multiple-24-regular]"></span>
+    }
 }
 
 templ SidebarUser() {

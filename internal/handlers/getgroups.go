@@ -35,7 +35,7 @@ func (h *GetGroupsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c := templates.Groups(groups)
-	err = templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
+	err = templates.Layout(templates.Card(c), "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

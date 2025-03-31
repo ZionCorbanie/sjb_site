@@ -28,7 +28,7 @@ func (h *GetEettafelHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     pageInt += offset
 
     c := templates.Eettafel(pageInt)
-    err := templates.Layout(c, "Eettafel").Render(r.Context(), w)
+    err := templates.Layout(templates.Card(c), "Eettafel").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

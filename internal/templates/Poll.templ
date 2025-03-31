@@ -1,0 +1,142 @@
+package templates
+
+import "sjb_site/internal/store"
+import "fmt"
+
+import ()
+
+templ Poll(poll *store.Poll, voted bool, totalVotes int){
+    <div class="text-xl">{ poll.Title }</div>
+    if !voted {
+        <form class="flex flex-col justify-between h-full mt-2"
+            hx-post={ fmt.Sprintf("/poll/%d", poll.ID) } 
+            hx-trigger="submit" hx-target="#poll" 
+            hx-swap="innerHTML">
+            for _, option := range poll.Options {
+                <div class="flex space-x-2 items-center">
+                    <input type="radio" name="option" value={ fmt.Sprintf("%d", option.ID) } id={ fmt.Sprintf("%d", option.ID) } >
+                    <label for={ fmt.Sprintf("%d", option.ID) }>{ option.Option }</label>
+                </div>
+            }
+            <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 transition duration-300 border-red-500 hover:border-neutral-200 hover:bg-red-500 hover:text-white">Stem</button>
+        </form>
+    }else {
+        <div class="grid grid-cols-[auto_auto_1fr] gap-2 items-center h-full mt-2">
+            for _, option := range poll.Options {
+                <div>{ option.Option }</div> 
+                <div class="w-40 flex rounded-full overflow-hidden">
+                    <div style={ fmt.Sprintf("width: %f%%", (float64(option.VoteCount) / float64(totalVotes)) * 100) } class="h-2 bg-red-500 rounded-full"></div>
+                    <div style={ fmt.Sprintf("width: %f%%", (float64(totalVotes - option.VoteCount) / float64(totalVotes)) * 100) } class="h-2 bg-white"></div>
+                </div>
+                <div>{ fmt.Sprintf("%d", option.VoteCount) }</div>
+            }
+        </div>
+        <button class="cursor-pointer mt-5 hover:underline text-red-500" hx-trigger="click" hx-delete={ fmt.Sprintf("/poll/%d", poll.ID) } hx-target="#poll" hx-swap="innerHTML">Stem veranderen</button>
+    }
+}
+
+templ Polls(polls []*store.Poll){
+    <div id="polls" class="flex flex-col lg:flex-row w-full h-full">
+        <div id="poll" class="w-full lg:w-3/5 max-md:border-b-1 border-black pb-4">
+            @CreatePoll()
+        </div>
+        <div id="list" class="w-full lg:w-2/5">
+            @PollList(polls)
+        </div>
+    </div>
+}
+
+templ PollList(polls []*store.Poll) {
+    <a href="/admin/poll" class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">
+        Nieuwe poll
+    </a>
+    <div class="border-1 border-black h-100 overflow-hidden overflow-y-scroll flex flex-col">
+        for _, poll := range polls {
+            <div class="flex justify-between hover:bg-stone-100 items-center px-4 py-1">
+                <span class="size-6 icon-[material-symbols--check-rounded] text-black hover:text-red-700 cursor-pointer" 
+                    hx-post={ fmt.Sprintf("/admin/poll/%d/activate", poll.ID) } 
+                    hx-target="#polls" 
+                    hx-swap="outerHTML"
+                    hx-confirm="Zeker dat je de poll actief wil maken?">
+                </span>
+                <div class="cursor-pointer hover:underline" 
+                    hx-trigger="click" hx-get={ fmt.Sprintf("/admin/poll/%d", poll.ID) } 
+                    hx-target="#poll" 
+                    hx-swap="innerHTML">
+                    { poll.Title }
+                </div>
+                <span class="size-6 icon-[tabler--trash] text-red-500 hover:text-red-700 cursor-pointer" 
+                    hx-delete={ fmt.Sprintf("/admin/poll/%d", poll.ID) } 
+                    hx-target="#polls" 
+                    hx-swap="outerHTML"
+                    hx-confirm="Zeker dat je de poll wil verwijderen?">
+                </span>
+            </div>
+        }
+    </div>
+}
+
+templ CreatePoll(){
+    <div class="lg:mt-10 flex justify-center" hx-ext="response-targets">
+        <form class="space-y-6" 
+            hx-post="/admin/poll"
+            hx-trigger="submit"
+            hx-target="#polls"
+            hx-swap="outerHTML"
+            >
+            <div id="answers" class="flex flex-col space-y-2 max-w-60">
+                <label for="title" class="block text-sm/6 font-medium text-gray-900">Vraag</label>
+                <input type="text" name="title" id="title" value="" autocomplete="off">
+                <label for="0" class="block text-sm/6 font-medium text-gray-900">Antwoorden</label>
+                <input type="text" name="0" id="0" placeholder="Antwoord 1" value="" autocomplete="off">
+            </div>
+            <div class="flex justify-between max-w-60 space-x-2">
+                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
+                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
+            </div>
+            <script src="/static/script/polls.js"/>
+
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Nieuwe poll maken</button>
+        </form>
+    </div>
+
+    <div id="poll-error"></div>
+}
+
+templ EditPoll(poll *store.Poll){
+    <div class="mt-10 flex justify-center" hx-ext="response-targets">
+        <form class="space-y-6" 
+            hx-put={ fmt.Sprintf("/admin/poll/%d", poll.ID)}
+            hx-trigger="submit"
+            hx-target="#polls"
+            hx-swap="outerHTML"
+            >
+            <div id="answers" class="flex flex-col space-y-2 max-w-60">
+                <label for="title" class="block text-sm/6 font-medium text-gray-900">Titel</label>
+                <input type="text" name="title" id="title" value={poll.Title} >
+                <label for="1" class="block text-sm/6 font-medium text-gray-900">Vragen</label>
+                for i, answer := range poll.Options {
+                    <input type="text" name={ fmt.Sprintf("%d", i) } id={ fmt.Sprintf("%d", i) } value={ answer.Option }>
+                }
+            </div>
+            <div class="flex justify-between max-w-60 space-x-2">
+                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
+                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
+            </div>
+            <script src="/static/script/polls.js"/>
+
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Poll opslaan</button>
+        </form>
+    </div>
+
+    <div id="poll-error"></div>
+}
+
+templ PollError(err error){
+    if err != nil {
+        <div class="mt-4 text-red-600">{ err.Error() }</div>
+    }
+    else{
+        <div class="mt-4 text-green-600">Poll toegevoegd</div>
+    }
+}

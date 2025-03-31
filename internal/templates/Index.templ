@@ -2,85 +2,108 @@ package templates
 
 import "sjb_site/internal/store"
 import "fmt"
-import "time"
 
-templ Index(user *store.User, posts []*store.Post) {
-    if user == nil {
-        <div>
-            <h1>Welkom bij D.S.V. Sint Jansbrug</h1>
-            <p>De gezelligste studentenvereniging van Delft</p>
-            <a href="/inschrijven"> Word lid </a>
-        </div>
-        <hr>
-    }
-    <div class="flex lg:justify-between flex-wrap -mx-8 lg:mr-0">
-        <div id="menu"
-            hx-trigger="load" 
-            hx-get={ fmt.Sprintf("/menu/%d", time.Now().Unix()/(60*60*24)) }
-            hx-target="#menu"
-            hx-swap="outerHTML"
-            >
-            Eettafelmenu
-        </div>
-        if user != nil {
-            <div class="mb-4 rounded-lg shadow-xl max-sm:w-screen">
-                <div class="underline text-xl mx-4 font-medium text-red-600">Sjaarsch van de dag</div>
-                <a class="p-4 flex flex-col justify-center items-center" href="/webalmanak/leden/1">
-                    <image class="rounded-full w-40 h-40" src="/static/img/placeholder-150x150.png" alt="Foto van sjaarsch van de dag"/>
-                    <div class="text-center text-red-600">Naam</div>
-                    <div class="text-center">JC incest</div>
-                </a>
-            </div>
-            <div class="mb-4 min-w-64 h-full p-4 rounded-lg shadow-xl max-sm:w-screen">
-                <div class="text-xl">Meer of minder marokkanen</div>
-                <form action="/poll" method="post" class="flex flex-col justify-between h-full">
-                    <div class="mt-2">
-                        <div><input type="radio" name="poll" value="1"> Meer</div>
-                        <div><input type="radio" name="poll" value="2"> Minder</div>
-                        <div><input type="radio" name="poll" value="3"> Idk geef me bier</div>
-                    </div>
-                    <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 border-red-500">Stem</button>
-                </form>
-            </div>
-        } 
-        else {
-            @carrousel()
-        }
+templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
+    <script src="/static/script/scroll-indicator.js"></script>
+    <div id="scroll-indicator" 
+         class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer transition-opacity duration-500"
+         hx-on:click="scrollToTarget()">
+         <span class="w-14 h-14 text-red-700 animate-bounce icon-[material-symbols-light--expand-circle-down-rounded]"></span>
     </div>
-    <hr>
-    <div>
-        @recentPosts(posts)
+
+    <div class="bg-fixed h-full w-full flex flex-grow flex-col overflow-y-auto no-scrollbar">
+        <div class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-100 to-75% w-full flex justify-center">
+            <div class="flex-grow flex-col justify-between h-full py-8 lg:px-8 w-full flex max-w-6xl">
+                if user == nil {
+                    <div>
+                        <h1>Welkom bij D.S.V. Sint Jansbrug</h1>
+                        <p>De gezelligste studentenvereniging van Delft</p>
+                        <a href="/inschrijven"> Word lid </a>
+                    </div>
+                    <hr>
+                }
+                <div class="flex lg:justify-between flex-wrap">
+                    @menu
+                    if user != nil {
+                        <div class="mb-4 p-4 bg-primary lg:rounded-xl shadow-xl max-sm:w-screen transition-shadow duration-100 hover:shadow-[0px_0px_50px_0px_rgba(224,27,36,1)]">
+                            <div class="underline text-xl font-medium text-red-700">Sjaarsch van de dag</div>
+                            <a class="mt-2 flex flex-col justify-center items-center" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>
+                                <div class="rounded-full w-40 h-40 overflow-hidden">
+                                    <image class="transition-transform duration-300 transform hover:scale-120 w-full h-full objec-cover" src={user.Image} alt="Foto van sjaarsch van de dag"/>
+                                </div>
+                                <div class="text-center text-red-600">{user.FirstName} {user.LastName}</div>
+                                <div class="text-center">JC incest</div>
+                            </a>
+                        </div>
+                        <div class="mb-4 bg-primary min-w-64 h-full p-4 lg:rounded-xl shadow-xl max-sm:w-screen">
+                            <div id="poll" hx-get="/poll/52" hx-swap="this" hx-swap="outerHTML" hx-trigger="load"> </div>
+                        </div>
+                    } 
+                    else {
+                        @carrousel()
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/178155_3864228971980_1032291266_o.jpg)] bg-center bg-[auto_100lvh] lg:bg-cover w-screen h-60 lg:h-100"></div>
+
+        <div id="posts" class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% w-full flex justify-center">
+            <div class="flex-grow flex-col justify-between h-full p-8 w-full flex max-w-6xl">
+                <div>
+                    @recentPosts(posts)
+                </div>
+            </div>
+        </div>
+
+        <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/soosieteit.jpg)] bg-center bg-cover w-screen h-60 lg:h-100 flex justify-center"></div>
+
+        <div class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% w-screen flex justify-center">
+            <div class="flex-grow flex-col justify-between text-justify h-full p-8 w-full flex max-w-6xl">
+                <p>  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis malesuada dolor. Morbi accumsan, ex ac rutrum lobortis, dolor elit tempus massa, vitae malesuada eros risus a nisl. Morbi faucibus ante leo, nec accumsan elit imperdiet in. Vivamus sed felis at neque dictum tristique quis a magna. In a pretium justo. Pellentesque volutpat magna lectus, eget efficitur lorem pharetra ut. Phasellus sit amet odio et justo feugiat porta in ornare tortor. Aliquam erat volutpat. Pellentesque et magna aliquet, ultrices arcu non, tristique velit. Morbi tincidunt mi ut interdum maximus. Duis at tellus fermentum, efficitur sem nec, rutrum sapien. Nullam nec ipsum luctus, euismod tortor ac, varius eros. Phasellus tortor mi, sodales vitae nisl sed, dapibus rutrum odio. Aenean vel purus imperdiet, feugiat ante eget, finibus tellus.
+
+Praesent bibendum rhoncus augue et congue. Aliquam sodales nulla nec purus rutrum volutpat. Donec et augue at nisi suscipit dictum. Quisque placerat iaculis massa in euismod. Sed ac orci sit amet odio faucibus sollicitudin in quis tortor. Pellentesque semper dictum sagittis. Cras varius, elit ac maximus lobortis, libero diam rhoncus urna, et accumsan odio dui pellentesque dui. Sed convallis commodo maximus. Maecenas pellentesque lobortis mauris, sit amet commodo dolor viverra ac. Vestibulum laoreet nisi ut augue iaculis sollicitudin in quis libero. Proin sollicitudin, turpis eget sollicitudin maximus, erat odio luctus purus, nec dictum magna purus non lacus.
+
+Duis mauris velit, rhoncus et suscipit id, aliquet eget ipsum. Quisque fermentum magna sapien, a tincidunt erat sollicitudin eu. Praesent at sodales sem, nec varius orci. Ut blandit maximus sapien, a consequat justo mollis sed. Praesent hendrerit orci a felis laoreet, in porta mi dictum. Phasellus ut orci vitae turpis ullamcorper semper at ut purus. Sed hendrerit sodales ex et sodales. Duis sed odio sit amet odio lacinia pellentesque tempor eu neque. Cras vel ligula laoreet, tempus eros quis, porttitor diam. In hac habitasse platea dictumst. Aliquam tristique lorem ac mi posuere, et cursus purus pharetra. Phasellus sed nulla hendrerit sem hendrerit vehicula non et dolor. Donec et maximus lectus. Curabitur viverra arcu felis, id venenatis eros viverra ac.
+
+Suspendisse in aliquet eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus tincidunt augue venenatis ligula placerat, vel rutrum sem rhoncus. Aliquam congue vehicula tortor, at mollis sem sodales gravida. Pellentesque consectetur lacus ut sagittis facilisis. Aliquam volutpat efficitur mi sed luctus. Etiam ut nisl a velit ultrices ultrices et eget ante. Maecenas vitae lectus nec urna rutrum convallis in vitae mauris. Nam tempus ipsum non pellentesque elementum. Vestibulum a eleifend erat. Mauris rhoncus massa non orci posuere volutpat. Aliquam erat volutpat. Praesent malesuada faucibus orci, nec vulputate orci gravida ut. Aenean feugiat venenatis lectus, et dignissim purus posuere id. Mauris ac odio viverra, tincidunt mi sed, condimentum mauris.
+
+Vivamus lectus nulla, egestas eget tortor et, pretium faucibus ex. Mauris magna augue, fringilla in risus congue, accumsan dictum dui. Cras porta ipsum id augue interdum, non pellentesque erat convallis. Donec ac lectus in purus condimentum rutrum. Vivamus dapibus vehicula lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean condimentum faucibus fermentum. Mauris vitae ipsum mollis, suscipit odio quis, facilisis odio. Etiam enim lacus, porta eu tempus quis, malesuada efficitur mi. Nunc elementum tellus neque, et blandit neque vulputate a. Morbi placerat ligula ligula, consectetur congue tellus sagittis non. Mauris dictum a dolor at bibendum. Sed sed purus nisl. Etiam vestibulum, mi vel finibus rhoncus, mi purus pretium lacus, eu suscipit felis ipsum 
+                </p>
+            </div>
+        </div>
     </div>
 }
 
 templ recentPosts(posts []*store.Post){
     <div class="mt-5">
-        <h1 class="text-red-500 text-xl">Laatste nieuws</h1>
+        <h1 class="text-red-800 text-3xl text-center font-serif font-weight-medium">Recente berichten</h1>
         <div class="flex flex-wrap justify-around mt-5">
             for _, post := range posts {
-                <div class="flex-none w-64 mx-2">
-                    <a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
-                        { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
-                    </a>
-                    <div>{ post.Date.Format("02-01-2006") }</div>
-                    <a  href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
-                        <div class="h-40 w-60 overflow-hidden">
-                            <image class="rounded-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
-                        </div>
-
-                        <div class="text-center text-wrap">{ post.Title }</div>
-                    </a>
+                <div class="flex-none w-72 m-2">
+                    //<a class="underline text-gray-600" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>
+                    //    { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
+                    //</a>
+                    //<div>{ post.Date.Format("02-01-2006") }</div>
+                    <div class="bg-white rounded-lg overflow-hidden shadow-2xl transition-shadow duration-100 hover:shadow-[0px_0px_50px_0px_rgba(224,27,36,1)]">
+                        <a href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
+                            <div class="rounded-t-lg h-48 overflow-hidden">
+                                <image class="transition-transform duration-300 transform hover:scale-125 peer w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                            </div>
+                            <div class="px-3 pb-2 pt-1 text-wrap text-xl text-red-700">{ post.Title }</div>
+                        </a>
+                    </div>
                 </div>
             }
         </div>
-        <div class="flex justify-center mt-5">
+        <div class="underline flex justify-center mt-5">
             <a href="/posts">Bekijk alle posts</a>
         </div>
     </div>
 }
 
 templ carrousel(){
-    <div class="lg:-mr-8 lg:ml-8 relative w-full lg:flex-1 h-80 lg:min-h-full overflow-hidden mb-4 overflow-hidden lg:rounded-l-lg">
+    <div class="lg:ml-8 relative w-full lg:flex-1 h-80 lg:min-h-full overflow-hidden mb-4 overflow-hidden lg:rounded-xl">
         <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
             <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
             <img src="/static/img/eettafelbord.jpg" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">

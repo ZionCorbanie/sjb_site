@@ -13,7 +13,7 @@ func NewGetCreatePostHandler() *GetCreatePostHandler {
 
 func (h *GetCreatePostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     c := templates.CreatePost()
-	err := templates.Layout(c, "Post toevoegen").Render(r.Context(), w)
+	err := templates.Layout(templates.Card(c), "Post toevoegen").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

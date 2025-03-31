@@ -13,7 +13,7 @@ func NewAdminHandler() *AdminHandler {
 
 func (h *AdminHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := templates.Admin()
-	err := templates.Layout(c, "Sjb admin").Render(r.Context(), w)
+	err := templates.Layout(templates.Card(c), "Sjb admin").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

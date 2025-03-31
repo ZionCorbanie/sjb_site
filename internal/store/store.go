@@ -17,11 +17,18 @@ type User struct {
 	Image       string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-150x150.png'"`
 }
 
+type Session struct {
+	ID        uint   `gorm:"primaryKey" json:"id"`
+	SessionID string `json:"session_id" gorm:"type:varchar(255)"`
+	UserID    uint   `json:"user_id"`
+	User      User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE" json:"user"`
+}
+
 type Group struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
-	Name        string    `json:"name"`
-	Email       string    `json:"email"`
-	Website     string    `json:"website"`
+	Name        string    `json:"name" gorm:"type:varchar(255);not null"`
+	Email       string    `json:"email" gorm:"type:varchar(255)"`
+	Website     string    `json:"website" gorm:"type:varchar(255)"`
 	GroupType   string    `json:"group_type" gorm:"type:enum('barploeg','bestuur','commissie','gilde','huis','jaarclub','overkoepelend','werkgroep')"`
 	StartDate   time.Time `json:"start_date;default:current_timestamp;not null"`
 	EndDate     time.Time `json:"end_date"`
@@ -69,7 +76,7 @@ type Post struct {
 
 type Comment struct {
     ID      uint      `gorm:"primaryKey" json:"id"`
-    Content string    `json:"content"`
+    Content string    `json:"content" gorm:"type:varchar(255);not null"`
     Date    time.Time `json:"date"`
     AuthorID uint     `json:"author_id"`
     Author   User     `gorm:"foreignKey:AuthorID;constraint:OnDelete:CASCADE;" json:"author"`
@@ -86,11 +93,30 @@ type Menu struct {
 	Toe   string    `json:"toe" gorm:"type:varchar(255)"`
 }
 
-type Session struct {
-	ID        uint   `gorm:"primaryKey" json:"id"`
-	SessionID string `json:"session_id" gorm:"type:varchar(255)"`
-	UserID    uint   `json:"user_id"`
-	User      User   `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE" json:"user"`
+type Poll struct {
+    ID      uint         `gorm:"primaryKey" json:"id"`
+    Title   string       `json:"title" gorm:"type:varchar(255)"`
+    Options []PollOption `gorm:"foreignKey:PollID;constraint:OnDelete:CASCADE;" json:"options"`
+    Active  bool         `json:"active" gorm:"default:False"`
+}
+
+type PollOption struct {
+    ID     uint       `gorm:"primaryKey" json:"id"`
+    PollID uint       `json:"poll_id"`
+    Poll   Poll       `gorm:"foreignKey:PollID" json:"poll"`
+    Option string     `json:"option" gorm:"type:varchar(255)"`
+    Votes  []PollVote `gorm:"foreignKey:OptionID;constraint:OnDelete:CASCADE;" json:"votes"`
+    VoteCount int     `json:"vote_count" gorm:"-"`
+}
+
+type PollVote struct {
+    ID       uint      `gorm:"primaryKey" json:"id"`
+    UserID   uint      `json:"user_id"`
+    User     User      `gorm:"foreignKey:UserID" json:"user"`
+    OptionID uint      `json:"option_id"`
+    Option   PollOption `gorm:"foreignKey:OptionID" json:"option"`
+    PollID uint       `json:"poll_id"`
+    Poll   Poll       `gorm:"foreignKey:PollID" json:"poll"`
 }
 
 type UserStore interface {
@@ -121,7 +147,7 @@ type GroupUserStore interface {
 }
 
 type MenuStore interface {
-	GetMenu(id string) (*Menu, error)
+	GetMenu(id string) (*Menu)
 	GetMenuRange(start int, length int) ([]*Menu, error)
 	CreateMenu(menu *Menu) error
 }
@@ -140,3 +166,17 @@ type CommentStore interface {
     GetComment(commentId string) (*Comment, error)
     DeleteComment(commentId string) error
 }
+
+type PollStore interface {
+    CreatePoll(poll *Poll) error
+    GetPoll(pollId string) (*Poll, error)
+    GetPolls() ([]*Poll, error)
+    DeletePoll(pollId string) error
+    PutPoll(poll Poll) error
+    VotePoll(pollId uint, optionId uint, userId uint) error
+    GetPollVotes(pollID uint, userID uint) (*Poll, bool)
+    DeletePollVote(pollId uint, userId uint) error
+    Activate(pollId string) error
+    GetActivePoll() (*Poll, error)
+}
+

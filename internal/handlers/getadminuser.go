@@ -36,7 +36,7 @@ func (h *GetAdminUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 
 	s := templates.AdminSidebarUser(user)
 	c := templates.UserEditAdmin(user)
-	err = templates.Layout(templates.Sidebar(c, s), "Sint Jansbrug").Render(r.Context(), w)
+	err = templates.Layout(templates.Card(templates.Sidebar(c, s)), "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

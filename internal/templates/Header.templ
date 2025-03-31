@@ -1,0 +1,187 @@
+package templates
+
+import "sjb_site/internal/middleware"
+import "fmt"
+
+templ nav() {
+    {{ user := middleware.GetUser(ctx) }}
+	<nav class="px-4 lg:pb-2 border-t-4 border-red-600 mt-4 flex justify-between lg:justify-center">
+		<div class="flex justify-between lg:py-4 w-full max-w-6xl">
+            <a class="static lg:ml-5" href="/">
+                <img class="transition-transform duration-300 transform hover:scale-120 hover:translate-y-2 h-26 absolute top-2 hidden lg:block" src="/static/img/logo.png" alt="logo"/>
+                <img class="h-18 absolute top-2 lg:hidden" src="/static/img/logo-small.png" alt="logo"/>
+                <div class="ml-14 lg:ml-22 px-2 font-serif text-xl lg:text-3xl font-weight-medium">D.S.V. Sint Jansbrug</div>
+            </a>
+			<ol class="hidden lg:flex space-x-4 items-center">
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/">
+                        <div class="-ml-1">Vereniging</div>
+                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+                    </a>
+				</li>
+				<li class="relative">
+					<a class="flex items-center text-red-600 gap-2 px-2 hover:underline" href="/eettafel">
+                        <div class="-ml-1">Eettafel</div>
+                    </a>
+				</li>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
+                        <div class="-ml-1">Contact</div>
+                    </a>
+				</li>
+				<li class="relative">
+					<a class="flex text-red-600 gap-2 px-2 items-center hover:underline" href="/eettafel">
+                        <div class="-ml-1">Extra</div>
+                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+                    </a>
+				</li>
+				if user != nil {
+                    <li x-data="{
+                        open: false,
+                        toggle() {
+                            if (this.open) {
+                                return this.close()
+                            }
+                            this.$refs.button.focus()
+                            this.open = true
+                        },
+                        close() {
+                            if (! this.open) return
+                            this.open = false
+                        }
+                        }"
+                        x-on:keydown.escape.prevent.stop="close()"
+                        x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+                        x-id="['dropdown-button']"
+                        @mouseleave="close()"
+                        class="relative"
+                        >
+                        <!-- Button -->
+                        <a
+                            href="/webalmanak/leden"    
+                            x-ref="button"
+                            x-on:click="toggle()"
+                            @mouseover="open = true"
+                            :aria-expanded="open"
+                            :aria-controls="$id('dropdown-button')"
+                            type="button"
+                            class="flex items-center gap-2 px-2 text-red-600 hover:underline"
+                            >
+                            Webalmanak<span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+                        </a>
+                        <!-- Panel -->
+                        <div
+                            x-ref="panel"
+                            x-show="open"
+                            x-transition.origin.top.left
+                            x-on:click.outside="close()"
+                            :id="$id('dropdown-button')"
+                            @mouseleave="close()"
+                            style="display: none;"
+                            class="absolute left-0 w-40 rounded-md bg-white shadow-md"
+                        >
+                            <a href="/webalmanak/leden" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Leden
+                            </a>
+                            <a href="/webalmanak/jaarclub" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Jaarclubs
+                            </a>
+                            <a href="/webalmanak/gilde" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Gilde
+                            </a>
+                            <a href="/webalmanak/commissie" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                                Commissies
+                            </a>
+                        </div>
+                    </li>
+                }
+			</ol>
+			<ol class="hidden lg:flex space-x-4">
+				if user != nil {
+                    <li class="relative">
+                        <a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
+                    </li>
+                    if middleware.IsAdmin(ctx) {
+                        <li class="relative">
+                            <a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
+                        </li>
+                    }
+                    <li class="relative">
+                        <button class="cursor-pointer flex text-red-600 items-center hover:bg-stone-200 rounded-full" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
+                    </li>
+				} else {
+					<li class="relative">
+						<a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href="/login"><span class="icon-[material-symbols-light--login-rounded]"></span></a>
+					</li>
+				}
+			</ol>
+            <button class="lg:hidden text-red-600" onclick="document.getElementById('mobile').classList.toggle('hidden')">
+                <span class="icon-[material-symbols-light--menu]"></span>
+            </button>
+		</div>
+
+        <div id="mobile" class="hidden">
+            <ol class="flex flex-col items-end text-end">
+                <li class="mb-4">
+                    <a class="hover:underline" href="/">
+                        <div class="-ml-1">Vereniging</div>
+                    </a>
+                    <ol class="mr-8">
+                        <li class="">
+                            <a class="hover:underline" href="/eettafel">
+                                <div class="-ml-1">structuur</div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="hover:underline" href="/eettafel">
+                                <div class="-ml-1">bestuur</div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="hover:underline" href="/eettafel">
+                                <div class="-ml-1">pand</div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="hover:underline" href="/eettafel">
+                                <div class="-ml-1">oprichting</div>
+                            </a>
+                        </li>
+                    </ol>
+                </li>
+                <li class="mb-4">
+                    <a class="hover:underline" href="/eettafel">
+                        <div class="-ml-1">Eettafel</div>
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a class="hover:underline" href="/eettafel">
+                        <div class="-ml-1">Contact</div>
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a class="hover:underline" href="/eettafel">
+                        <div class="-ml-1">Extra</div>
+                    </a>
+                    <ol class="mr-8">
+                        <li class="">
+                            <a class="hover:underline" href="/eettafel">
+                                <div class="-ml-1">Help</div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="hover:underline" href="/eettafel">
+                                <div class="-ml-1">Downloads</div>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="hover:underline" href="/eettafel">
+                                <div class="-ml-1">Gratis ram</div>
+                            </a>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+	</nav>
+}
