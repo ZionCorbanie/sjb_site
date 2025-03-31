@@ -35,5 +35,10 @@ func (h *GetPollHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    templates.Poll(poll, voted, 2).Render(r.Context(), w)
+    totalVotes := 0
+    for _, option := range poll.Options {
+        totalVotes += option.VoteCount
+    }
+
+    templates.Poll(poll, voted, totalVotes).Render(r.Context(), w)
 }

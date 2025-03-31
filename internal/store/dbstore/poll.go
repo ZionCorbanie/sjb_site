@@ -33,7 +33,7 @@ func (s *PollStore) GetPoll(pollId string) (*store.Poll, error) {
 
 func (s *PollStore) GetPolls() ([]*store.Poll, error) {
     var polls []*store.Poll
-    err := s.db.Find(&polls).Error
+    err := s.db.Order("id DESC").Find(&polls).Error
     return polls, err
 }
 
