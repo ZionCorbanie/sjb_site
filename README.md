@@ -4,7 +4,6 @@ Een nieuwe, snelle en veilige site voor Sint Jansbrug gemaakt met Go, Tailwind, 
 * Go - Backend
 * Tailwind - CSS
 * Templ - Templating
-* HTMX - Simeple dynamische frontend
 
 ## Makefile
 De makefile zorgt ervoor dat je makkelijk de site kan draaien en bouwen. 
