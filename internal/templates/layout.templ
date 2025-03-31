@@ -66,17 +66,18 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
 }
 
 templ Card(contents templ.Component) {
-    <div class="bg-white shadow-xl rounded-t-xl p-8 mt-8 w-full max-w-6xl grow flex flex-col">
+    <div class="bg-white shadow-xl rounded-t-xl p-8 mt-8 w-full max-w-6xl grow flex flex-col min-h-full">
         @contents
     </div>
 }
 
 templ Sidebar(main templ.Component, sidebar templ.Component) {
-    <div class="flex-1 lg:h-full flex flex-col lg:flex-row">
-        <div class="w-full lg:min-h-full lg:w-3/4 max-md:pb-10 lg:border-r-2 max-md:border-b-2 border-red-600">
+    <div class="flex-1 lg:h-full flex flex-col lg:flex-row w-full max-w-6xl">
+        //<div class="w-full lg:min-h-full lg:w-3/4 max-md:pb-10 lg:border-r-2 max-md:border-b-2 border-red-600">
+        <div class="w-full lg:min-h-full lg:w-3/4 border-red-600">
             @main
         </div>
-        <div class="w-full lg:min-h-full lg:w-1/4 max-md:pt-5 lg:pl-5">
+        <div class="w-full lg:min-h-full lg:w-1/4 max-md:pt-2 lg:pl-5">
             @sidebar
         </div>
     </div>

@@ -55,9 +55,15 @@ templ PollList(polls []*store.Poll) {
     <div class="border-1 border-black h-100 overflow-hidden overflow-y-scroll">
         <div class="max-h-100 flex flex-col">
             for _, poll := range polls {
-                <div class="flex justify-between hover:bg-stone-100 items-center px-4 h-10">
+                {{ pollClass := "flex justify-between hover:bg-stone-100 items-center px-4 h-10" }}
+                if poll.Active {
+                    {{ pollClass += " -order-1"}}
+                }
+                <div class={pollClass}>
                     if poll.Active {
-                        <span class="size-6 icon-[material-symbols--check-rounded] text-green-600 cursor-pointer"> </span>
+                        <div class="bg-green-200 rounded-full h-6">
+                            <span class="size-6 icon-[material-symbols--check-rounded] text-green-700 cursor-pointer"> </span>
+                        </div>
                     }else{
                         <span class="size-6 icon-[material-symbols--check-rounded] text-black hover:text-red-700 cursor-pointer" 
                             hx-post={ fmt.Sprintf("/admin/poll/%d/activate", poll.ID) } 
