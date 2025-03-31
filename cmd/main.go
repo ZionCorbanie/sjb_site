@@ -148,6 +148,17 @@ func main() {
 		//Need to be logged in to access these routes
 		r.Group(func(r chi.Router) {
 			r.Use(authMiddleware.LoggedIn)
+            r.Route("/poll/{pollId}", func(r chi.Router) {
+                r.Get("/", handlers.NewGetPollHandler(handlers.GetPollHandlerParams{
+                    PollStore: pollStore,
+                }).ServeHTTP)
+                r.Post("/", handlers.NewPostPollVoteHandler(handlers.PostPollVoteHandlerParams{
+                    PollStore: pollStore,
+                }).ServeHTTP)
+                r.Delete("/", handlers.NewDeletePollVoteHandler(handlers.DeletePollVoteHandlerParams{
+                    PollStore: pollStore,
+                }).ServeHTTP)
+            })
 			r.Route("/webalmanak", func(r chi.Router) {
 				r.Route("/leden", func(r chi.Router) {
 					r.Get("/", handlers.NewUserSearchHandler().ServeHTTP)
@@ -225,12 +236,17 @@ func main() {
                 r.Post("/", handlers.NewPostCreatePollHandler(handlers.PostCreatePollHandlerParams{
                     PollStore: pollStore,
                 }).ServeHTTP)
-                r.Get("/{pollId}", handlers.NewGetPollEditHandler(handlers.GetPollEditHandlerParams{
-                    PollStore: pollStore,
-                }).ServeHTTP)
-                r.Put("/{pollId}", handlers.NewPutPollHandler(handlers.PutPollHandlerParams{
-                    PollStore: pollStore,
-                }).ServeHTTP)
+                r.Route("/{pollId}", func(r chi.Router) {
+                    r.Get("/", handlers.NewGetPollEditHandler(handlers.GetPollEditHandlerParams{
+                        PollStore: pollStore,
+                    }).ServeHTTP)
+                    r.Put("/", handlers.NewPutPollHandler(handlers.PutPollHandlerParams{
+                        PollStore: pollStore,
+                    }).ServeHTTP)
+                    r.Delete("/", handlers.NewDeletePollHandler(handlers.DeletePollHandlerParams{
+                        PollStore: pollStore,
+                    }).ServeHTTP)
+                })
             })
         })
 

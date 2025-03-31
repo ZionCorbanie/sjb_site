@@ -5,7 +5,7 @@ document.getElementById("addPoll").addEventListener("click", function(){
     newInput.type = "text";
     newInput.name = i;
     newInput.id = i;
-    newInput.placeholder = "Vraag "+(i+1);
+    newInput.placeholder = "Antwoord "+(i+1);
     answers.appendChild(newInput);
 });
 document.getElementById("delPoll").addEventListener("click", function(){

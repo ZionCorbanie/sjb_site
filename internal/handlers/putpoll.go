@@ -36,6 +36,7 @@ func (h *PutPollHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
     for i := 0; i < size; i++ {
         options[i] = store.PollOption{
+            PollID: uint(pollId),
             Option: r.Form.Get(strconv.FormatInt(int64(i), 10)),
         }
     }

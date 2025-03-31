@@ -36,15 +36,7 @@ templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
                             </a>
                         </div>
                         <div class="mb-4 bg-primary min-w-64 h-full p-4 lg:rounded-xl shadow-xl max-sm:w-screen">
-                            <div class="text-xl">Meer of minder marokkanen</div>
-                            <form action="/poll" method="post" class="flex flex-col justify-between h-full">
-                                <div class="mt-2">
-                                    <div><input type="radio" name="poll" value="1"> Meer</div>
-                                    <div><input type="radio" name="poll" value="2"> Minder</div>
-                                    <div><input type="radio" name="poll" value="3"> Idk geef me bier</div>
-                                </div>
-                                <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 transition duration-300 border-red-500 hover:border-neutral-200 hover:bg-red-500 hover:text-white">Stem</button>
-                            </form>
+                            <div id="poll" hx-get="/poll/52" hx-swap="this" hx-swap="outerHTML" hx-trigger="load"> </div>
                         </div>
                     } 
                     else {
