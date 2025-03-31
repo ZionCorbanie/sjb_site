@@ -246,6 +246,9 @@ func main() {
                     r.Delete("/", handlers.NewDeletePollHandler(handlers.DeletePollHandlerParams{
                         PollStore: pollStore,
                     }).ServeHTTP)
+                    r.Post("/activate", handlers.NewPostPollActivateHandler(handlers.PostPollActivateHandlerParams{
+                        PollStore: pollStore,
+                    }).ServeHTTP)
                 })
             })
         })

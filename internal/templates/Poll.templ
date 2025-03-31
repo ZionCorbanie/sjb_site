@@ -53,6 +53,12 @@ templ PollList(polls []*store.Poll) {
     <div class="border-1 border-black h-100 overflow-hidden overflow-y-scroll flex flex-col">
         for _, poll := range polls {
             <div class="flex justify-between hover:bg-stone-100 items-center px-4 py-1">
+                <span class="size-6 icon-[material-symbols--check-rounded] text-black hover:text-red-700 cursor-pointer" 
+                    hx-post={ fmt.Sprintf("/admin/poll/%d/activate", poll.ID) } 
+                    hx-target="#polls" 
+                    hx-swap="outerHTML"
+                    hx-confirm="Zeker dat je de poll actief wil maken?">
+                </span>
                 <div class="cursor-pointer hover:underline" 
                     hx-trigger="click" hx-get={ fmt.Sprintf("/admin/poll/%d", poll.ID) } 
                     hx-target="#poll" 

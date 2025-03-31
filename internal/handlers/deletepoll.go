@@ -27,7 +27,7 @@ func (h *DeletePollHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     
     err := h.store.DeletePoll(pollId)
 	if err != nil {
-		http.Error(w, "Error getting polls", http.StatusInternalServerError)
+		http.Error(w, "Error deleting polls", http.StatusInternalServerError)
 		return
 	}
 

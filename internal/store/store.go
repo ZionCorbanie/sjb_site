@@ -97,6 +97,7 @@ type Poll struct {
     ID      uint         `gorm:"primaryKey" json:"id"`
     Title   string       `json:"title" gorm:"type:varchar(255)"`
     Options []PollOption `gorm:"foreignKey:PollID;constraint:OnDelete:CASCADE;" json:"options"`
+    Active  bool         `json:"active" gorm:"default:False"`
 }
 
 type PollOption struct {
@@ -175,5 +176,7 @@ type PollStore interface {
     VotePoll(pollId uint, optionId uint, userId uint) error
     GetPollVotes(pollID uint, userID uint) (*Poll, bool)
     DeletePollVote(pollId uint, userId uint) error
+    Activate(pollId string) error
+    GetActivePoll() (*Poll, error)
 }
 

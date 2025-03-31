@@ -41,6 +41,16 @@ func (s *PollStore) DeletePoll(pollId string) error {
     return s.db.Delete(&store.Poll{}, pollId).Error
 }
 
+func (s *PollStore) Activate(pollId string) error {
+    return s.db.Exec("UPDATE polls SET active = (CASE WHEN id = ? THEN 1 ELSE 0 END)", pollId).Error
+}
+
+func (s *PollStore) GetActivePoll() (*store.Poll, error) {
+    var poll store.Poll
+    err := s.db.Where("active = 1").First(&poll).Error
+    return &poll, err
+}
+
 func (s *PollStore) PutPoll(poll store.Poll) error {
     tx := s.db.Begin()
 
