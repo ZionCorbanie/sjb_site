@@ -16,7 +16,7 @@ templ User(User *store.User, Groups []*store.GroupUser) {
                     <div class="flex items-center space-x-4"> <span class="icon-[mingcute--cake-line]"></span> <div> { User.StartDate.Format("02/01/2006") } </div> </div> //TODO: verjaardag in database
                     <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-top]"></span> <div> { User.StartDate.Format("02/01/2006") }</div> </div>
                     if !User.EndDate.IsZero() {
-                        <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-top] rotate-180"></span> <div>{ User.EndDate.Format("02/01/2006") }</div> </div>
+                        <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-bottom] rotate-180"></span> <div>{ User.EndDate.Format("02/01/2006") }</div> </div>
                     }
                     <div class="flex items-center space-x-4"> <span class="icon-[mdi--email-outline]"></span> <div>{ User.Email }</div> </div>
                     <div class="flex items-center space-x-4"> <span class="icon-[mdi--phone]"></span> <div> { User.PhoneNumber } </div> </div>

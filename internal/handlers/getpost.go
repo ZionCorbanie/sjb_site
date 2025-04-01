@@ -52,7 +52,7 @@ func (h *PostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 
 	c := templates.Post(post)
-	err = templates.BannerLayout(c, post.Image, post.Title).Render(r.Context(), w)
+	err = templates.BannerLayout(templates.Card(c), post.Image, post.Title).Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

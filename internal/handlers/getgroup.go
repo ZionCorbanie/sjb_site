@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 
@@ -37,7 +38,7 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	users, err := h.GroupUserStore.GetUsersByGroup(groupId)
+	users, err := h.GroupUserStore.GetGroupUserByGroup(groupId)
 	if err != nil {
 		err = templates.NotFound().Render(r.Context(), w)
 		if err != nil {
@@ -47,9 +48,28 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := templates.Group(group, users)
-	s := templates.SidebarUser()
-	err = templates.BannerLayout(templates.Sidebar(c, s), group.Image, group.Name).Render(r.Context(), w)
+    jaarclubs, err := h.GroupStore.GetJaarclubs(group)
+    if err != nil {
+        err = templates.NotFound().Render(r.Context(), w)
+        if err != nil {
+            http.Error(w, "Error rendering template", http.StatusInternalServerError)
+            return
+        }
+        return
+    }
+
+    user := middleware.GetUser(r.Context())
+    isVoorzitter := false
+    for _, u := range *users {
+        if u.UserID == user.ID {
+            isVoorzitter = true
+            break
+        }
+    }
+
+	c := templates.Group(group, users, isVoorzitter)
+	s := templates.SidebarGroup(jaarclubs)
+	err = templates.BannerLayout(templates.Sidebar(templates.Card(c), templates.Card(s)), group.Image, group.Name).Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

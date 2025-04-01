@@ -137,6 +137,7 @@ type GroupStore interface {
 	CreateGroup(group *Group) error
 	GetGroupsByType(groupType string) ([]*Group, error)
 	GetGroup(groupId string) (*Group, error)
+    GetJaarclubs(group *Group) (*[]Group, error)
 }
 
 type GroupUserStore interface {
@@ -144,6 +145,7 @@ type GroupUserStore interface {
 	GetUsersByGroup(groupId string) ([]*User, error)
     GetGroupsByUser(userId string) ([]*Group, error)
     GetGroupUserByUser(userId string) ([]*GroupUser, error)
+    GetGroupUserByGroup(groupId string) (*[]GroupUser, error)
 }
 
 type MenuStore interface {

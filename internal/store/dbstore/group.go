@@ -44,3 +44,13 @@ func (s *GroupStore) GetGroupsByType(groupType string) ([]*store.Group, error) {
 	}
 	return groups, err
 }
+
+func (s *GroupStore) GetJaarclubs(group *store.Group) (*[]store.Group, error) {
+    var groups []store.Group
+    err := s.db.Where("group_type = ? AND year(start_date) = year(?) AND id != ?", "jaarclub", group.StartDate, group.ID).Find(&groups).Error
+
+    if err != nil {
+        return nil, err
+    }
+    return &groups, err
+}

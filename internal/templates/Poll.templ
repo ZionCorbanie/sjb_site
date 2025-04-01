@@ -8,7 +8,7 @@ import ()
 templ Poll(poll *store.Poll, voted bool, totalVotes int){
     <div class="text-xl">{ poll.Title }</div>
     if !voted {
-        <form class="flex flex-col justify-between h-full mt-2"
+        <form class="flex flex-col justify-between h-full w-full mt-2"
             hx-post={ fmt.Sprintf("/poll/%d", poll.ID) } 
             hx-trigger="submit" hx-target="#poll" 
             hx-swap="innerHTML">
