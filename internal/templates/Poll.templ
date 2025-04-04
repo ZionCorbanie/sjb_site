@@ -18,7 +18,7 @@ templ Poll(poll *store.Poll, voted bool, totalVotes int){
                     <label for={ fmt.Sprintf("%d", option.ID) }>{ option.Option }</label>
                 </div>
             }
-            <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 transition duration-300 border-red-500 hover:border-neutral-200 hover:bg-red-500 hover:text-white">Stem</button>
+            <button type="submit" value="Stem" class="rounded-full cursor-pointer p-2 border-2 mt-5 transition duration-300 border-red-500 hover:bg-red-500 hover:text-white">Stem</button>
         </form>
     }else {
         <div>
@@ -107,13 +107,13 @@ templ CreatePoll(){
                 <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
                 <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
             </div>
-            <script src="/static/script/polls.js"/>
 
             <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Nieuwe poll maken</button>
         </form>
     </div>
 
     <div id="poll-error"></div>
+    <script src="/static/script/polls.js"> </script>
 }
 
 templ EditPoll(poll *store.Poll){
@@ -136,7 +136,7 @@ templ EditPoll(poll *store.Poll){
                 <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
                 <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
             </div>
-            <script src="/static/script/polls.js"/>
+            <script src="/static/script/polls.js"> </script>
 
             <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Poll opslaan</button>
         </form>

@@ -39,11 +39,11 @@ templ Group(group *store.Group, users *[]store.GroupUser, isVoorzitter bool) {
         </div>
     </div>
 
-    <div class="flex flex-wrap justify-normal">
+    <div class="flex flex-wrap justify-between">
         for _, user := range *users {
-            <a class="flex p-3 rounded-md hover:bg-stone-100" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.UserID)) }>
+            <a class="flex flex-col max-md:items-center lg:flex-row p-3 rounded-md hover:bg-stone-100" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.UserID)) }>
                 <image class="rounded-full size-28" src={ user.User.Image } alt={ fmt.Sprintf("Foto van %s", user.User.FirstName) }/>
-                <div class="p-2 max-w-30 text-wrap">
+                <div class="p-2 w-30 text-wrap text-center lg:text-left">
                     <div class="text-red-600"> { user.User.FirstName } { user.User.LastName } </div>
                     <div> { user.Title } </div>
                 </div>
@@ -52,15 +52,15 @@ templ Group(group *store.Group, users *[]store.GroupUser, isVoorzitter bool) {
     </div>
 }
 
-templ SidebarGroup(groups *[]store.Group) {
-    if len(*groups) != 0 {
-        <h2 class="text-2xl">{ (*groups)[0].GroupType }</h2>
+templ SidebarGroup(groups *[]store.Group, title string) {
+    if groups != nil && len(*groups) > 0 {
+        <h2 class="text-2xl">{title}</h2>
+        <div class="m-4 flex flex-col text-red-600">
+            for _, group := range *groups {
+                <a class="hover:underline" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
+                    <div> { group.Name } </div>
+                </a>
+            }
+        </div>
     }
-    <div class="m-4 flex flex-col text-red-600">
-        for _, group := range *groups {
-            <a class="hover:underline" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
-                <div> { group.Name } </div>
-            </a>
-        }
-    </div>
 }

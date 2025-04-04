@@ -138,6 +138,7 @@ type GroupStore interface {
 	GetGroupsByType(groupType string) ([]*Group, error)
 	GetGroup(groupId string) (*Group, error)
     GetJaarclubs(group *Group) (*[]Group, error)
+    GetSimelarGroups(group *Group) (*[]Group, string, error)
 }
 
 type GroupUserStore interface {

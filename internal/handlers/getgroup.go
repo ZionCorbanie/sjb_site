@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
@@ -48,7 +49,7 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    jaarclubs, err := h.GroupStore.GetJaarclubs(group)
+    groups, title, err := h.GroupStore.GetSimelarGroups(group)
     if err != nil {
         err = templates.NotFound().Render(r.Context(), w)
         if err != nil {
@@ -57,6 +58,8 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         }
         return
     }
+
+    fmt.Println("groups", groups)
 
     user := middleware.GetUser(r.Context())
     isVoorzitter := false
@@ -68,7 +71,7 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 
 	c := templates.Group(group, users, isVoorzitter)
-	s := templates.SidebarGroup(jaarclubs)
+	s := templates.SidebarGroup(groups, title)
 	err = templates.BannerLayout(templates.Sidebar(templates.Card(c), templates.Card(s)), group.Image, group.Name).Render(r.Context(), w)
 
 	if err != nil {

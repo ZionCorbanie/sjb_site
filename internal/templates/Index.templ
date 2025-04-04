@@ -25,7 +25,7 @@ templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
                 <div class="flex lg:justify-between flex-wrap">
                     @menu
                     if user != nil {
-                        <div class="mb-4 p-4 bg-primary lg:rounded-xl shadow-xl max-sm:w-screen transition-shadow duration-100 hover:shadow-[0px_0px_50px_0px_rgba(224,27,36,1)]">
+                        <div class="mb-4 p-4 bg-primary lg:rounded-xl shadow-xl max-sm:w-screen outline-red-600 hover:outline-2">
                             <div class="underline text-xl font-medium text-red-700">Sjaarsch van de dag</div>
                             <a class="mt-2 flex flex-col justify-center items-center" href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }>
                                 <div class="rounded-full w-40 h-40 overflow-hidden">
@@ -85,10 +85,10 @@ templ recentPosts(posts []*store.Post){
                     //    { fmt.Sprintf("%s %s",post.Author.FirstName, post.Author.LastName)}
                     //</a>
                     //<div>{ post.Date.Format("02-01-2006") }</div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-2xl transition-shadow duration-100 hover:shadow-[0px_0px_50px_0px_rgba(224,27,36,1)]">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md">
                         <a href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
                             <div class="rounded-t-lg h-48 overflow-hidden">
-                                <image class="transition-transform duration-300 transform hover:scale-125 peer w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                                <image class="transition-transform duration-400 transform hover:scale-125 peer w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
                             </div>
                             <div class="px-3 pb-2 pt-1 text-wrap text-xl text-red-700">{ post.Title }</div>
                         </a>
