@@ -18,9 +18,9 @@ templ User(User *store.User, Groups []*store.GroupUser) {
                     if !User.EndDate.IsZero() {
                         <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-bottom] rotate-180"></span> <div>{ User.EndDate.Format("02/01/2006") }</div> </div>
                     }
-                    <div class="flex items-center space-x-4" > <span class="icon-[mdi--email-outline]"></span> <a class="text-red-600 hover:underline" href={templ.URL("mailto:" + User.Email)}>{ User.Email }</a> </div>
-                    <div class="flex items-center space-x-4"> <span class="icon-[mdi--phone]"></span> <div> { User.PhoneNumber } </div> </div>
-                    <div class="flex items-center space-x-4"> <span class="icon-[fluent--home-24-regular]"></span> <a class="text-secondary-600 hover:underline" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
+                    <div class="flex items-center space-x-4" > <span class="icon-[mdi--email-outline]"></span> <a class="link" href={templ.URL("mailto:" + User.Email)}>{ User.Email }</a> </div>
+                    <div class="flex items-center space-x-4"> <span class="icon-[mdi--phone]"></span> <a class="link" href={ templ.URL("tel:"+User.PhoneNumber) }> { User.PhoneNumber } </a> </div>
+                    <div class="flex items-center space-x-4"> <span class="icon-[fluent--home-24-regular]"></span> <a class="link" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
 
                     <div class="flex flex-col mt-5">
                         {{ groupType := "" }}
@@ -30,7 +30,7 @@ templ User(User *store.User, Groups []*store.GroupUser) {
                                 {{ groupType = groupUser.Group.GroupType }}
                             }
                             <span class="flex items-center space-x-4">
-                                <a class="text-secondary-600 ml-10 hover:underline" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
+                                <a class="link ml-10" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
                                 if groupUser.Function != "" {
                                     <p>{ groupUser.Function },</p>
                                 }
@@ -41,7 +41,7 @@ templ User(User *store.User, Groups []*store.GroupUser) {
                 </div>
             </div>
             if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
-                <a class="max-md:self-end" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }><span class="text-red-600 icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
+                <a class="max-md:self-end" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }><span class="link icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
             }
         </div>
     </div>

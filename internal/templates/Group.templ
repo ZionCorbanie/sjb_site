@@ -7,7 +7,7 @@ import "fmt"
 templ Group(group *store.Group, users *[]store.GroupUser, isVoorzitter bool) {
     <div class="flex flex-row-reverse justify-between">
         if middleware.IsAdmin(ctx) || isVoorzitter {
-            <a class="text-red-600" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d/edit", group.ID)) }> 
+            <a class="link" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d/edit", group.ID)) }> 
                 <span class="icon-[material-symbols-light--edit-square-outline-rounded]"></span>
             </a>
         }
@@ -16,13 +16,13 @@ templ Group(group *store.Group, users *[]store.GroupUser, isVoorzitter bool) {
             if group.Email != "" {
                 <div class="flex items-center space-x-4"> 
                     <span class="size-6 icon-[mdi--email-outline]"></span> 
-                    <a class="text-red-600 hover:underline" href={ templ.URL("mailto:"+group.Website) }>{ group.Email }</a> 
+                    <a class="link" href={ templ.URL("mailto:"+group.Website) }>{ group.Email }</a> 
                 </div>
             }
             if group.Website != "" {
                 <div class="flex items-center space-x-4">
                     <span class="size-6 icon-[tabler--world]"></span>
-                    <a class="text-red-600 hover:underline" href={ templ.URL(group.Website) }>{ group.Website }</a>
+                    <a class="link" href={ templ.URL(group.Website) }>{ group.Website }</a>
                 </div>
             }
 
@@ -55,9 +55,9 @@ templ Group(group *store.Group, users *[]store.GroupUser, isVoorzitter bool) {
 templ SidebarGroup(groups *[]store.Group, title string) {
     if groups != nil && len(*groups) > 0 {
         <h2 class="text-2xl">{title}</h2>
-        <div class="m-4 flex flex-col text-red-600">
+        <div class="m-4 flex flex-col">
             for _, group := range *groups {
-                <a class="hover:underline" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
+                <a class="link" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
                     <div> { group.Name } </div>
                 </a>
             }

@@ -18,7 +18,8 @@ templ Groups(groups []*store.Group) {
 templ Jaarclubs() {
     <div class="text-2xl text-red-600">Jaarclubs</div>
     <div hx-get="/webalmanak/jaarclubs/0"
-        hx-trigger="load">
+        hx-trigger="load"
+        hx-swap="outerHTML">
     </div>
     <script>
         function toggleYear(id) {
@@ -45,9 +46,7 @@ templ Jaarclubs() {
 }
 
 templ JaarclubRow(groups *[]store.Group, jaarlaag int) {
-    <div hx-get={fmt.Sprintf("/webalmanak/jaarclubs/%d", jaarlaag+1)}
-        hx-trigger="intersect once"
-        hx-swap="afterend">
+    <div >
         if groups != nil || len(*groups) != 0 {
             <div class="select-none text-2xl text-red-600 w-full flex justify-between items-center cursor-pointer hover:underline hover:text-red-800 my-2"
                 onclick={ templ.JSUnsafeFuncCall(fmt.Sprintf("toggleYear(%d)",jaarlaag)) }>
@@ -66,5 +65,10 @@ templ JaarclubRow(groups *[]store.Group, jaarlaag int) {
             </a>
         }
         </div>
+    </div>
+    <div hx-get={fmt.Sprintf("/webalmanak/jaarclubs/%d", jaarlaag+1)}
+        hx-trigger="intersect once"
+        hx-swap="outerHTML">
+        <span class="size-20 icon-[line-md--loading-loop]"></span>
     </div>
 }

@@ -14,7 +14,7 @@ templ Poll(poll *store.Poll, voted bool, totalVotes int){
             hx-swap="innerHTML">
             for _, option := range poll.Options {
                 <div class="flex space-x-2 items-center">
-                    <input type="radio" name="option" value={ fmt.Sprintf("%d", option.ID) } id={ fmt.Sprintf("%d", option.ID) } >
+                    <input type="radio" class="checked:bg-red-600 checked:hover:bg-red-600 checked:active:bg-red-600 checked:focus:bg-red-600 focus:bg-red-600 focus:outline-none focus:ring-1 focus:ring-red-600" name="option" value={ fmt.Sprintf("%d", option.ID) } id={ fmt.Sprintf("%d", option.ID) } >
                     <label for={ fmt.Sprintf("%d", option.ID) }>{ option.Option }</label>
                 </div>
             }
@@ -33,7 +33,7 @@ templ Poll(poll *store.Poll, voted bool, totalVotes int){
                 }
             </div>
         </div>
-        <button class="cursor-pointer mt-5 hover:underline text-red-500" hx-trigger="click" hx-delete={ fmt.Sprintf("/poll/%d", poll.ID) } hx-target="#poll" hx-swap="innerHTML">Stem veranderen</button>
+        <button class="cursor-pointer mt-5 link" hx-trigger="click" hx-delete={ fmt.Sprintf("/poll/%d", poll.ID) } hx-target="#poll" hx-swap="innerHTML">Stem veranderen</button>
     }
 }
 

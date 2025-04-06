@@ -24,7 +24,7 @@ templ Post(post *store.Post){
                 } else {
                     <div><span class="icon-[tabler--world-off]"></span></div>
                 }
-                <a class="text-secondary-600" href={templ.SafeURL(fmt.Sprintf("/admin/post/%d", post.ID))}><span class="icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
+                <a class="link" href={templ.SafeURL(fmt.Sprintf("/admin/post/%d", post.ID))}><span class="icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
             }
         </div>
     </div>
@@ -63,7 +63,7 @@ templ Post(post *store.Post){
             hx-trigger="load"
             hx-swap="innerHTML">
 
-            hier komen comments fzo
+            <span class="icon-[line-md--loading-loop]"></span>
         </div>
     }
 }

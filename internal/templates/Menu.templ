@@ -38,11 +38,11 @@ templ MenuDay(menu *store.Menu) {
             </div>
 
             <div class="flex items-center justify-center w-full m-2">
-                <button class="text-white cursor-pointer bg-black/40 rounded-full" hx-get={ fmt.Sprintf("/menu/%d",menu.ID-1) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                <button class="text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50" hx-get={ fmt.Sprintf("/menu/%d",menu.ID-1) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
                     <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
                 </button>
                 <div class="mx-2">{ menu.Date.Format("02-01-2006") }</div>
-                <button class="text-white cursor-pointer bg-black/40 rounded-full" hx-get={ fmt.Sprintf("/menu/%d",menu.ID+1)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+                <button class="text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50" hx-get={ fmt.Sprintf("/menu/%d",menu.ID+1)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
                     <span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span>
                 </button>
             </div>

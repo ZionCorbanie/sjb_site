@@ -15,6 +15,9 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+  .link {
+    @apply text-secondary-600 hover:text-secondary-700 hover:underline;
+  }
 }
 
 /*

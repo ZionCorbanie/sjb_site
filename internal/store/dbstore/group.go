@@ -63,7 +63,6 @@ func (s *GroupStore) GetSimelarGroups(group *store.Group) (*[]store.Group, strin
     case "barploeg":
         err = s.db.Where("group_type = ? AND end_date IS NULL AND id != ?", "barploeg", group.ID).Find(&groups).Error
         title = "Barploegen"
-
     case "commissie":
         subquery := s.db.Select("parent_id").Table("parent_groups p").Where("p.child_id = ?", group.ID)
         err = s.db.Joins("JOIN parent_groups pg ON groups.id = pg.child_id").
