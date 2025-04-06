@@ -23,16 +23,18 @@ templ Jaarclubs() {
     <script>
         function toggleYear(id) {
             let el = document.getElementById('jaarlaag_'+id)
-            document.getElementById('icon_'+id).classList.toggle('rotate-90');
+            let icon = document.getElementById('icon_'+id)
 
             if (el.classList.contains('hidden')) {
                 el.classList.remove('hidden');
+                icon.classList.add('rotate-90');
                 requestAnimationFrame(() => {
                     el.classList.remove('opacity-0');
                     el.classList.add('opacity-100');
                 });
             }else {
                 el.classList.remove('opacity-100');
+                icon.classList.remove('rotate-90');
                 el.classList.add('opacity-0');
                 setTimeout(() => {
                     el.classList.add('hidden');
