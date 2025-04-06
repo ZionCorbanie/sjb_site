@@ -120,3 +120,9 @@ templ carrousel(){
     </div>
     <script src="/static/script/carrousel.js"></script>
 }
+
+templ DefaultSidebar(){
+    <div id="poll" class="flex flex-col items-center px-2 bg-primary h-full max-sm:w-screen">
+        <div hx-get="/poll/52" hx-target="this" hx-swap="outerHTML" hx-trigger="load"> </div>
+    </div>
+}

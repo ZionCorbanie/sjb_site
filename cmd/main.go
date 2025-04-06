@@ -177,6 +177,14 @@ func main() {
 						UserStore: userStore,
 					}).ServeHTTP)
 				})
+                r.Route("/jaarclubs", func(r chi.Router) {
+                    r.Get("/", handlers.NewJaarclubsHandler(handlers.GetJaarclubsHandlerParams{
+                        GroupStore: groupStore,
+                    }).ServeHTTP)
+                    r.Get("/{jaarlaag}", handlers.NewJaarclubsHandler(handlers.GetJaarclubsHandlerParams{
+                        GroupStore: groupStore,
+                    }).ServeHTTP)
+                })
 				r.Route("/{groupType}", func(r chi.Router) {
 					r.Get("/", handlers.NewGroupsHandler(handlers.GetGroupsHandlerParams{
 						GroupStore: groupStore,

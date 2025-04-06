@@ -50,7 +50,7 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
                 @nav()
             </header>
             <div class="flex-grow flex flex-col justify-between overflow-y-auto no-scrollbar w-full max-w-6xl">
-                <div class="lg:rounded-b-lg bg-primary lg:shadow-xl">
+                <div class="lg:rounded-b-lg bg-primary shadow-xl">
                     <div class="w-full h-80">
                         <image class="w-full h-full object-cover" src={ banner } alt="banner"/>
                     </div>
@@ -66,7 +66,7 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
 }
 
 templ Card(contents templ.Component) {
-    <div class="bg-white h-full shadow-xl rounded-t-xl p-8 mt-8 w-full max-w-6xl grow flex flex-col ">
+    <div class="bg-white h-full shadow-xl lg:rounded-t-xl p-8 mt-8 w-full max-w-6xl grow flex flex-col ">
         @contents
     </div>
 }

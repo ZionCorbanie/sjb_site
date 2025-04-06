@@ -2,6 +2,7 @@ package templates
 
 import "sjb_site/internal/store"
 import "fmt"
+import "strconv"
 
 templ Groups(groups []*store.Group) {
     <div class="flex flex-wrap justify-normal">
@@ -14,3 +15,40 @@ templ Groups(groups []*store.Group) {
     </div>
 }
 
+templ Jaarclubs() {
+    <div class="text-2xl text-red-600">Jaarclubs</div>
+    <div hx-get="/webalmanak/jaarclubs/0"
+        hx-trigger="load">
+    </div>
+    <script>
+        function toggleYear(id) {
+            document.getElementById('jaarlaag_'+id).classList.toggle('hidden');
+            document.getElementById('icon_'+id).classList.toggle('rotate-90');
+        }
+    </script>
+}
+
+templ JaarclubRow(groups *[]store.Group, jaarlaag int) {
+    <div hx-get={fmt.Sprintf("/webalmanak/jaarclubs/%d", jaarlaag+1)}
+        hx-trigger="intersect once"
+        hx-swap="afterend">
+        if groups != nil || len(*groups) != 0 {
+            <div class="select-none text-2xl text-red-600 w-full flex justify-between items-center cursor-pointer hover:underline hover:text-red-800 my-2"
+                onclick={ templ.JSUnsafeFuncCall(fmt.Sprintf("toggleYear(%d)",jaarlaag)) }>
+                <div class="bg-stone-300 w-10 h-1 rounded-full"></div>
+                <span id={fmt.Sprintf("icon_%d", jaarlaag)} class="size-6 icon-[material-symbols-light--arrow-forward-ios-rounded] transition-transform duration-250 ease-in-out rotate-90"></span>
+                <div class="bg-stone-300 w-10 h-1 rounded-full"></div>
+                <h2 class="mx-2">{ strconv.Itoa((*groups)[0].StartDate.Year()) }</h2>
+                <div class="bg-stone-300 grow h-1 rounded-full"></div>
+            </div>
+        }
+        <div id={fmt.Sprintf("jaarlaag_%d", jaarlaag)} class="flex flex-wrap justify-normal">
+        for _, group := range *groups {
+            <a class="flex-none w-60 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
+                <image class="rounded-md" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
+                <div class="text-center text-wrap">{ group.Name }</div>
+            </a>
+        }
+        </div>
+    </div>
+}

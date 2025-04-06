@@ -45,63 +45,50 @@ func (s *GroupStore) GetGroupsByType(groupType string) ([]*store.Group, error) {
 	return groups, err
 }
 
-func (s *GroupStore) GetJaarclubs(group *store.Group) (*[]store.Group, error) {
+func (s *GroupStore) GetJaarclubs(jaarlaag int) (*[]store.Group, error) {
     var groups []store.Group
-    err := s.db.Where("group_type = ? AND year(start_date) = year(?) AND id != ?", "jaarclub", group.StartDate, group.ID).Find(&groups).Error
-
-    if err != nil {
-        return nil, err
-    }
+    subQuery := s.db.Table("groups").Select("YEAR(start_date) as year").Where("group_type = ?", "jaarclub").Group("year").Order("start_date DESC").Offset(jaarlaag).Limit(1)
+	err := s.db.Where("group_type = ? AND YEAR(start_date) = (?)", "jaarclub", subQuery).Find(&groups).Error
     return &groups, err
 }
 
 func (s *GroupStore) GetSimelarGroups(group *store.Group) (*[]store.Group, string, error) {
     var groups []store.Group
+    var title string
+    var err error
     switch group.GroupType {   
     case "jaarclub":
-        err := s.db.Where("group_type = ? AND year(start_date) = year(?) AND id != ?", "jaarclub", group.StartDate, group.ID).Find(&groups).Error
-        if err != nil {
-            return nil, "", err
-        }
-        return &groups, "Jaarclubs uit " + group.StartDate.Format("2006"), err
+        err = s.db.Where("group_type = ? AND year(start_date) = year(?) AND id != ?", "jaarclub", group.StartDate, group.ID).Find(&groups).Error
+        title = "Jaarclubs uit " + group.StartDate.Format("2006")
     case "barploeg":
-        err := s.db.Where("group_type = ? AND end_date IS NULL AND id != ?", "barploeg", group.ID).Find(&groups).Error
-        if err != nil {
-            return nil, "", err
-        }
-        return &groups, "Barbloegen", err
+        err = s.db.Where("group_type = ? AND end_date IS NULL AND id != ?", "barploeg", group.ID).Find(&groups).Error
+        title = "Barploegen"
+
     case "commissie":
-        err := s.db.Joins("JOIN parent_groups pg ON groups.id = pg.child_id JOIN groups p on p.id = pg.parent_id").Where("groups.group_type = ? AND groups.id != ?", "commissie", group.ID).Find(&groups).Error
-        if err != nil {
-            return nil, "", err
-        }
-        return &groups, "Commissies", err
+        subquery := s.db.Select("parent_id").Table("parent_groups p").Where("p.child_id = ?", group.ID)
+        err = s.db.Joins("JOIN parent_groups pg ON groups.id = pg.child_id").
+                Where("pg.parent_id = (?) AND groups.id != ?", subquery, group.ID).
+                Find(&groups).Error
+        title = "Commissies"
     case "bestuur":
-        err := s.db.Where("group_type = ? AND id != ?", "bestuur", group.ID).Find(&groups).Error
-        if err != nil {
-            return nil, "", err
-        }
-        return &groups, "Besturen", err
+        err = s.db.Where("group_type = ? AND id != ?", "bestuur", group.ID).Find(&groups).Error
+        title = "Besturen"
     case "huis":
-        err := s.db.Where("group_type = ? AND id != ?", "huis", group.ID).Find(&groups).Error
-        if err != nil {
-            return nil, "", err
-        }
-        return &groups, "Huizen", err
+        err = s.db.Where("group_type = ? AND id != ?", "huis", group.ID).Find(&groups).Error
+        title = "Huizen"
     case "gilde":
-        err := s.db.Where("group_type = ? AND end_date IS NULL AND id != ?", "gilde", group.ID).Find(&groups).Error
-        if err != nil {
-            return nil, "", err
-        }
-        return &groups, "Gilden", err
+        err = s.db.Where("group_type = ? AND end_date IS NULL AND id != ?", "gilde", group.ID).Find(&groups).Error
+        title = "Gilden"
     case "werkgroep":
-        err := s.db.Where("group_type = ? AND end_date IS NULL AND id != ?", "werkgroep", group.ID).Find(&groups).Error
-        if err != nil {
-            return nil, "", err
-        }
+        err = s.db.Where("group_type = ? AND end_date IS NULL AND id != ?", "werkgroep", group.ID).Find(&groups).Error
+        title = "Werkgroepen"
     }
 
-    return nil, "", nil
+    if err != nil {
+        return nil, "", err
+    }
+
+    return &groups, title, err
 }
 
 

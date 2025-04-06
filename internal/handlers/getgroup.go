@@ -1,12 +1,12 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 
+	"github.com/a-h/templ"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -49,18 +49,6 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    groups, title, err := h.GroupStore.GetSimelarGroups(group)
-    if err != nil {
-        err = templates.NotFound().Render(r.Context(), w)
-        if err != nil {
-            http.Error(w, "Error rendering template", http.StatusInternalServerError)
-            return
-        }
-        return
-    }
-
-    fmt.Println("groups", groups)
-
     user := middleware.GetUser(r.Context())
     isVoorzitter := false
     for _, u := range *users {
@@ -70,8 +58,16 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         }
     }
 
+
+    groups, title, err := h.GroupStore.GetSimelarGroups(group)
+    var s templ.Component
+    if err != nil || groups == nil || len(*groups) == 0 {
+        s = templates.DefaultSidebar()
+    }else{
+        s = templates.SidebarGroup(groups, title)
+    }
+
 	c := templates.Group(group, users, isVoorzitter)
-	s := templates.SidebarGroup(groups, title)
 	err = templates.BannerLayout(templates.Sidebar(templates.Card(c), templates.Card(s)), group.Image, group.Name).Render(r.Context(), w)
 
 	if err != nil {

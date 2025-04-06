@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"sjb_site/internal/store/dbstore"
 	"sjb_site/internal/templates"
@@ -26,7 +25,6 @@ func NewPostPollActivateHandler(params PostPollActivateHandlerParams) *PostPollA
 func (h *PostPollActivateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pollId := chi.URLParam(r, "pollId")
 
-    fmt.Println("Poll ID: ", pollId)
     err := h.store.Activate(pollId)
     if  err != nil {
         http.Error(w, "Error making poll active", http.StatusInternalServerError)

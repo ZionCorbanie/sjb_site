@@ -10,7 +10,7 @@ templ User(User *store.User, Groups []*store.GroupUser) {
     <div>
         <div class="flex flex-col-reverse lg:flex-row justify-between">
             <div class="flex flex-col lg:flex-row lg:space-x-8">
-                <image class="rounded-full w-36 h-36 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
+                <image class="rounded-full size-48 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
                 <div class="space-y-2">
                     <div class="text-3xl text-red-600 mb-10">{ User.FirstName } { User.LastName } </div>
                     <div class="flex items-center space-x-4"> <span class="icon-[mingcute--cake-line]"></span> <div> { User.StartDate.Format("02/01/2006") } </div> </div> //TODO: verjaardag in database
@@ -18,9 +18,9 @@ templ User(User *store.User, Groups []*store.GroupUser) {
                     if !User.EndDate.IsZero() {
                         <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-bottom] rotate-180"></span> <div>{ User.EndDate.Format("02/01/2006") }</div> </div>
                     }
-                    <div class="flex items-center space-x-4"> <span class="icon-[mdi--email-outline]"></span> <div>{ User.Email }</div> </div>
+                    <div class="flex items-center space-x-4" > <span class="icon-[mdi--email-outline]"></span> <a class="text-red-600 hover:underline" href={templ.URL("mailto:" + User.Email)}>{ User.Email }</a> </div>
                     <div class="flex items-center space-x-4"> <span class="icon-[mdi--phone]"></span> <div> { User.PhoneNumber } </div> </div>
-                    <div class="flex items-center space-x-4"> <span class="icon-[fluent--home-24-regular]"></span> <a class="text-secondary-600" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
+                    <div class="flex items-center space-x-4"> <span class="icon-[fluent--home-24-regular]"></span> <a class="text-secondary-600 hover:underline" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
 
                     <div class="flex flex-col mt-5">
                         {{ groupType := "" }}
@@ -67,12 +67,14 @@ templ groupEmoji(Group *store.Group) {
 }
 
 templ SidebarUser() {
-    //Todo implement user list and search
-    <div class="min-h-full">
-        <h3 class="text-2xl">Leden</h3>
-        <div class="flex flex-col space-y-5">
-            <a class="text-red-600" href="/webalmanak/leden">Leden</a>
-            <a class="text-red-600" href="/webalmanak/leden/add">Voeg lid toe</a>
+    <h2 class="text-2xl text-secondary-600">Leden</h2>
+    <input class="form-control my-5 rounded-md" type="search"
+        name="search" placeholder="Zoek voor naam, email, telefoon, adres"
+        hx-post="/webalmanak/leden"
+        hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+        hx-target="#leden">   
+    <div class="flex flex-col h-200 no-scrollbar overflow-hidden overflow-y-scroll">
+        <div id="leden" class="mx-auto">
         </div>
     </div>
 }

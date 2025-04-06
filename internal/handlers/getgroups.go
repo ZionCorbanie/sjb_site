@@ -24,6 +24,7 @@ func NewGroupsHandler(params GetGroupsHandlerParams) *GetGroupsHandler {
 
 func (h *GetGroupsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	groupType := chi.URLParam(r, "groupType")
+
 	groups, err := h.GroupStore.GetGroupsByType(groupType)
 	if err != nil {
 		err = templates.NotFound().Render(r.Context(), w)

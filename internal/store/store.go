@@ -137,7 +137,7 @@ type GroupStore interface {
 	CreateGroup(group *Group) error
 	GetGroupsByType(groupType string) ([]*Group, error)
 	GetGroup(groupId string) (*Group, error)
-    GetJaarclubs(group *Group) (*[]Group, error)
+    GetJaarclubs(jaarlaag int) (*[]Group, error)
     GetSimelarGroups(group *Group) (*[]Group, string, error)
 }
 

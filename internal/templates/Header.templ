@@ -83,7 +83,7 @@ templ nav() {
                             <a href="/webalmanak/leden" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
                                 Leden
                             </a>
-                            <a href="/webalmanak/jaarclub" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                            <a href="/webalmanak/jaarclubs" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
                                 Jaarclubs
                             </a>
                             <a href="/webalmanak/gilde" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
@@ -119,69 +119,72 @@ templ nav() {
                 <span class="icon-[material-symbols-light--menu]"></span>
             </button>
 		</div>
-
-        <div id="mobile" class="hidden">
-            <ol class="flex flex-col items-end text-end">
-                <li class="mb-4">
-                    <a class="hover:underline" href="/">
-                        <div class="-ml-1">Vereniging</div>
-                    </a>
-                    <ol class="mr-8">
-                        <li class="">
-                            <a class="hover:underline" href="/eettafel">
-                                <div class="-ml-1">structuur</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="hover:underline" href="/eettafel">
-                                <div class="-ml-1">bestuur</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="hover:underline" href="/eettafel">
-                                <div class="-ml-1">pand</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="hover:underline" href="/eettafel">
-                                <div class="-ml-1">oprichting</div>
-                            </a>
-                        </li>
-                    </ol>
-                </li>
-                <li class="mb-4">
-                    <a class="hover:underline" href="/eettafel">
-                        <div class="-ml-1">Eettafel</div>
-                    </a>
-                </li>
-                <li class="mb-4">
-                    <a class="hover:underline" href="/eettafel">
-                        <div class="-ml-1">Contact</div>
-                    </a>
-                </li>
-                <li class="mb-4">
-                    <a class="hover:underline" href="/eettafel">
-                        <div class="-ml-1">Extra</div>
-                    </a>
-                    <ol class="mr-8">
-                        <li class="">
-                            <a class="hover:underline" href="/eettafel">
-                                <div class="-ml-1">Help</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="hover:underline" href="/eettafel">
-                                <div class="-ml-1">Downloads</div>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="hover:underline" href="/eettafel">
-                                <div class="-ml-1">Gratis ram</div>
-                            </a>
-                        </li>
-                    </ol>
-                </li>
-            </ol>
-        </div>
 	</nav>
+    @mobile()
+}
+
+templ mobile(){
+    <div id="mobile" class="hidden pr-8 lg:hidden">
+        <ol class="flex flex-col items-end text-end">
+            <li class="mb-4">
+                <a class="hover:underline" href="/">
+                    <div class="-ml-1">Vereniging</div>
+                </a>
+                <ol class="mr-8">
+                    <li class="">
+                        <a class="hover:underline" href="/eettafel">
+                            <div class="-ml-1">structuur</div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="hover:underline" href="/eettafel">
+                            <div class="-ml-1">bestuur</div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="hover:underline" href="/eettafel">
+                            <div class="-ml-1">pand</div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="hover:underline" href="/eettafel">
+                            <div class="-ml-1">oprichting</div>
+                        </a>
+                    </li>
+                </ol>
+            </li>
+            <li class="mb-4">
+                <a class="hover:underline" href="/eettafel">
+                    <div class="-ml-1">Eettafel</div>
+                </a>
+            </li>
+            <li class="mb-4">
+                <a class="hover:underline" href="/eettafel">
+                    <div class="-ml-1">Contact</div>
+                </a>
+            </li>
+            <li class="mb-4">
+                <a class="hover:underline" href="/eettafel">
+                    <div class="-ml-1">Extra</div>
+                </a>
+                <ol class="mr-8">
+                    <li class="">
+                        <a class="hover:underline" href="/eettafel">
+                            <div class="-ml-1">Help</div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="hover:underline" href="/eettafel">
+                            <div class="-ml-1">Downloads</div>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="hover:underline" href="/eettafel">
+                            <div class="-ml-1">Gratis ram</div>
+                        </a>
+                    </li>
+                </ol>
+            </li>
+        </ol>
+    </div>
 }
