@@ -22,8 +22,22 @@ templ Jaarclubs() {
     </div>
     <script>
         function toggleYear(id) {
-            document.getElementById('jaarlaag_'+id).classList.toggle('hidden');
+            let el = document.getElementById('jaarlaag_'+id)
             document.getElementById('icon_'+id).classList.toggle('rotate-90');
+
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    el.classList.remove('opacity-0');
+                    el.classList.add('opacity-100');
+                });
+            }else {
+                el.classList.remove('opacity-100');
+                el.classList.add('opacity-0');
+                setTimeout(() => {
+                    el.classList.add('hidden');
+                }, 100);
+            }
         }
     </script>
 }
@@ -42,7 +56,7 @@ templ JaarclubRow(groups *[]store.Group, jaarlaag int) {
                 <div class="bg-stone-300 grow h-1 rounded-full"></div>
             </div>
         }
-        <div id={fmt.Sprintf("jaarlaag_%d", jaarlaag)} class="flex flex-wrap justify-normal">
+        <div id={fmt.Sprintf("jaarlaag_%d", jaarlaag)} class="flex flex-wrap justify-normal opacity-100 transition-opacity ease-in duration-150">
         for _, group := range *groups {
             <a class="flex-none w-60 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
                 <image class="rounded-md" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
