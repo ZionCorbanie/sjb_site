@@ -3,36 +3,55 @@ package templates
 import "sjb_site/internal/middleware"
 import "fmt"
 
+type dropDownItem struct{
+    name string
+    link string
+}
+
+var verenigingDrop = []dropDownItem{
+    { name: "Structuur", link: "/webalmanak/jaarclubs" },
+    { name: "Pand", link: "/webalmanak/gilde" },
+    { name: "Geschiedenis", link: "/webalmanak/leden" },
+}
+
+var webalmanakDrop = []dropDownItem{
+    { name: "Leden", link: "/webalmanak/leden" },
+    { name: "Jaarclubs", link: "/webalmanak/jaarclubs" },
+    { name: "Gilden", link: "/webalmanak/gilde" },
+    { name: "Commissies", link: "/webalmanak/commissies" },
+    { name: "Besturen", link: "/webalmanak/bestuur" },
+    { name: "Werkgroepen", link: "/webalmanak/werkgroep" },
+    { name: "Huizen", link: "/webalmanak/huis" },
+}
+
+var extraDrop = []dropDownItem{
+    { name: "Help", link: "/webalmanak/leden" },
+    { name: "Downloads", link: "/webalmanak/jaarclubs" },
+    { name: "Bromtol", link: "/webalmanak/gilde" },
+    { name: "Afschrijfmap", link: "/webalmanak/commissie" },
+    { name: "Beer en pas", link: "/webalmanak/bestuur" },
+    { name: "Webshop", link: "/webalmanak/werkgroep" },
+}
+
+
 templ nav() {
     {{ user := middleware.GetUser(ctx) }}
 	<nav class="px-4 lg:pb-2 border-t-4 border-red-600 mt-4 flex justify-between lg:justify-center">
 		<div class="flex justify-between lg:py-4 w-full max-w-6xl">
-            <a class="static lg:ml-5" href="/">
+            <a class="static lg:ml-5 z-100" href="/">
                 <img class="transition-transform duration-300 transform hover:scale-120 hover:translate-y-2 h-26 absolute top-2 hidden lg:block" src="/static/img/logo.png" alt="logo"/>
                 <img class="h-18 absolute top-2 lg:hidden" src="/static/img/logo-small.png" alt="logo"/>
                 <div class="ml-14 lg:ml-22 px-2 font-serif text-xl lg:text-3xl font-weight-medium">D.S.V. Sint Jansbrug</div>
             </a>
 			<ol class="hidden lg:flex space-x-4 items-center">
-                @dropDown("Vereniging", "/", &[]dropDownItem{
-                    { name: "Structuur", link: "/webalmanak/jaarclubs" },
-                    { name: "Pand", link: "/webalmanak/gilde" },
-                    { name: "Geschiedenis", link: "/webalmanak/leden" },
-                })
+                @dropDown("Vereniging", "/", &verenigingDrop)
 				<li class="relative">
 					<a class="flex items-center gap-2 px-2 link" href="/eettafel">
                         <div class="-ml-1">Eettafel</div>
                     </a>
 				</li>
 				if user != nil {
-                    @dropDown("Webalmanak", "/webalmanak/leden", &[]dropDownItem{
-                        { name: "Leden", link: "/webalmanak/leden" },
-                        { name: "Jaarclubs", link: "/webalmanak/jaarclubs" },
-                        { name: "Gilden", link: "/webalmanak/gilde" },
-                        { name: "Commissies", link: "/webalmanak/commissies" },
-                        { name: "Besturen", link: "/webalmanak/bestuur" },
-                        { name: "Werkgroepen", link: "/webalmanak/werkgroep" },
-                        { name: "Huizen", link: "/webalmanak/huis" },
-                    })
+                    @dropDown("Webalmanak", "/webalmanak/leden", &webalmanakDrop)
                 } else {
                     <li class="relative">
                         <a class="group flex items-center gap-2 pl-5 pr-3 py-1 transition-color duration-150 ease-in-out rounded-full bg-red-500 border-1 border-transparent hover:border-red-500 text-white hover:bg-white hover:text-red-600 hover:underline" href="/eettafel">
@@ -46,14 +65,7 @@ templ nav() {
                         <div class="-ml-1">Contact</div>
                     </a>
 				</li>
-                @dropDown("Extra", "/", &[]dropDownItem{
-                    { name: "Help", link: "/webalmanak/leden" },
-                    { name: "Downloads", link: "/webalmanak/jaarclubs" },
-                    { name: "Bromtol", link: "/webalmanak/gilde" },
-                    { name: "Afschrijfmap", link: "/webalmanak/commissie" },
-                    { name: "Beer en pas", link: "/webalmanak/bestuur" },
-                    { name: "Webshop", link: "/webalmanak/werkgroep" },
-                })
+                @dropDown("Extra", "/", &extraDrop)
 			</ol>
 			<ol class="hidden lg:flex space-x-4">
 				if user != nil {
@@ -78,83 +90,30 @@ templ nav() {
 					</li>
 				}
 			</ol>
-            <button class="lg:hidden text-red-600" onclick="document.getElementById('mobile').classList.toggle('hidden')">
+            <button class="lg:hidden text-red-600" onclick="toggleMenu()">
                 <span class="icon-[material-symbols-light--menu]"></span>
             </button>
 		</div>
 	</nav>
     @mobile()
-}
+    <script>
+        function toggleMenu() {
+            let el = document.getElementById('mobileList')
+            let mobile = document.getElementById('mobile')
 
-templ mobile(){
-    <div id="mobile" class="hidden pr-8 lg:hidden">
-        <ol class="flex flex-col items-end text-end">
-            <li class="mb-4">
-                <a class="hover:underline" href="/">
-                    <div class="-ml-1">Vereniging</div>
-                </a>
-                <ol class="mr-8">
-                    <li class="">
-                        <a class="hover:underline" href="/eettafel">
-                            <div class="-ml-1">structuur</div>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="hover:underline" href="/eettafel">
-                            <div class="-ml-1">bestuur</div>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="hover:underline" href="/eettafel">
-                            <div class="-ml-1">pand</div>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="hover:underline" href="/eettafel">
-                            <div class="-ml-1">oprichting</div>
-                        </a>
-                    </li>
-                </ol>
-            </li>
-            <li class="mb-4">
-                <a class="hover:underline" href="/eettafel">
-                    <div class="-ml-1">Eettafel</div>
-                </a>
-            </li>
-            <li class="mb-4">
-                <a class="hover:underline" href="/eettafel">
-                    <div class="-ml-1">Contact</div>
-                </a>
-            </li>
-            <li class="mb-4">
-                <a class="hover:underline" href="/eettafel">
-                    <div class="-ml-1">Extra</div>
-                </a>
-                <ol class="mr-8">
-                    <li class="">
-                        <a class="hover:underline" href="/eettafel">
-                            <div class="-ml-1">Help</div>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="hover:underline" href="/eettafel">
-                            <div class="-ml-1">Downloads</div>
-                        </a>
-                    </li>
-                    <li class="">
-                        <a class="hover:underline" href="/eettafel">
-                            <div class="-ml-1">Gratis ram</div>
-                        </a>
-                    </li>
-                </ol>
-            </li>
-        </ol>
-    </div>
-}
-
-type dropDownItem struct{
-    name string
-    link string
+            if (mobile.classList.contains('hidden')) {
+                mobile.classList.remove('hidden');
+                el.classList.add('right-0');
+                requestAnimationFrame(() => {
+                    el.classList.remove('-right-60');
+                });
+            }else {
+                el.classList.add('-right-60');
+                el.classList.remove('right-0');
+                mobile.classList.add('hidden');
+            }
+        }
+    </script>
 }
 
 templ dropDown(title string, link string, items *[]dropDownItem) {
@@ -209,4 +168,36 @@ templ dropDown(title string, link string, items *[]dropDownItem) {
         </ol>
     </li>
 
+}
+
+templ mobile(){
+    <div class="w-screen static shadow-xl">
+        <button id="mobile" onclick="toggleMenu()" class="absolute hidden lg:hidden bg-stone-400/50 w-screen h-screen"></button>
+        <div class="absolute w-screen overflow-x-clip">
+            <div id="mobileList" class="w-60 h-screen absolute top-0 pr-12 bg-white -right-60 transition-all ease-in-out duration-100">
+                <ol class="flex flex-col items-end text-end w-full h-screen ml-2 py-4 border-l-2 border-red-400">
+                    @mobileDropDown("Vereniging", "/", &verenigingDrop)
+                    @mobileDropDown("Webalmanak", "/webalmanak/leden", &webalmanakDrop)
+                    @mobileDropDown("Extra", "/extra", &extraDrop)
+                </ol>
+            </div>
+        </div>
+    </div>
+}
+
+templ mobileDropDown(title string, link string, items *[]dropDownItem) {
+    <li class="mb-4">
+        <a class="hover:underline" href={templ.URL(link)}>
+            <div class="-ml-1">{title}</div>
+        </a>
+        <ol class="mr-8">
+        for _, item := range *items {
+            <li class="">
+                <a class="hover:underline" href={templ.URL(item.link)}>
+                    <div class="-ml-1">{item.name}</div>
+                </a>
+            </li>
+        }
+        </ol>
+    </li>
 }
