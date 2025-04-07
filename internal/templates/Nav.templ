@@ -13,100 +13,40 @@ templ nav() {
                 <div class="ml-14 lg:ml-22 px-2 font-serif text-xl lg:text-3xl font-weight-medium">D.S.V. Sint Jansbrug</div>
             </a>
 			<ol class="hidden lg:flex space-x-4 items-center">
-				<li class="relative">
-					<a class="flex gap-2 px-2 items-center link" href="/">
-                        <div class="-ml-1">Vereniging</div>
-                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
-                    </a>
-				</li>
+                @dropDown("Vereniging", "/", &[]dropDownItem{
+                    { name: "Structuur", link: "/webalmanak/jaarclubs" },
+                    { name: "Pand", link: "/webalmanak/gilde" },
+                    { name: "Geschiedenis", link: "/webalmanak/leden" },
+                })
 				<li class="relative">
 					<a class="flex items-center gap-2 px-2 link" href="/eettafel">
                         <div class="-ml-1">Eettafel</div>
                     </a>
 				</li>
+				if user != nil {
+                    @dropDown("Webalmanak", "/webalmanak/leden", &[]dropDownItem{
+                        { name: "Leden", link: "/webalmanak/leden" },
+                        { name: "Jaarclubs", link: "/webalmanak/jaarclubs" },
+                        { name: "Gilden", link: "/webalmanak/gilde" },
+                        { name: "Commissies", link: "/webalmanak/commissie" },
+                        { name: "Besturen", link: "/webalmanak/bestuur" },
+                        { name: "Werkgroepen", link: "/webalmanak/werkgroep" },
+                        { name: "Huizen", link: "/webalmanak/huis" },
+                    })
+                }
 				<li class="relative">
 					<a class="flex gap-2 px-2 items-center link" href="/eettafel">
                         <div class="-ml-1">Contact</div>
                     </a>
 				</li>
-				<li class="relative">
-					<a class="flex gap-2 px-2 items-center link" href="/eettafel">
-                        <div class="-ml-1">Extra</div>
-                        <span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
-                    </a>
-				</li>
-				if user != nil {
-                    <li x-data="{
-                        open: false,
-                        toggle() {
-                            if (this.open) {
-                                return this.close()
-                            }
-                            this.$refs.button.focus()
-                            this.open = true
-                        },
-                        close() {
-                            if (! this.open) return
-                            this.open = false
-                        }
-                        }"
-                        x-on:keydown.escape.prevent.stop="close()"
-                        x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
-                        x-id="['dropdown-button']"
-                        @mouseleave="close()"
-                        class="relative"
-                        >
-                        <!-- Button -->
-                        <a
-                            href="/webalmanak/leden"    
-                            x-ref="button"
-                            x-on:click="toggle()"
-                            @mouseover="open = true"
-                            :aria-expanded="open"
-                            :aria-controls="$id('dropdown-button')"
-                            type="button"
-                            class="flex items-center gap-2 px-2 link"
-                            >
-                            Webalmanak<span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
-                        </a>
-                        <!-- Panel -->
-                        <div
-                            x-ref="panel"
-                            x-show="open"
-                            x-transition.origin.top.left
-                            x-on:click.outside="close()"
-                            :id="$id('dropdown-button')"
-                            @mouseleave="close()"
-                            style="display: none;"
-                            class="absolute left-0 w-40 rounded-md bg-white shadow-md"
-                        >
-                            <a href="/webalmanak/leden" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Leden
-                            </a>
-                            <a href="/webalmanak/jaarclubs" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Jaarclubs
-                            </a>
-                            <a href="/webalmanak/gilde" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Gilde
-                            </a>
-                            <a href="/webalmanak/commissie" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Commissies
-                            </a>
-                            <a href="/webalmanak/barploeg" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Barploegen
-                            </a>
-                            <a href="/webalmanak/bestuur" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Besturen
-                            </a>
-                            <a href="/webalmanak/werkgroep" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Werkgroepen
-                            </a>
-                            <a href="/webalmanak/huis" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                                Huizen
-                            </a>
-                        </div>
-                    </li>
-                }
+                @dropDown("Extra", "/", &[]dropDownItem{
+                    { name: "Help", link: "/webalmanak/leden" },
+                    { name: "Downloads", link: "/webalmanak/jaarclubs" },
+                    { name: "Bromtol", link: "/webalmanak/gilde" },
+                    { name: "Afschrijfmap", link: "/webalmanak/commissie" },
+                    { name: "Beer en pas", link: "/webalmanak/bestuur" },
+                    { name: "Webshop", link: "/webalmanak/werkgroep" },
+                })
 			</ol>
 			<ol class="hidden lg:flex space-x-4">
 				if user != nil {
@@ -199,4 +139,63 @@ templ mobile(){
             </li>
         </ol>
     </div>
+}
+
+type dropDownItem struct{
+    name string
+    link string
+}
+
+templ dropDown(title string, link string, items *[]dropDownItem) {
+    <li x-data="{
+        open: false,
+        toggle() {
+            if (this.open) {
+                return this.close()
+            }
+            this.$refs.button.focus()
+            this.open = true
+        },
+        close() {
+            if (! this.open) return
+            this.open = false
+        }
+        }"
+        x-on:keydown.escape.prevent.stop="close()"
+        x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+        x-id="['dropdown-button']"
+        @mouseleave="close()"
+        class="relative"
+        >
+        <a
+            href={ templ.URL(link) }    
+            x-ref="button"
+            x-on:click="toggle()"
+            @mouseover="open = true"
+            :aria-expanded="open"
+            :aria-controls="$id('dropdown-button')"
+            type="button"
+            class="flex items-center gap-2 px-2 link"
+            >
+            { title }<span class="-ml-4 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+        </a>
+        <ol x-ref="panel"
+            x-show="open"
+            x-transition.origin.top.left
+            x-on:click.outside="close()"
+            :id="$id('dropdown-button')"
+            @mouseleave="close()"
+            style="display: none;"
+            class="absolute left-0 w-40 rounded-md bg-white shadow-md"
+        >
+            for _, item := range *items {
+                <li class="">
+                    <a href={ templ.URL(item.link) } class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500" >
+                        <div class="">{ item.name }</div>
+                    </a>
+                </li>
+            }
+        </ol>
+    </li>
+
 }

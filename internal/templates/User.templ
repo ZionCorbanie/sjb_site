@@ -7,43 +7,41 @@ import (
 )
 
 templ User(User *store.User, Groups []*store.GroupUser) {
-    <div>
-        <div class="flex flex-col-reverse lg:flex-row justify-between">
-            <div class="flex flex-col lg:flex-row lg:space-x-8">
-                <image class="rounded-full size-48 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
-                <div class="space-y-2">
-                    <div class="text-3xl text-red-600 mb-10">{ User.FirstName } { User.LastName } </div>
-                    <div class="flex items-center space-x-4"> <span class="icon-[mingcute--cake-line]"></span> <div> { User.StartDate.Format("02/01/2006") } </div> </div> //TODO: verjaardag in database
-                    <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-top]"></span> <div> { User.StartDate.Format("02/01/2006") }</div> </div>
-                    if !User.EndDate.IsZero() {
-                        <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-bottom] rotate-180"></span> <div>{ User.EndDate.Format("02/01/2006") }</div> </div>
-                    }
-                    <div class="flex items-center space-x-4" > <span class="icon-[mdi--email-outline]"></span> <a class="link" href={templ.URL("mailto:" + User.Email)}>{ User.Email }</a> </div>
-                    <div class="flex items-center space-x-4"> <span class="icon-[mdi--phone]"></span> <a class="link" href={ templ.URL("tel:"+User.PhoneNumber) }> { User.PhoneNumber } </a> </div>
-                    <div class="flex items-center space-x-4"> <span class="icon-[fluent--home-24-regular]"></span> <a class="link" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
+    <div class="flex flex-col-reverse lg:flex-row justify-between">
+        <div class="flex flex-col lg:flex-row lg:space-x-8">
+            <image class="rounded-full size-48 object-center" src={ User.Image } alt={ fmt.Sprintf("Foto van %s", User.Username) }/>
+            <div class="space-y-2">
+                <div class="text-3xl text-red-600 mb-10">{ User.FirstName } { User.LastName } </div>
+                <div class="flex items-center space-x-4"> <span class="icon-[mingcute--cake-line]"></span> <div> { User.StartDate.Format("02/01/2006") } </div> </div> //TODO: verjaardag in database
+                <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-top]"></span> <div> { User.StartDate.Format("02/01/2006") }</div> </div>
+                if !User.EndDate.IsZero() {
+                    <div class="flex items-center space-x-4"> <span class="icon-[ic--round-hourglass-bottom] rotate-180"></span> <div>{ User.EndDate.Format("02/01/2006") }</div> </div>
+                }
+                <div class="flex items-center space-x-4" > <span class="icon-[mdi--email-outline]"></span> <a class="link" href={templ.URL("mailto:" + User.Email)}>{ User.Email }</a> </div>
+                <div class="flex items-center space-x-4"> <span class="icon-[mdi--phone]"></span> <a class="link" href={ templ.URL("tel:"+User.PhoneNumber) }> { User.PhoneNumber } </a> </div>
+                <div class="flex items-center space-x-4"> <span class="icon-[fluent--home-24-regular]"></span> <a class="link" href={ templ.URL(fmt.Sprintf("https://maps.google.com/?q=%s", User.Adres)) }>{ User.Adres }</a> </div>
 
-                    <div class="flex flex-col mt-5">
-                        {{ groupType := "" }}
-                        for _, groupUser := range Groups {
-                            if groupType != groupUser.Group.GroupType {
-                                <span class="flex items-center space-x-4 text-stone-600 mt-4"> @groupEmoji(&groupUser.Group) <div>{ groupUser.Group.GroupType }</div> </span>
-                                {{ groupType = groupUser.Group.GroupType }}
-                            }
-                            <span class="flex items-center space-x-4">
-                                <a class="link ml-10" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
-                                if groupUser.Function != "" {
-                                    <p>{ groupUser.Function },</p>
-                                }
-                                <p>{ groupUser.Title }</p>
-                            </span>
+                <div class="flex flex-col mt-5">
+                    {{ groupType := "" }}
+                    for _, groupUser := range Groups {
+                        if groupType != groupUser.Group.GroupType {
+                            <span class="flex items-center space-x-4 text-stone-600 mt-4"> @groupEmoji(&groupUser.Group) <div>{ groupUser.Group.GroupType }</div> </span>
+                            {{ groupType = groupUser.Group.GroupType }}
                         }
-                    </div>
+                        <span class="flex items-center space-x-4">
+                            <a class="link ml-10" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
+                            if groupUser.Function != "" {
+                                <p>{ groupUser.Function },</p>
+                            }
+                            <p>{ groupUser.Title }</p>
+                        </span>
+                    }
                 </div>
             </div>
-            if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
-                <a class="max-md:self-end" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }><span class="link icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
-            }
         </div>
+        if middleware.IsAdmin(ctx) || middleware.GetUser(ctx).ID == User.ID {
+            <a class="max-md:self-end" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d/edit", User.ID)) }><span class="link icon-[material-symbols-light--edit-square-outline-rounded]"></span></a>
+        }
     </div>
 }
 
@@ -73,7 +71,7 @@ templ SidebarUser() {
         hx-post="/webalmanak/leden"
         hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
         hx-target="#leden">   
-    <div class="flex flex-col h-200 no-scrollbar overflow-hidden overflow-y-scroll">
+    <div class="flex flex-col h-200 no-scrollbar overflow-hidden overflow-y-scroll overscroll-none">
         <div id="leden" class="mx-auto">
         </div>
     </div>
