@@ -52,7 +52,7 @@ func (s *GroupStore) GetJaarclubs(jaarlaag int) (*[]store.Group, error) {
     return &groups, err
 }
 
-func (s *GroupStore) GetSimelarGroups(group *store.Group) (*[]store.Group, string, error) {
+func (s *GroupStore) GetSimilarGroups(group *store.Group) (*[]store.Group, string, error) {
     var groups []store.Group
     var title string
     var err error

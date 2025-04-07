@@ -33,6 +33,13 @@ templ nav() {
                         { name: "Werkgroepen", link: "/webalmanak/werkgroep" },
                         { name: "Huizen", link: "/webalmanak/huis" },
                     })
+                } else {
+                    <li class="relative">
+                        <a class="group flex items-center gap-2 pl-5 pr-3 py-1 transition-color duration-150 ease-in-out rounded-full bg-red-500 border-1 border-transparent hover:border-red-500 text-white hover:bg-white hover:text-red-600 hover:underline" href="/eettafel">
+                            <div class="-ml-1">Lid worden</div>
+                            <span class="-rotate-45 group-hover:rotate-0 size-6 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                        </a>
+                    </li>
                 }
 				<li class="relative">
 					<a class="flex gap-2 px-2 items-center link" href="/eettafel">
@@ -50,19 +57,23 @@ templ nav() {
 			</ol>
 			<ol class="hidden lg:flex space-x-4">
 				if user != nil {
-                    <li class="relative">
+                    <li class="relative group">
+                        <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-100 delay-300 ease-in absolute pointer-events-none -top-5 -left-3">Account</span>
                         <a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) }><span class="icon-[material-symbols-light--account-circle]"></span></a>
                     </li>
                     if middleware.IsAdmin(ctx) {
-                        <li class="relative">
+                        <li class="relative group">
+                            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-100 delay-300 ease-in absolute pointer-events-none -top-5 -left-7">Instellingen</span>
                             <a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href="/admin"><span class="icon-[material-symbols-light--settings-outline-rounded]"></span></a>
                         </li>
                     }
-                    <li class="relative">
+                    <li class="relative group">
+                        <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-100 delay-300 ease-in absolute pointer-events-none -top-5 -left-3">Uitloggen</span>
                         <button class="cursor-pointer flex text-red-600 items-center hover:bg-stone-200 rounded-full" hx-target="body" hx-swap="innerHTML" hx-post="/logout"><span class="icon-[material-symbols-light--logout-rounded]"></span></button>
                     </li>
 				} else {
-					<li class="relative">
+					<li class="relative group">
+                        <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-100 delay-300 ease-in absolute pointer-events-none -top-5 -left-3">Inloggen</span>
 						<a class="flex text-red-600 items-center hover:bg-stone-200 rounded-full" href="/login"><span class="icon-[material-symbols-light--login-rounded]"></span></a>
 					</li>
 				}

@@ -48,7 +48,7 @@ templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
 
         <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/178155_3864228971980_1032291266_o.jpg)] bg-center bg-[auto_100lvh] lg:bg-cover w-screen h-60 lg:h-100"></div>
 
-        <div id="posts" class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% w-full flex justify-center">
+        <div id="posts" class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% w-full flex justify-center transition-opacity ease-in duration-700">
             <div class="flex-grow flex-col justify-between h-full p-8 w-full flex max-w-6xl">
                 <div>
                     @recentPosts(posts)
@@ -92,8 +92,12 @@ templ recentPosts(posts []*store.Post){
                 </div>
             }
         </div>
-        <div class="underline flex justify-center mt-5">
-            <a href="/posts">Bekijk alle posts</a>
+
+        <div class="flex justify-center mt-5">
+            <a href="/posts" class="hover:underline group flex">
+                    <div>Bekijk alle posts</div>
+                    <span class="ml-2 -rotate-45 group-hover:rotate-0 size-6 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+            </a>
         </div>
     </div>
 }

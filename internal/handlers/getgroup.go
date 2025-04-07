@@ -59,7 +59,7 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 
 
-    groups, title, err := h.GroupStore.GetSimelarGroups(group)
+    groups, title, err := h.GroupStore.GetSimilarGroups(group)
     var s templ.Component
     if err != nil || groups == nil || len(*groups) == 0 {
         s = templates.DefaultSidebar()
