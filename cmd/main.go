@@ -185,6 +185,11 @@ func main() {
                         GroupStore: groupStore,
                     }).ServeHTTP)
                 })
+                r.Route("/commissies", func(r chi.Router) {
+                    r.Get("/", handlers.NewCommissiesHandler(handlers.GetCommissiesHandlerParams{
+                        GroupStore: groupStore,
+                    }).ServeHTTP)
+				})
 				r.Route("/{groupType}", func(r chi.Router) {
 					r.Get("/", handlers.NewGroupsHandler(handlers.GetGroupsHandlerParams{
 						GroupStore: groupStore,

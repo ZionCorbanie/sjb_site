@@ -4,13 +4,42 @@ import "sjb_site/internal/store"
 import "fmt"
 import "strconv"
 
-templ Groups(groups []*store.Group) {
-    <div class="flex flex-wrap justify-normal">
-        for _, group := range groups {
-            <a class="flex-none w-44 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
-                <image class="rounded-md" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
-                <div class="text-center text-wrap">{ group.Name }</div>
-            </a>
+var groupText = map[string]string{
+    "bestuur":   "Besturen",
+    "commissie": "Commissies",
+    "werkgroep": "Werkgroepen",
+    "gilde":     "Gilden",
+    "huis":      "Huizen",
+}
+
+templ Groups(groups *[]store.Group) {
+    if groups != nil && len(*groups) != 0 {
+        <div class="text-2xl text-red-600 mb-5">{groupText[(*groups)[0].GroupType]}</div>
+    }
+    <div class="flex flex-col lg:flex-row flex-wrap max-md:items-center justify-normal">
+        {{ dood := false }}
+        for _, group := range *groups {
+            if group.EndDate.IsZero() {
+                <a class="flex-none w-60 mr-5 mb-5 group" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
+                    <div class="w-60 h-40 overflow-hidden ">
+                        <image class="rounded-md transition-transform duration-400 transform group-hover:scale-125" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
+                    </div>
+                    <div class="text-center text-wrap">{ group.Name }</div>
+                </a>
+            }else {
+                if !dood {
+                    {{ dood = true }}
+                    <div class="text-2xl text-red-600 mb-5 w-full">Dood</div>
+                }
+
+                <a class="flex-none w-60 mr-5" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", group.ID)) }>
+                    <div class="w-60 h-40 overflow-hidden relative rounded-md group">
+                        <div class="absolute bg-stone-400/50 size-full z-50"></div>
+                        <image class="rounded-md transition-transform duration-400 transform group-hover:scale-125" src={ group.Image } alt={ fmt.Sprintf("Foto van %s", group.Name) }/>
+                    </div>
+                    <div class="text-center text-wrap">{ group.Name }</div>
+                </a>
+            }
         }
     </div>
 }
@@ -46,7 +75,7 @@ templ Jaarclubs() {
 }
 
 templ JaarclubRow(groups *[]store.Group, jaarlaag int) {
-    <div >
+    <div>
         if groups != nil || len(*groups) != 0 {
             <div class="select-none text-2xl text-red-600 w-full flex justify-between items-center cursor-pointer hover:underline hover:text-red-800 my-2"
                 onclick={ templ.JSUnsafeFuncCall(fmt.Sprintf("toggleYear(%d)",jaarlaag)) }>

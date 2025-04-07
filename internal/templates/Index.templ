@@ -84,7 +84,7 @@ templ recentPosts(posts []*store.Post){
                     <div class="group bg-white rounded-lg overflow-hidden shadow-md">
                         <a href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
                             <div class="rounded-t-lg h-48 overflow-hidden">
-                                <image class="transition-transform duration-400 transform group-hover:scale-125 peer w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
+                                <image class="transition-transform duration-400 transform group-hover:scale-125 w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
                             </div>
                             <div class="px-3 pb-2 pt-1 text-wrap text-xl text-red-700">{ post.Title }</div>
                         </a>

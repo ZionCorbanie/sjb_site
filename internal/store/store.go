@@ -135,9 +135,10 @@ type SessionStore interface {
 
 type GroupStore interface {
 	CreateGroup(group *Group) error
-	GetGroupsByType(groupType string) ([]*Group, error)
+	GetGroupsByType(groupType string) (*[]Group, error)
 	GetGroup(groupId string) (*Group, error)
     GetJaarclubs(jaarlaag int) (*[]Group, error)
+	GetCommissies() (*[]Group, error)
     GetSimilarGroups(group *Group) (*[]Group, string, error)
 }
 
