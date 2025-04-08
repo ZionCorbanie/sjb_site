@@ -46,7 +46,7 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
 	@header(title)
     <body class="bg-fixed bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% min-h-screen flex flex-col items-center justify-center">
         <div class="flex flex-col justify-center items-center min-h-screen w-full mx-auto">
-            <header class="sticky top-0 bg-primary shadow-xl z-50 lg:rounded-b-lg w-full">
+            <header class="sticky top-0 bg-primary shadow-md z-50 lg:rounded-b-lg w-full">
                 @nav()
             </header>
             <div class="flex-grow flex flex-col justify-between overflow-y-auto no-scrollbar w-full max-w-6xl">
@@ -66,7 +66,7 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
 }
 
 templ Card(contents templ.Component) {
-    <div class="bg-white h-full shadow-xl lg:rounded-t-xl p-8 mt-8 w-full max-w-6xl grow flex flex-col ">
+    <div class="bg-white h-full shadow-xl lg:rounded-t-xl p-8 mt-5 w-full max-w-6xl grow flex flex-col ">
         @contents
     </div>
 }
@@ -79,10 +79,5 @@ templ Sidebar(main templ.Component, sidebar templ.Component) {
         <div id="sidebar" class="w-full lg:min-h-full lg:w-1/4 max-md:pt-2 lg:pl-5">
             @sidebar
         </div>
-        //<div id="sidebar" class="w-full h-min lg:min-h-full lg:w-1/4 max-md:pt-2 lg:pl-5 relative">
-        //    <div class="fixed">
-        //        @sidebar
-        //    </div>
-        //</div>
     </div>
 }

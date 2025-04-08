@@ -25,8 +25,8 @@ templ User(User *store.User, Groups []*store.GroupUser) {
                     {{ groupType := "" }}
                     for _, groupUser := range Groups {
                         if groupType != groupUser.Group.GroupType {
-                            <span class="flex items-center space-x-4 text-stone-600 mt-4"> @groupEmoji(&groupUser.Group) <div>{ groupUser.Group.GroupType }</div> </span>
                             {{ groupType = groupUser.Group.GroupType }}
+                            <span class="flex items-center space-x-4 text-stone-600 mt-4"> @groupEmoji(&groupUser.Group) <div>{ groupText[groupType] }</div> </span>
                         }
                         <span class="flex items-center space-x-4">
                             <a class="link ml-10" href={ templ.URL(fmt.Sprintf("/webalmanak/groep/%d", groupUser.Group.ID)) }> { groupUser.Group.Name }</a> 
