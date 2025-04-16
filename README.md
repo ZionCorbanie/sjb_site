@@ -4,6 +4,7 @@ Een nieuwe, snelle en veilige site voor Sint Jansbrug gemaakt met Go, Tailwind, 
 * Go - Backend
 * Tailwind - CSS
 * Templ - Templating
+* Htmx - Frontend framework
 
 ## Makefile
 De makefile zorgt ervoor dat je makkelijk de site kan draaien en bouwen. 
@@ -28,5 +29,3 @@ Momenteel werkt alleen de dev omgeving, maar er is ook een productie omgeving.
 
 Met gorm en templ zijn we volledig beschermd tegen sql injection en xss attacks.
 Op alle niet-publieke routes staan middleware voor admin of leden privileges.
-
-Useruploads worden "beschermd" via uuid, een hacker zou dus miljarden requests moeten doen om er een te vinden. (eigenlijk moet dit door middleware)
