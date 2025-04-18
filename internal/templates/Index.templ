@@ -4,13 +4,6 @@ import "sjb_site/internal/store"
 import "fmt"
 
 templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
-    <script src="/static/script/scroll-indicator.js"></script>
-    <div id="scroll-indicator" 
-         class="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer transition-opacity duration-500"
-         hx-on:click="scrollToTarget()">
-         <span class="w-14 h-14 text-red-700 animate-bounce icon-[material-symbols-light--expand-circle-down-rounded]"></span>
-    </div>
-
     <div class="bg-fixed h-full w-full flex flex-grow flex-col overflow-y-auto no-scrollbar">
         <div class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-100 to-75% w-full flex justify-center">
             <div class="flex-grow flex-col justify-between h-full py-8 lg:px-8 w-full flex max-w-6xl">
@@ -100,25 +93,6 @@ templ recentPosts(posts []*store.Post){
             </a>
         </div>
     </div>
-}
-
-templ carrousel(){
-    <div class="lg:ml-8 relative w-full lg:flex-1 h-80 lg:min-h-full overflow-hidden mb-4 overflow-hidden lg:rounded-xl">
-        <div id="carousel" class="flex transition-transform duration-500 ease-in-out">
-            <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
-            <img src="/static/img/eettafelbord.jpg" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
-            <img src="/static/img/placeholder-group.png" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
-            <img src="/static/img/eettafelbord.jpg" class="w-full h-80 object-cover flex-shrink-0" alt="Carousel Image">
-        </div>
-
-        <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">
-            <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
-        </button>
-        <button id="nextBtn" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full">
-            <span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span>
-        </button>
-    </div>
-    <script src="/static/script/carrousel.js"></script>
 }
 
 templ DefaultSidebar(){

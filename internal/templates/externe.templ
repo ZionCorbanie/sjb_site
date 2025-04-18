@@ -1,0 +1,66 @@
+package templates
+
+import "sjb_site/internal/store"
+
+templ Externe(posts []*store.Post, menu templ.Component) {
+    <script src="/static/script/scroll-indicator.js"></script>
+    <div id="scroll-indicator" 
+         class="fixed bottom-10 left-1/2 transform -translate-x-1/2 hidden flex-col items-center cursor-pointer transition-opacity duration-500"
+         hx-on:click="scrollToTarget()">
+         <span class="w-14 h-14 text-red-700 animate-bounce icon-[material-symbols-light--expand-circle-down-rounded]"></span>
+    </div>
+
+    <div class="w-full pb-10">
+        <div class="w-full flex justify-between my-20 space-x-20">
+            <div class="w-1/2 flex text-2xl justify-center pl-70 mt-20">
+                <div class="space-y-10">
+                    <h1 class="text-5xl font-bold">Delftsche Studenten-Vereniging <span class="text-red-700">Sint Jansbrug</span></h1>
+                    <p class="text-2xl">De vereniging die groot genoeg is om gave dingen neer te zetten maar klein genoeg dat je iedereen kent</p>
+                    <a class="group flex justify-between items-center gap-2 pl-7 pr-5 py-3 w-60 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-white hover:text-red-600 hover:underline" href="/eettafel">
+                        <div class="-ml-1">Lid worden</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-8 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="w-1/2">
+                @carrousel()
+            </div>
+        </div>
+
+        <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/178155_3864228971980_1032291266_o.jpg)] bg-center bg-[auto_100lvh] lg:bg-cover w-screen h-60 lg:h-100"></div>
+
+        <div id="target" class="w-full flex justify-center py-20">
+            <div class="flex space-x-10">
+                @menu
+                <p class="text-2xl">Kom eten bij onze open eettafel</p>
+            </div>
+        </div>
+
+        <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/soosieteit.jpg)] bg-center bg-cover w-screen h-60 lg:h-100 flex justify-center"></div>
+
+        <div class="flex justify-center">
+            <div class="max-w-6xl">
+                @recentPosts(posts)
+            </div>
+        </div>
+    </div>
+}
+
+templ carrousel(){
+    <div class="relative w-full md:flex-1 h-140 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
+        <div id="carousel" class="flex transition-transform duration-500 ease-in-out w-full h-full">
+            <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/eettafelbord.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/eettafelbord.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
+        </div>
+
+        <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2  p-2 text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
+        </button>
+        <button id="nextBtn" class="absolute top-1/2 right-2 transform -translate-y-1/2  p-2 text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span>
+        </button>
+    </div>
+    <script src="/static/script/carrousel.js"></script>
+}
