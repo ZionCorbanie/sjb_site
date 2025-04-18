@@ -174,8 +174,8 @@ templ mobile(){
     <div class="w-screen static shadow-xl">
         <button id="mobile" onclick="toggleMenu()" class="absolute hidden lg:hidden bg-stone-400/50 w-screen h-screen z-50"></button>
         <div class="absolute w-screen overflow-x-clip z-50">
-            <div id="mobileList" class="w-60 h-screen absolute top-0 pr-12 bg-white -right-60 transition-all ease-in-out duration-100">
-                <ol class="flex flex-col w-full h-screen ml-2 pl-6 py-4 border-l-2 border-red-400">
+            <div id="mobileList" class="w-60 h-screen absolute top-0 bg-white -right-60 transition-all ease-in-out duration-100">
+                <ol class="flex flex-col w-full h-screen ml-2 pl-1 py-4 border-l-2 border-red-400">
                     @mobileDropDown("Vereniging", "/", &verenigingDrop)
                     @mobileDropDown("Webalmanak", "/webalmanak/leden", &webalmanakDrop)
                     @mobileDropDown("Extra", "/extra", &extraDrop)
@@ -188,11 +188,11 @@ templ mobile(){
 templ mobileDropDown(title string, link string, items *[]dropDownItem) {
     <li class="mb-4 group">
         {{ script := templ.JSUnsafeFuncCall(fmt.Sprintf("document.getElementById('dropDown_%s').classList.toggle('hidden'); document.getElementById('dropIcon_%s').classList.toggle('-rotate-90')", title, title)) }}
-        <button class="hover:underline flex items-center" onclick={script}>
-            <span id={"dropIcon_"+title} class="-ml-4 transition-transform duration-250 ease-in-out -rotate-90 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
+        <button class="hover:underline flex items-center w-full" onclick={script}>
+            <span id={"dropIcon_"+title} class="transition-transform duration-250 ease-in-out -rotate-90 icon-[material-symbols-light--arrow-drop-down-rounded]"></span>
             <span class="-ml-1">{title}</span>
         </button>
-        <ol id={"dropDown_"+title} class="ml-8 hidden mt-2 space-y-2">
+        <ol id={"dropDown_"+title} class="ml-12 hidden mt-1 space-y-2">
         for _, item := range *items {
             <li class="">
                 <a class="hover:underline" href={templ.URL(item.link)}>

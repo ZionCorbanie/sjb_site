@@ -49,7 +49,7 @@ templ Polls(polls []*store.Poll){
 }
 
 templ PollList(polls []*store.Poll) {
-    <a href="/admin/poll" class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">
+    <a href="/admin/poll" class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">
         Nieuwe poll
     </a>
     <div class="border-1 border-black h-100 overflow-hidden overflow-y-scroll">
@@ -104,8 +104,8 @@ templ CreatePoll(){
                 <input type="text" name="0" id="0" placeholder="Antwoord 1" value="" autocomplete="off">
             </div>
             <div class="flex justify-between max-w-60 space-x-2">
-                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
-                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
+                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
+                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
             </div>
 
             <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Nieuwe poll maken</button>
