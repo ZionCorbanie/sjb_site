@@ -5,16 +5,8 @@ import "fmt"
 
 templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
     <div class="bg-fixed h-full w-full flex flex-grow flex-col overflow-y-auto no-scrollbar">
-        <div class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-100 to-75% w-full flex justify-center">
+        <div class="bg-stone-100 w-full flex justify-center">
             <div class="flex-grow flex-col justify-between h-full py-8 lg:px-8 w-full flex max-w-6xl">
-                if user == nil {
-                    <div>
-                        <h1>Welkom bij D.S.V. Sint Jansbrug</h1>
-                        <p>De gezelligste studentenvereniging van Delft</p>
-                        <a href="/inschrijven"> Word lid </a>
-                    </div>
-                    <hr>
-                }
                 <div class="flex lg:justify-between flex-wrap">
                     @menu
                     if user != nil {
@@ -39,9 +31,7 @@ templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
             </div>
         </div>
 
-        <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/178155_3864228971980_1032291266_o.jpg)] bg-center bg-[auto_100lvh] lg:bg-cover w-screen h-60 lg:h-100"></div>
-
-        <div id="posts" class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% w-full flex justify-center transition-opacity ease-in duration-700">
+        <div id="posts" class="bg-stone-100 w-full flex justify-center transition-opacity ease-in duration-700 border-neutral border-t-2">
             <div class="flex-grow flex-col justify-between h-full p-8 w-full flex max-w-6xl">
                 <div>
                     @recentPosts(posts)
@@ -50,21 +40,6 @@ templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
         </div>
 
         <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/soosieteit.jpg)] bg-center bg-cover w-screen h-60 lg:h-100 flex justify-center"></div>
-
-        <div class="bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% w-screen flex justify-center">
-            <div class="flex-grow flex-col justify-between text-justify h-full p-8 w-full flex max-w-6xl">
-                <p>  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis malesuada dolor. Morbi accumsan, ex ac rutrum lobortis, dolor elit tempus massa, vitae malesuada eros risus a nisl. Morbi faucibus ante leo, nec accumsan elit imperdiet in. Vivamus sed felis at neque dictum tristique quis a magna. In a pretium justo. Pellentesque volutpat magna lectus, eget efficitur lorem pharetra ut. Phasellus sit amet odio et justo feugiat porta in ornare tortor. Aliquam erat volutpat. Pellentesque et magna aliquet, ultrices arcu non, tristique velit. Morbi tincidunt mi ut interdum maximus. Duis at tellus fermentum, efficitur sem nec, rutrum sapien. Nullam nec ipsum luctus, euismod tortor ac, varius eros. Phasellus tortor mi, sodales vitae nisl sed, dapibus rutrum odio. Aenean vel purus imperdiet, feugiat ante eget, finibus tellus.
-
-Praesent bibendum rhoncus augue et congue. Aliquam sodales nulla nec purus rutrum volutpat. Donec et augue at nisi suscipit dictum. Quisque placerat iaculis massa in euismod. Sed ac orci sit amet odio faucibus sollicitudin in quis tortor. Pellentesque semper dictum sagittis. Cras varius, elit ac maximus lobortis, libero diam rhoncus urna, et accumsan odio dui pellentesque dui. Sed convallis commodo maximus. Maecenas pellentesque lobortis mauris, sit amet commodo dolor viverra ac. Vestibulum laoreet nisi ut augue iaculis sollicitudin in quis libero. Proin sollicitudin, turpis eget sollicitudin maximus, erat odio luctus purus, nec dictum magna purus non lacus.
-
-Duis mauris velit, rhoncus et suscipit id, aliquet eget ipsum. Quisque fermentum magna sapien, a tincidunt erat sollicitudin eu. Praesent at sodales sem, nec varius orci. Ut blandit maximus sapien, a consequat justo mollis sed. Praesent hendrerit orci a felis laoreet, in porta mi dictum. Phasellus ut orci vitae turpis ullamcorper semper at ut purus. Sed hendrerit sodales ex et sodales. Duis sed odio sit amet odio lacinia pellentesque tempor eu neque. Cras vel ligula laoreet, tempus eros quis, porttitor diam. In hac habitasse platea dictumst. Aliquam tristique lorem ac mi posuere, et cursus purus pharetra. Phasellus sed nulla hendrerit sem hendrerit vehicula non et dolor. Donec et maximus lectus. Curabitur viverra arcu felis, id venenatis eros viverra ac.
-
-Suspendisse in aliquet eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus tincidunt augue venenatis ligula placerat, vel rutrum sem rhoncus. Aliquam congue vehicula tortor, at mollis sem sodales gravida. Pellentesque consectetur lacus ut sagittis facilisis. Aliquam volutpat efficitur mi sed luctus. Etiam ut nisl a velit ultrices ultrices et eget ante. Maecenas vitae lectus nec urna rutrum convallis in vitae mauris. Nam tempus ipsum non pellentesque elementum. Vestibulum a eleifend erat. Mauris rhoncus massa non orci posuere volutpat. Aliquam erat volutpat. Praesent malesuada faucibus orci, nec vulputate orci gravida ut. Aenean feugiat venenatis lectus, et dignissim purus posuere id. Mauris ac odio viverra, tincidunt mi sed, condimentum mauris.
-
-Vivamus lectus nulla, egestas eget tortor et, pretium faucibus ex. Mauris magna augue, fringilla in risus congue, accumsan dictum dui. Cras porta ipsum id augue interdum, non pellentesque erat convallis. Donec ac lectus in purus condimentum rutrum. Vivamus dapibus vehicula lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean condimentum faucibus fermentum. Mauris vitae ipsum mollis, suscipit odio quis, facilisis odio. Etiam enim lacus, porta eu tempus quis, malesuada efficitur mi. Nunc elementum tellus neque, et blandit neque vulputate a. Morbi placerat ligula ligula, consectetur congue tellus sagittis non. Mauris dictum a dolor at bibendum. Sed sed purus nisl. Etiam vestibulum, mi vel finibus rhoncus, mi purus pretium lacus, eu suscipit felis ipsum 
-                </p>
-            </div>
-        </div>
     </div>
 }
 

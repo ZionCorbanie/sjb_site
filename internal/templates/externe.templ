@@ -4,35 +4,86 @@ import "sjb_site/internal/store"
 
 templ Externe(posts []*store.Post, menu templ.Component) {
     <script src="/static/script/scroll-indicator.js"></script>
-    <div id="scroll-indicator" 
+    <div id="scroll-indicator"
          class="fixed bottom-10 left-1/2 transform -translate-x-1/2 hidden flex-col items-center cursor-pointer transition-opacity duration-500"
          hx-on:click="scrollToTarget()">
          <span class="w-14 h-14 text-red-700 animate-bounce icon-[material-symbols-light--expand-circle-down-rounded]"></span>
     </div>
 
     <div class="w-full pb-10">
-        <div class="w-full flex justify-between my-20 space-x-20">
-            <div class="w-1/2 flex text-2xl justify-center pl-70 mt-20">
+        <div class="w-full flex md:flex-row flex-col-reverse justify-between md:my-20 lg:space-x-20">
+            <div class="w-full md:w-1/2 flex text-2xl justify-center p-10 lg:pl-70 md:mt-20">
                 <div class="space-y-10">
                     <h1 class="text-5xl font-bold">Delftsche Studenten-Vereniging <span class="text-red-700">Sint Jansbrug</span></h1>
                     <p class="text-2xl">De vereniging die groot genoeg is om gave dingen neer te zetten maar klein genoeg dat je iedereen kent</p>
-                    <a class="group flex justify-between items-center gap-2 pl-7 pr-5 py-3 w-60 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-white hover:text-red-600 hover:underline" href="/eettafel">
+                    <a class="group flex justify-between items-center mx-auto lg:mx-0 gap-2 pl-7 pr-5 py-3 w-60 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline" href="/eettafel">
                         <div class="-ml-1">Lid worden</div>
                         <span class="-rotate-45 group-hover:rotate-0 size-8 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
                     </a>
                 </div>
             </div>
-            <div class="w-1/2">
+            <div class="w-full md:w-1/2 h-full">
                 @carrousel()
             </div>
         </div>
 
         <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/178155_3864228971980_1032291266_o.jpg)] bg-center bg-[auto_100lvh] lg:bg-cover w-screen h-60 lg:h-100"></div>
 
-        <div id="target" class="w-full flex justify-center py-20">
-            <div class="flex space-x-10">
-                @menu
-                <p class="text-2xl">Kom eten bij onze open eettafel</p>
+        <div id="target" class="w-full flex flex-col align-center py-20 max-w-4xl mx-auto overflow-x-clip">
+            <div class="flex flex-col md:flex-row max-md:w-full justify-between md:space-x-20">
+                <h2 class="block md:hidden text-4xl text-red-700 font-medium mb-5 max-md:px-5">Open eettafel</h2>
+                <div class="w-110">
+                    @menu
+                </div>
+                <div class="flex flex-col max-md:px-5">
+                    <h2 class="hidden md:block text-4xl text-red-700 font-medium mb-5">Open eettafel</h2>
+                    <p class="text-xl text-justify">Onze eettafel is elke dag in de week van <strong>17:45 tot 19:30</strong> open voor leden en externen. Onze chef Kokkie maakt hier al meer dan 30 jaar heerlijke gerechten.</p>
+                    <a href="/eettafel" class="cursor-pointer underline group flex items-center mt-2 w-fit">
+                        <div>Weekmenu bekijken</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-5 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+            <h1 class="text-5xl text-red-700 font-bold mt-15 mx-auto">
+                Onze vereniging
+            </h1>
+            <div id="feitjes" class="flex flex-row flex-nowrap md:flex-col w-screen md:w-fit overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-5 px-10 mt-10">
+                <div class="flex flex-col md:flex-row-reverse min-w-80 md:justify-between md:space-x-reverse md:space-x-20 snap-center">
+                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Jaarclubs">
+                    <div class="w-full">
+                        <h2 class="text-2xl text-red-600 font-medium">Jaarclubs</h2>
+                        <p>
+                            De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Dit kan met je hele jaar of met een paar vrienden. Je kan zelf kiezen hoe groot je jaarclub is, maar het moet wel minimaal 5 mensen zijn. Je kan ook een jaarclub vormen met mensen van andere verenigingen, maar dat is niet zo leuk.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row min-w-80 md:justify-between md:space-x-20 snap-center">
+                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Gilden">
+                    <div class="w-full">
+                        <h2 class="text-2xl text-red-600 font-medium">Gilden</h2>
+                        <p>
+                            Gilden zijn de verticale integratie binnen sint jansbrug. Bij een gilde doe je borrels, activiteiten en ga je samen op reis.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row-reverse min-w-80 md:justify-between md:space-x-reverse md:space-x-20 snap-center">
+                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Jaarclubs">
+                    <div class="w-full">
+                        <h2 class="text-2xl text-red-600 font-medium">Jaarclubs</h2>
+                        <p>
+                            De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Dit kan met je hele jaar of met een paar vrienden. Je kan zelf kiezen hoe groot je jaarclub is, maar het moet wel minimaal 5 mensen zijn. Je kan ook een jaarclub vormen met mensen van andere verenigingen, maar dat is niet zo leuk.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row min-w-80 md:justify-between md:space-x-20 snap-center">
+                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Gilden">
+                    <div class="w-full">
+                        <h2 class="text-2xl text-red-600 font-medium">Gilden</h2>
+                        <p>
+                            Gilden zijn de verticale integratie binnen sint jansbrug. Bij een gilde doe je borrels, activiteiten en ga je samen op reis.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -47,7 +98,7 @@ templ Externe(posts []*store.Post, menu templ.Component) {
 }
 
 templ carrousel(){
-    <div class="relative w-full md:flex-1 h-140 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
+    <div class="relative w-full md:flex-1 h-80 md:h-100 lg:h-140 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
         <div id="carousel" class="flex transition-transform duration-500 ease-in-out w-full h-full">
             <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
             <img src="/static/img/eettafelbord.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">

@@ -6,8 +6,8 @@ import (
 )
 
 templ MenuDay(menu *store.Menu) {
-    <div id="menu" class="bg-[url(/static/img/eettafelbord.jpg)] bg-cover bg-clip-border bg-clip-border mb-4 shadow-xl rounded-none lg:rounded-xl overflow-hidden">
-        <div class="bg-white/60 backdrop-blur-xs px-4 max-lg:w-screen lg:w-110 min-h-58 h-full flex flex-col justify-between align-end font-medium">
+    <div id="menu" class="bg-[url(/static/img/eettafelbord.jpg)] w-screen min-h-70 md:w-110 bg-cover bg-clip-border mb-4 shadow-xl rounded-none md:rounded-xl overflow-hidden">
+        <div class="bg-white/60 backdrop-blur-xs px-4 w-screen md:w-full min-h-70 h-full flex flex-col justify-between align-end font-medium">
             <div class="my-2 text-xl">
                 <span>Menu: </span><span class="underline text-red-700 font-normal">{menu.Name}</span>
             </div>
