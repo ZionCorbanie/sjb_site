@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Auto-scroll every 5 seconds
-    let autoScroll = setInterval(nextSlide, intervalTime);
+    // let autoScroll = setInterval(nextSlide, intervalTime);
 
     // Pause auto-scroll on button click, then restart
     function resetAutoScroll() {
@@ -33,11 +33,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     nextBtn.addEventListener("click", function () {
         nextSlide();
-        resetAutoScroll();
+        // resetAutoScroll();
     });
 
     prevBtn.addEventListener("click", function () {
         prevSlide();
-        resetAutoScroll();
+        // resetAutoScroll();
     });
 });

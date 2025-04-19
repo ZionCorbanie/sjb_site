@@ -7,7 +7,9 @@ templ Externe(posts []*store.Post, menu templ.Component) {
     <div id="scroll-indicator"
          class="fixed bottom-10 left-1/2 transform -translate-x-1/2 hidden flex-col items-center cursor-pointer transition-opacity duration-500"
          hx-on:click="scrollToTarget()">
-         <span class="w-14 h-14 text-red-700 animate-bounce icon-[material-symbols-light--expand-circle-down-rounded]"></span>
+         <div class="size-10 text-white animate-bounce bg-white rounded-full flex justify-center items-center">
+             <span class="flex-shrink-0 size-14 bg-red-700 icon-[material-symbols-light--expand-circle-down-rounded]"></span>
+         </div>
     </div>
 
     <div class="w-full pb-10">
@@ -104,8 +106,7 @@ templ Externe(posts []*store.Post, menu templ.Component) {
 templ carrousel(){
     <div class="relative w-full md:flex-1 h-80 md:h-100 lg:h-140 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
         <div id="carousel" class="flex transition-transform duration-500 ease-in-out w-full h-full">
-            <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
-            <img src="/static/img/eettafelbord.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
+            <iframe class="w-full h-full object-cover flex-shrink-0" src="https://www.youtube-nocookie.com/embed/LUnvspyhMgY?si=XossSNLGFrwepUKM&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
             <img src="/static/img/eettafelbord.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
         </div>
