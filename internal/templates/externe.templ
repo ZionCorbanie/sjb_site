@@ -1,0 +1,230 @@
+package templates
+
+import "sjb_site/internal/store"
+import "fmt"
+
+templ Externe(posts []*store.Post, menu templ.Component) {
+    <script src="/static/script/scroll-indicator.js"></script>
+    <div id="scroll-indicator"
+         class="fixed bottom-10 left-1/2 transform -translate-x-1/2 hidden flex-col items-center cursor-pointer transition-opacity duration-500"
+         hx-on:click="scrollToTarget()">
+         <div class="size-10 text-white animate-bounce bg-white rounded-full flex justify-center items-center">
+             <span class="flex-shrink-0 size-14 bg-red-700 icon-[material-symbols-light--expand-circle-down-rounded]"></span>
+         </div>
+    </div>
+
+    <div class="w-full pb-10">
+        <div class="w-full flex md:flex-row flex-col-reverse justify-between md:my-20 lg:space-x-20">
+            <div class="w-full md:w-1/2 flex text-2xl justify-center p-10 lg:pl-70 md:mt-20">
+                <div class="space-y-10">
+                    <h1 class="text-5xl font-bold">Delftse Studenten-Vereniging <span class="text-red-700">Sint Jansbrug</span></h1>
+                    <p class="text-2xl">De vereniging die groot genoeg is om gave dingen neer te zetten maar klein genoeg dat je iedereen kent</p>
+                    <a class="group flex justify-between items-center mx-auto lg:mx-0 gap-2 pl-7 pr-5 py-3 w-60 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline" href="https://owee.sintjansbrug.nl/2025/inschrijven/">
+                        <div class="-ml-1">Lid worden</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-8 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 h-full">
+                @carrousel()
+            </div>
+        </div>
+
+        <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/178155_3864228971980_1032291266_o.jpg)] bg-center bg-[auto_100lvh] lg:bg-cover w-screen h-60 lg:h-100"></div>
+
+        <div id="target" class="w-full flex flex-col align-center py-20 max-w-4xl mx-auto overflow-x-clip">
+            <div class="flex flex-col md:flex-row max-md:w-full justify-between md:space-x-20">
+                <h2 class="block md:hidden max-md:self-center text-4xl text-red-700 font-medium mb-5 max-md:px-5">Open eettafel</h2>
+                <div class="w-110">
+                    @menu
+                </div>
+                <div class="flex flex-col max-md:px-5">
+                    <h2 class="hidden md:block text-4xl text-red-700 font-medium mb-5">Open eettafel</h2>
+                    <p class="text-xl text-justify">Onze eettafel is elke dag in de week van <strong>17:45 tot 19:30</strong> open voor leden en externen. Onze chef Kokkie maakt hier al meer dan 30 jaar heerlijke gerechten.</p>
+                    <a href="/eettafel" class="cursor-pointer underline group flex items-center mt-2 w-fit">
+                        <div>Weekmenu bekijken</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-5 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="info" class="flex max-lg:flex-col flex-nowrap w-screen justify-center">
+            @Info(0, nil)
+        </div>
+        <div class="w-full flex justify-center mb-20 mt-5">
+            <a class="group flex justify-between items-center self-center pl-7 pr-5 py-2 w-55 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline text-xl" href="https://owee.sintjansbrug.nl/">
+                <div class="-ml-1">Meer weten?</div>
+                <span class="-rotate-45 group-hover:rotate-0 size-8 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+            </a>
+        </div>
+
+        <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/soosieteit.jpg)] bg-center bg-cover w-screen h-60 lg:h-100 flex justify-center"></div>
+
+        <div class="flex justify-center">
+            <div class="max-w-6xl">
+                @recentPosts(posts)
+            </div>
+        </div>
+    </div>
+}
+
+type displayItem struct{
+    name string
+    text string
+    img string
+    link string
+    linkText string
+}
+
+var items = &[]displayItem{
+    {
+        name: "Jaarclubs",
+        text: "De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Jaarclubs bestaan uit dertien leden van jouw jaarlaag. Je kan zelf kiezen met wie je een jaarclub vormt.",
+        img: "/static/img/jaarclub.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Gilden",
+        text: "Gilden zijn de verticale integratie binnen sint jansbrug. Bij een gilde doe je borrels, activiteiten en ga je samen op reis.",
+        img: "/static/img/gilde.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Onder-verenigingen",
+        text: "Sint Jansbrug heeft een aantal onderverenigingen die zich richten op specifieke activiteiten. Er zijn bijvoorbeeld onderverenigingen voor sport, muziek, bier brouwen en meer.",
+        img: "/static/img/placeholder-group.png",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Huizen",
+        text: "Door group te worden bij Sint Jansbrug maak je ook kans om in een van onze ambassadeurshuizen of andere verenigingshuizen te gaan wonen. Verder worden er ook veel advertenties geplaatst voor kamers in de stad.",
+        img: "/static/img/huizen.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over huizen",
+    },
+    {
+        name: "Commissies",
+        text: "Bij Sint Jansbrug zijn er een tal van commissies waar je aan kan deelnemen. Dit zijn commissies die zich bezighouden met het organiseren van activiteiten en reizen, het onderhouden van het pand, en nog veel meer. Je kan zelf kiezen in welke commissie je wil zitten en zo ook nieuwe mensen leren kennen.",
+        img: "/static/img/commissie.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Historisch pand",
+        text: "Sint Jansbrug is gevestigd in een prachtig historisch pand aan de Oude Delft. Het pand is in 1640 gebouwd en heeft een rijke geschiedenis. Het is een van de oudste panden van Delft en heeft veel meegemaakt. Het pand is later overgenomen door de vereniging en is nu een van de mooiste panden van Delft.",
+        img: "/static/img/pand.jpg",
+        link: "/pand",
+        linkText: "Meer lezen over het pand",
+    },
+}
+
+templ displayItems(items *[]displayItem){
+    for i, item := range *items {
+        if i%2 == 0 {
+            <div class="flex flex-col md:flex-row-reverse min-w-80 md:justify-between md:space-x-reverse md:space-x-20 snap-center">
+                <img class="min-w-80 w-80 h-55 rounded-xl object-cover" src={item.img} alt={item.name}>
+                <div class="w-full">
+                    <h2 class="text-2xl text-red-600 font-medium">{item.name}</h2>
+                    <p class="text-justify">{item.text}</p>
+                    <a href={templ.URL(item.link)} class="cursor-pointer underline group flex items-center mt-2 w-fit">
+                        <div>{item.linkText}</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-5 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+        }else {
+            <div class="flex flex-col md:flex-row min-w-80 md:justify-between md:space-x-20 snap-center">
+                <img class="min-w-80 w-80 h-55 rounded-xl object-cover" src={item.img} alt={item.name}>
+                <div class="w-full">
+                    <h2 class="text-2xl text-red-600 font-medium">{item.name}</h2>
+                    <p class="text-justify">{item.text}</p>
+                    <a href={templ.URL(item.link)} class="cursor-pointer underline group flex items-center mt-2 w-fit">
+                        <div>{item.linkText}</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-5 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+        }
+    }
+}
+
+templ Info(active int, content templ.Component) {
+    <aside class="lg:min-h-full relative lg:w-1/4 pl-10">
+        @sticky(active)
+    </aside>
+    <hr class="block lg:hidden my-5">
+    <section class="flex flex-row flex-nowrap md:flex-col w-screen lg:w-3/4 max-w-4xl overflow-y-clip overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-20 px-10 md:pr-20 md:mt-10 lg:mt-30">
+        if active == 0 {
+            @displayItems(items)
+        }else {
+            @content
+        }
+    </section>
+}
+
+var list = []string{
+    "Jaarclubs",
+    "Gilden",
+    "Onder-verenigingen",
+    "Huizen",
+    "Commissies",
+    "Pand",
+}
+
+templ sticky(active int){
+    <div id="sticky" class="lg:sticky lg:top-50">
+        <h1 class="text-4xl text-red-700 font-bold mt-15 cursor-pointer" hx-get="/info?index=0" hx-target="#info" hx-swap="innerHTML">
+            Onze vereniging
+        </h1>
+        <ul class="mt-5 text-xl list-disc ml-12">
+            for i, item := range list {
+                <li class="border-y-1">
+                    if i+1 == active {
+                        <button class="p-2 cursor-pointer underline text-red-700 w-full text-left">
+                            {item}
+                        </button>
+                    } else {
+                        <button class="p-2 cursor-pointer hover:underline hover:text-red-600 w-full text-left" 
+                            hx-get={ fmt.Sprintf("/info?item=%s&index=%d", item, i+1) } 
+                            hx-target="#info" hx-swap="innerHTML">
+                            {item}
+                        </button>
+                    }
+                </li>
+            }
+        </ul>
+        <script> 
+            document.body.addEventListener('htmx:afterSwap', function (event) {
+                const el = event.detail.target
+
+                if (el.id === 'info') {
+                    const offset = 140
+                    const top = el.getBoundingClientRect().top + window.scrollY - offset
+
+                    window.scrollTo({ top })
+                }
+            })
+        </script>
+    </div>
+}
+
+templ carrousel(){
+    <div class="relative w-full md:flex-1 h-80 md:h-100 lg:h-140 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
+        <div id="carousel" class="flex transition-transform duration-500 ease-in-out w-full h-full">
+            <iframe class="w-full h-full object-cover flex-shrink-0" src="https://www.youtube-nocookie.com/embed/LUnvspyhMgY?si=XossSNLGFrwepUKM&rel=0" title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <img src="/static/img/bestuur.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
+            <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
+        </div>
+
+        <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2  p-2 text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
+        </button>
+        <button id="nextBtn" class="absolute top-1/2 right-2 transform -translate-y-1/2  p-2 text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span>
+        </button>
+    </div>
+    <script src="/static/script/carrousel.js"></script>
+}

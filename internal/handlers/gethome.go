@@ -7,6 +7,8 @@ import (
 	"sjb_site/internal/templates"
 	"strconv"
 	"time"
+
+	"github.com/a-h/templ"
 )
 
 type HomeHandler struct{
@@ -41,7 +43,12 @@ func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     menuId := time.Now().Unix()/(60*60*24)
     menu := templates.MenuDay(h.menuStore.GetMenu(strconv.FormatInt(menuId, 10)))
 
-	c := templates.Index(user, posts, menu)
+	var c templ.Component
+	if external {
+		c = templates.Externe(posts, menu)
+	} else {
+		c = templates.Index(user, posts, menu)
+	}
 	err = templates.Layout(c, "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
