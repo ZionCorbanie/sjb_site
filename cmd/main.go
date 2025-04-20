@@ -112,6 +112,8 @@ func main() {
             MenuStore: menuStore,
         }).ServeHTTP)
 
+		r.Get("/info", handlers.NewInfoHandler().ServeHTTP)
+
         r.Get("/post/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
             PostStore: postStore,
         }).ServeHTTP)
@@ -132,22 +134,22 @@ func main() {
             WeekMenuStore: menuStore,
         }).ServeHTTP)
 
-        r.Route("/comments/{postId}", func(r chi.Router) {
-            r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
-                CommentStore: commentStore,
-            }).ServeHTTP)
-            r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
-                CommentStore: commentStore,
-            }).ServeHTTP)
-            r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
-                CommentStore: commentStore,
-            }).ServeHTTP)
-        })
-
-
 		//Need to be logged in to access these routes
 		r.Group(func(r chi.Router) {
 			r.Use(authMiddleware.LoggedIn)
+
+			r.Route("/comments/{postId}", func(r chi.Router) {
+				r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
+					CommentStore: commentStore,
+				}).ServeHTTP)
+				r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
+					CommentStore: commentStore,
+				}).ServeHTTP)
+				r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
+					CommentStore: commentStore,
+				}).ServeHTTP)
+			})
+
             r.Route("/poll/{pollId}", func(r chi.Router) {
                 r.Get("/", handlers.NewGetPollHandler(handlers.GetPollHandlerParams{
                     PollStore: pollStore,

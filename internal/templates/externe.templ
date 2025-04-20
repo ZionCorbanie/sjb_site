@@ -1,6 +1,7 @@
 package templates
 
 import "sjb_site/internal/store"
+import "fmt"
 
 templ Externe(posts []*store.Post, menu templ.Component) {
     <script src="/static/script/scroll-indicator.js"></script>
@@ -47,17 +48,11 @@ templ Externe(posts []*store.Post, menu templ.Component) {
                 </div>
             </div>
         </div>
-        <div class="flex max-md:flex-col flex-nowrap w-screen justify-center md:px-10">
-            <aside class="hidden md:block min-h-max relative w-1/4">
-                @sticky()
-            </aside>
-            <h2 class="block md:hidden self-center text-4xl text-red-700 font-medium mb-5">Onze vereniging</h2>
-            <section id="feitjes" class="flex flex-row flex-nowrap md:flex-col w-screen md:w-3/4 max-w-4xl overflow-y-clip overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-20 px-10 md:mt-50">
-                @displayItems(items)
-            </section>
+        <div id="info" class="flex max-lg:flex-col flex-nowrap w-screen justify-center">
+            @Info(0, nil)
         </div>
-        <div class="w-full flex justify-center mb-20 mt-10">
-            <a class="group flex justify-between items-center self-center pl-7 pr-5 py-2 w-55 mt-10 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline text-xl" href="https://owee.sintjansbrug.nl/">
+        <div class="w-full flex justify-center mb-20 mt-5">
+            <a class="group flex justify-between items-center self-center pl-7 pr-5 py-2 w-55 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline text-xl" href="https://owee.sintjansbrug.nl/">
                 <div class="-ml-1">Meer weten?</div>
                 <span class="-rotate-45 group-hover:rotate-0 size-8 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
             </a>
@@ -84,7 +79,7 @@ type displayItem struct{
 var items = &[]displayItem{
     {
         name: "Jaarclubs",
-        text: "De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Dit kan met je hele jaar of met een paar vrienden. Je kan zelf kiezen hoe groot je jaarclub is, maar het moet wel minimaal 5 mensen zijn. Je kan ook een jaarclub vormen met mensen van andere verenigingen, maar dat is niet zo leuk.",
+        text: "De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Jaarclubs bestaan uit dertien leden van jouw jaarlaag. Je kan zelf kiezen met wie je een jaarclub vormt.",
         img: "/static/img/jaarclub.jpg",
         link: "/structuur",
         linkText: "Meer lezen over structuur",
@@ -97,7 +92,7 @@ var items = &[]displayItem{
         linkText: "Meer lezen over structuur",
     },
     {
-        name: "Onderverenigingen",
+        name: "Onder-verenigingen",
         text: "Sint Jansbrug heeft een aantal onderverenigingen die zich richten op specifieke activiteiten. Er zijn bijvoorbeeld onderverenigingen voor sport, muziek, bier brouwen en meer.",
         img: "/static/img/placeholder-group.png",
         link: "/structuur",
@@ -156,20 +151,63 @@ templ displayItems(items *[]displayItem){
     }
 }
 
-templ sticky(){
-    <div class="sticky top-50">
-        <h1 class="text-4xl text-red-700 font-bold mt-15">
+templ Info(active int, content templ.Component) {
+    <aside class="lg:min-h-full relative lg:w-1/4 pl-10">
+        @sticky(active)
+    </aside>
+    <hr class="block lg:hidden my-5">
+    <section class="flex flex-row flex-nowrap md:flex-col w-screen lg:w-3/4 max-w-4xl overflow-y-clip overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-20 px-10 md:pr-20 md:mt-10 lg:mt-30">
+        if active == 0 {
+            @displayItems(items)
+        }else {
+            @content
+        }
+    </section>
+}
+
+var list = []string{
+    "Jaarclubs",
+    "Gilden",
+    "Onder-verenigingen",
+    "Huizen",
+    "Commissies",
+    "Pand",
+}
+
+templ sticky(active int){
+    <div id="sticky" class="lg:sticky lg:top-50">
+        <h1 class="text-4xl text-red-700 font-bold mt-15 cursor-pointer" hx-get="/info?index=0" hx-target="#info" hx-swap="innerHTML">
             Onze vereniging
         </h1>
         <ul class="mt-5 text-xl list-disc ml-12">
-            <li><button class="cursor-pointer hover:underline hover:text-red-500">Jaarclubs</button></li>
-            <li><button class="cursor-pointer hover:underline hover:text-red-500">Gilden</button></li>
-            <li><button class="cursor-pointer hover:underline hover:text-red-500">Commissies</button></li>
-            <li><button class="cursor-pointer hover:underline hover:text-red-500">Onderverenigingen</button></li>
-            <li><button class="cursor-pointer hover:underline hover:text-red-500">Huizen</button></li>
-            <li><button class="cursor-pointer hover:underline hover:text-red-500">Pand</button></li>
-            <li><button class="cursor-pointer hover:underline hover:text-red-500">Geschiedenis</button></li>
+            for i, item := range list {
+                <li class="border-y-1">
+                    if i+1 == active {
+                        <button class="p-2 cursor-pointer underline text-red-700 w-full text-left">
+                            {item}
+                        </button>
+                    } else {
+                        <button class="p-2 cursor-pointer hover:underline hover:text-red-600 w-full text-left" 
+                            hx-get={ fmt.Sprintf("/info?item=%s&index=%d", item, i+1) } 
+                            hx-target="#info" hx-swap="innerHTML">
+                            {item}
+                        </button>
+                    }
+                </li>
+            }
         </ul>
+        <script> 
+            document.body.addEventListener('htmx:afterSwap', function (event) {
+                const el = event.detail.target
+
+                if (el.id === 'info') {
+                    const offset = 140
+                    const top = el.getBoundingClientRect().top + window.scrollY - offset
+
+                    window.scrollTo({ top })
+                }
+            })
+        </script>
     </div>
 }
 
