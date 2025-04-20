@@ -16,7 +16,7 @@ templ Externe(posts []*store.Post, menu templ.Component) {
         <div class="w-full flex md:flex-row flex-col-reverse justify-between md:my-20 lg:space-x-20">
             <div class="w-full md:w-1/2 flex text-2xl justify-center p-10 lg:pl-70 md:mt-20">
                 <div class="space-y-10">
-                    <h1 class="text-5xl font-bold">Delftsche Studenten-Vereniging <span class="text-red-700">Sint Jansbrug</span></h1>
+                    <h1 class="text-5xl font-bold">Delftse Studenten-Vereniging <span class="text-red-700">Sint Jansbrug</span></h1>
                     <p class="text-2xl">De vereniging die groot genoeg is om gave dingen neer te zetten maar klein genoeg dat je iedereen kent</p>
                     <a class="group flex justify-between items-center mx-auto lg:mx-0 gap-2 pl-7 pr-5 py-3 w-60 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline" href="https://owee.sintjansbrug.nl/2025/inschrijven/">
                         <div class="-ml-1">Lid worden</div>
@@ -33,7 +33,7 @@ templ Externe(posts []*store.Post, menu templ.Component) {
 
         <div id="target" class="w-full flex flex-col align-center py-20 max-w-4xl mx-auto overflow-x-clip">
             <div class="flex flex-col md:flex-row max-md:w-full justify-between md:space-x-20">
-                <h2 class="block md:hidden text-4xl text-red-700 font-medium mb-5 max-md:px-5">Open eettafel</h2>
+                <h2 class="block md:hidden max-md:self-center text-4xl text-red-700 font-medium mb-5 max-md:px-5">Open eettafel</h2>
                 <div class="w-110">
                     @menu
                 </div>
@@ -46,51 +46,21 @@ templ Externe(posts []*store.Post, menu templ.Component) {
                     </a>
                 </div>
             </div>
-            <h1 class="text-5xl text-red-700 font-bold mt-15 mx-auto">
-                Onze vereniging
-            </h1>
-            <div id="feitjes" class="flex flex-row flex-nowrap md:flex-col w-screen md:w-fit overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-5 px-10 mt-10">
-                <div class="flex flex-col md:flex-row-reverse min-w-80 md:justify-between md:space-x-reverse md:space-x-20 snap-center">
-                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Jaarclubs">
-                    <div class="w-full">
-                        <h2 class="text-2xl text-red-600 font-medium">Jaarclubs</h2>
-                        <p>
-                            De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Dit kan met je hele jaar of met een paar vrienden. Je kan zelf kiezen hoe groot je jaarclub is, maar het moet wel minimaal 5 mensen zijn. Je kan ook een jaarclub vormen met mensen van andere verenigingen, maar dat is niet zo leuk.
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col md:flex-row min-w-80 md:justify-between md:space-x-20 snap-center">
-                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Gilden">
-                    <div class="w-full">
-                        <h2 class="text-2xl text-red-600 font-medium">Gilden</h2>
-                        <p>
-                            Gilden zijn de verticale integratie binnen sint jansbrug. Bij een gilde doe je borrels, activiteiten en ga je samen op reis.
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col md:flex-row-reverse min-w-80 md:justify-between md:space-x-reverse md:space-x-20 snap-center">
-                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Jaarclubs">
-                    <div class="w-full">
-                        <h2 class="text-2xl text-red-600 font-medium">Commissies</h2>
-                        <p>
-                            De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Dit kan met je hele jaar of met een paar vrienden. Je kan zelf kiezen hoe groot je jaarclub is, maar het moet wel minimaal 5 mensen zijn. Je kan ook een jaarclub vormen met mensen van andere verenigingen, maar dat is niet zo leuk.
-                        </p>
-                    </div>
-                </div>
-                <div class="flex flex-col md:flex-row min-w-80 md:justify-between md:space-x-20 snap-center">
-                    <img class="w-100 rounded-xl" src="/static/img/placeholder-group.png" alt="Gilden">
-                    <div class="w-full">
-                        <h2 class="text-2xl text-red-600 font-medium">Historisch pand</h2>
-                        <p>
-                            Gilden zijn de verticale integratie binnen sint jansbrug. Bij een gilde doe je borrels, activiteiten en ga je samen op reis.
-                        </p>
-                    </div>
-                </div>
-                <a class="group flex justify-between items-center self-center pl-7 pr-5 py-2 w-55 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline text-xl" href="https://owee.sintjansbrug.nl/">
-                    <div class="-ml-1">Meer weten?</div>
-                    <span class="-rotate-45 group-hover:rotate-0 size-8 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
-                </a>
-            </div>
+        </div>
+        <div class="flex max-md:flex-col flex-nowrap w-screen justify-center md:px-10">
+            <aside class="hidden md:block min-h-max relative w-1/4">
+                @sticky()
+            </aside>
+            <h2 class="block md:hidden self-center text-4xl text-red-700 font-medium mb-5">Onze vereniging</h2>
+            <section id="feitjes" class="flex flex-row flex-nowrap md:flex-col w-screen md:w-3/4 max-w-4xl overflow-y-clip overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-20 px-10 md:mt-50">
+                @displayItems(items)
+            </section>
+        </div>
+        <div class="w-full flex justify-center mb-20 mt-10">
+            <a class="group flex justify-between items-center self-center pl-7 pr-5 py-2 w-55 mt-10 transition-color duration-150 ease-in-out rounded-full bg-red-600 border-1 border-transparent hover:border-red-500 text-white hover:bg-transparent hover:text-red-600 hover:underline text-xl" href="https://owee.sintjansbrug.nl/">
+                <div class="-ml-1">Meer weten?</div>
+                <span class="-rotate-45 group-hover:rotate-0 size-8 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+            </a>
         </div>
 
         <div class="shadow-[inset_0px_0px_47px_10px_rgba(0,_0,_0,_0.5)] bg-fixed bg-[url(/static/img/soosieteit.jpg)] bg-center bg-cover w-screen h-60 lg:h-100 flex justify-center"></div>
@@ -103,12 +73,112 @@ templ Externe(posts []*store.Post, menu templ.Component) {
     </div>
 }
 
+type displayItem struct{
+    name string
+    text string
+    img string
+    link string
+    linkText string
+}
+
+var items = &[]displayItem{
+    {
+        name: "Jaarclubs",
+        text: "De leukste manier om je vereniging te leren kennen is door een jaarclub te vormen. Dit kan met je hele jaar of met een paar vrienden. Je kan zelf kiezen hoe groot je jaarclub is, maar het moet wel minimaal 5 mensen zijn. Je kan ook een jaarclub vormen met mensen van andere verenigingen, maar dat is niet zo leuk.",
+        img: "/static/img/jaarclub.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Gilden",
+        text: "Gilden zijn de verticale integratie binnen sint jansbrug. Bij een gilde doe je borrels, activiteiten en ga je samen op reis.",
+        img: "/static/img/gilde.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Onderverenigingen",
+        text: "Sint Jansbrug heeft een aantal onderverenigingen die zich richten op specifieke activiteiten. Er zijn bijvoorbeeld onderverenigingen voor sport, muziek, bier brouwen en meer.",
+        img: "/static/img/placeholder-group.png",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Huizen",
+        text: "Door group te worden bij Sint Jansbrug maak je ook kans om in een van onze ambassadeurshuizen of andere verenigingshuizen te gaan wonen. Verder worden er ook veel advertenties geplaatst voor kamers in de stad.",
+        img: "/static/img/huizen.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over huizen",
+    },
+    {
+        name: "Commissies",
+        text: "Bij Sint Jansbrug zijn er een tal van commissies waar je aan kan deelnemen. Dit zijn commissies die zich bezighouden met het organiseren van activiteiten en reizen, het onderhouden van het pand, en nog veel meer. Je kan zelf kiezen in welke commissie je wil zitten en zo ook nieuwe mensen leren kennen.",
+        img: "/static/img/commissie.jpg",
+        link: "/structuur",
+        linkText: "Meer lezen over structuur",
+    },
+    {
+        name: "Historisch pand",
+        text: "Sint Jansbrug is gevestigd in een prachtig historisch pand aan de Oude Delft. Het pand is in 1640 gebouwd en heeft een rijke geschiedenis. Het is een van de oudste panden van Delft en heeft veel meegemaakt. Het pand is later overgenomen door de vereniging en is nu een van de mooiste panden van Delft.",
+        img: "/static/img/pand.jpg",
+        link: "/pand",
+        linkText: "Meer lezen over het pand",
+    },
+}
+
+templ displayItems(items *[]displayItem){
+    for i, item := range *items {
+        if i%2 == 0 {
+            <div class="flex flex-col md:flex-row-reverse min-w-80 md:justify-between md:space-x-reverse md:space-x-20 snap-center">
+                <img class="min-w-80 w-80 h-55 rounded-xl object-cover" src={item.img} alt={item.name}>
+                <div class="w-full">
+                    <h2 class="text-2xl text-red-600 font-medium">{item.name}</h2>
+                    <p class="text-justify">{item.text}</p>
+                    <a href={templ.URL(item.link)} class="cursor-pointer underline group flex items-center mt-2 w-fit">
+                        <div>{item.linkText}</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-5 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+        }else {
+            <div class="flex flex-col md:flex-row min-w-80 md:justify-between md:space-x-20 snap-center">
+                <img class="min-w-80 w-80 h-55 rounded-xl object-cover" src={item.img} alt={item.name}>
+                <div class="w-full">
+                    <h2 class="text-2xl text-red-600 font-medium">{item.name}</h2>
+                    <p class="text-justify">{item.text}</p>
+                    <a href={templ.URL(item.link)} class="cursor-pointer underline group flex items-center mt-2 w-fit">
+                        <div>{item.linkText}</div>
+                        <span class="-rotate-45 group-hover:rotate-0 size-5 transition-transform duration-150 ease-in-out icon-[line-md--arrow-right]"></span>
+                    </a>
+                </div>
+            </div>
+        }
+    }
+}
+
+templ sticky(){
+    <div class="sticky top-50">
+        <h1 class="text-4xl text-red-700 font-bold mt-15">
+            Onze vereniging
+        </h1>
+        <ul class="mt-5 text-xl list-disc ml-12">
+            <li><button class="cursor-pointer hover:underline hover:text-red-500">Jaarclubs</button></li>
+            <li><button class="cursor-pointer hover:underline hover:text-red-500">Gilden</button></li>
+            <li><button class="cursor-pointer hover:underline hover:text-red-500">Commissies</button></li>
+            <li><button class="cursor-pointer hover:underline hover:text-red-500">Onderverenigingen</button></li>
+            <li><button class="cursor-pointer hover:underline hover:text-red-500">Huizen</button></li>
+            <li><button class="cursor-pointer hover:underline hover:text-red-500">Pand</button></li>
+            <li><button class="cursor-pointer hover:underline hover:text-red-500">Geschiedenis</button></li>
+        </ul>
+    </div>
+}
+
 templ carrousel(){
     <div class="relative w-full md:flex-1 h-80 md:h-100 lg:h-140 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
         <div id="carousel" class="flex transition-transform duration-500 ease-in-out w-full h-full">
-            <iframe class="w-full h-full object-cover flex-shrink-0" src="https://www.youtube-nocookie.com/embed/LUnvspyhMgY?si=XossSNLGFrwepUKM&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe class="w-full h-full object-cover flex-shrink-0" src="https://www.youtube-nocookie.com/embed/LUnvspyhMgY?si=XossSNLGFrwepUKM&rel=0" title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <img src="/static/img/bestuur.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
             <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
-            <img src="/static/img/eettafelbord.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
         </div>
 
         <button id="prevBtn" class="absolute top-1/2 left-2 transform -translate-y-1/2  p-2 text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50">
