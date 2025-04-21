@@ -34,7 +34,6 @@ func (h *GetJaarclubsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
         return
     }
 
-
 	groups, err := h.GroupStore.GetJaarclubs(int(jaar))
 	if err != nil || len(*groups) == 0 {
         w.WriteHeader(http.StatusOK)
