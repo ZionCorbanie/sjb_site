@@ -3,30 +3,43 @@ package templates
 import (
     "fmt"
     "sjb_site/internal/store"
+	"regexp"
 )
 
 templ Posts(posts []*store.Post, page int) {
     @pagination(posts, page)
 
     for _, post := range posts {
-        <div class="flex flex-col md:flex-row md:mx-10 my-5 shadow-xl rounded-md">
-            <a class="lg:w-1/3 h-48 overflow-hidden" href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) }>
-                <image class="lg:rounded-l-md max-md:rounded-t-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
-            </a>
-            <div class="lg:w-2/3">
-                <div class="ml-5 mt-2">
-                    <a class="underline" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", post.Author.ID)) }>{ post.Author.FirstName } { post.Author.LastName }</a>
-                    <p class="text-neutral-600">{ post.Date.Format("02-01-2006") }</p>
+        <a href={templ.URL(fmt.Sprintf("/post/%d", post.ID))} class="cursor-pointer"  >
+            <div class="flex flex-col md:flex-row md:mx-10 my-5 shadow-xl rounded-md">
+                <div class="lg:w-1/3 h-48 overflow-hidden">
+                    <image class="lg:rounded-l-md max-md:rounded-t-md w-full h-full object-cover" src={post.Image} alt={ fmt.Sprintf("Foto van %s", post.Title) }/>
                 </div>
-                <div class="px-8 py-4">
-                    <a class="text-2xl text-secondary-600" href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >{ post.Title }</a>
-                    <p class="text-justify">{ post.Content[:min(len(post.Content), 255)]+"..." }</p>
+                <div class="lg:w-2/3">
+                    <div class="ml-5 mt-2">
+                        <div class="underline" >{ post.Author.FirstName } { post.Author.LastName }</div>
+                        <p class="text-neutral-600">{ post.Date.Format("02-01-2006") }</p>
+                    </div>
+                    <div class="px-8 py-4">
+                        <div class="text-2xl text-secondary-600">{ post.Title }</div>
+                        {{ content := stripHtmlTags(post.Content)
+                        if len(content) > 200 {
+                            content = content[:200]+"..."
+                        }
+                        }}
+                        <p class="text-justify">{ content }</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
     }
     
     @pagination(posts, page)
+}
+
+func stripHtmlTags(s string) string {
+    re := regexp.MustCompile("<[^>]*>")
+    return re.ReplaceAllString(s, "")
 }
 
 templ pagination(posts []*store.Post, page int){

@@ -125,7 +125,7 @@ templ displayItems(items *[]displayItem){
     for i, item := range *items {
         if i%2 == 0 {
             <div class="flex flex-col md:flex-row-reverse min-w-80 md:justify-between md:space-x-reverse md:space-x-20 snap-center">
-                <img class="min-w-80 w-80 h-55 rounded-xl object-cover" src={item.img} alt={item.name}>
+                <img class="lg:min-w-100 min-w-80 w-80 h-55 lg:h-65 rounded-xl object-cover" src={item.img} alt={item.name}>
                 <div class="w-full">
                     <h2 class="text-2xl text-red-600 font-medium">{item.name}</h2>
                     <p class="text-justify">{item.text}</p>
@@ -137,7 +137,7 @@ templ displayItems(items *[]displayItem){
             </div>
         }else {
             <div class="flex flex-col md:flex-row min-w-80 md:justify-between md:space-x-20 snap-center">
-                <img class="min-w-80 w-80 h-55 rounded-xl object-cover" src={item.img} alt={item.name}>
+                <img class="lg:min-w-100 min-w-80 w-80 h-55 lg:h-65 rounded-xl object-cover" src={item.img} alt={item.name}>
                 <div class="w-full">
                     <h2 class="text-2xl text-red-600 font-medium">{item.name}</h2>
                     <p class="text-justify">{item.text}</p>
@@ -156,7 +156,7 @@ templ Info(active int, content templ.Component) {
         @sticky(active)
     </aside>
     <hr class="block lg:hidden my-5">
-    <section class="flex flex-row flex-nowrap md:flex-col w-screen lg:w-3/4 max-w-4xl overflow-y-clip overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-20 px-10 md:pr-20 md:mt-10 lg:mt-30">
+    <section class="flex flex-row flex-nowrap md:flex-col w-screen lg:w-3/4 max-w-4xl overflow-y-clip overflow-x-scroll snap-x snap-mandatory max-md:space-x-5 space-y-20 md:max-lg:mx-auto px-10 lg:pr-20 md:mt-10 lg:mt-30">
         if active == 0 {
             @displayItems(items)
         }else {
@@ -181,7 +181,7 @@ templ sticky(active int){
         </h1>
         <ul class="mt-5 text-xl list-disc ml-12">
             for i, item := range list {
-                <li class="border-y-1">
+                <li class="first:border-y-1 border-b-1">
                     if i+1 == active {
                         <button class="p-2 cursor-pointer underline text-red-700 w-full text-left">
                             {item}
@@ -212,9 +212,9 @@ templ sticky(active int){
 }
 
 templ carrousel(){
-    <div class="relative w-full md:flex-1 h-80 md:h-100 lg:h-140 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
+    <div class="relative w-full md:flex-1 h-80 md:h-100 lg:h-126.5 max-w-240 mb-4 overflow-hidden md:rounded-l-4xl">
         <div id="carousel" class="flex transition-transform duration-500 ease-in-out w-full h-full">
-            <iframe class="w-full h-full object-cover flex-shrink-0" src="https://www.youtube-nocookie.com/embed/LUnvspyhMgY?si=XossSNLGFrwepUKM&rel=0" title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe class="w-full h-full object-cover flex-shrink-0" src="https://www.youtube-nocookie.com/embed/LUnvspyhMgY?&autoplay=1&mute=1&rel=0" title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen allow="autoplay"></iframe>
             <img src="/static/img/bestuur.jpg" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
             <img src="/static/img/placeholder-group.png" class="w-full h-full object-cover flex-shrink-0" alt="Carousel Image">
         </div>
