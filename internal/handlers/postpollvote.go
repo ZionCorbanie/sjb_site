@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store/dbstore"
@@ -48,5 +47,5 @@ func (h *PostPollVoteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
         return
     }
 
-    http.Redirect(w, r, fmt.Sprintf("/poll/%d", pollId), http.StatusSeeOther)
+    http.Redirect(w, r, "/poll", http.StatusSeeOther)
 }

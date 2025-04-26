@@ -42,16 +42,16 @@ func (s *MenuStore) GetMenu(menuId string) (*store.Menu) {
 	return &menu
 }
 
-func (s *MenuStore) GetMenuRange(start int, length int) ([]*store.Menu, error) {
-    menus := make([]*store.Menu, length)
+func (s *MenuStore) GetMenuRange(start int, length int) (*[]store.Menu, error) {
+    menus := make([]store.Menu, length)
 
-    for i := 0; i < length; i++ {
+	for i := range length {
         var menu store.Menu
         _ = s.db.Where("id = ?", start+i).Find(&menu).Error
-        menus[i] = &menu
+        menus[i] = menu
     }
 
-    return menus, nil
+    return &menus, nil
 }
 
 func (s *MenuStore) CreateMenu(menu *store.Menu) error {

@@ -16,9 +16,9 @@ templ Users() {
     </div>
 }
 
-templ RenderUsers(leden []*store.User) {
+templ RenderUsers(leden *[]store.User) {
     <div class="flex flex-wrap justify-center">
-        for _, lid := range leden {
+        for _, lid := range *leden {
             <a class="flex-none p-4 rounded-md hover:bg-stone-100" href={ templ.URL(fmt.Sprintf("/webalmanak/leden/%d", lid.ID)) }>
                 <div class="w-24 h-24 md:w-28 md:h-28 overflow-hidden">
                     <image class="rounded-full w-full h-full object-cover object-center" src={ lid.Image } alt={ fmt.Sprintf("Foto van %s", lid.Username) }/>

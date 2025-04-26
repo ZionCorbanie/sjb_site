@@ -60,15 +60,15 @@ func (s *UserStore) GetUserById(userId string) (*store.User, error) {
 	return &user, err
 }
 
-func (s *UserStore) SearchUsers(search string) ([]*store.User, error) {
+func (s *UserStore) SearchUsers(search string) (*[]store.User, error) {
 
-	var users []*store.User
+	var users []store.User
 	err := s.db.Where("username like ?", fmt.Sprintf("%%%s%%", search)).Find(&users).Error
 
 	if err != nil {
 		return nil, err
 	}
-	return users, err
+	return &users, err
 }
 
 func (s *UserStore) PatchUser(user store.User) error {

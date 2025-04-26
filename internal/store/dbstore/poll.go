@@ -31,10 +31,10 @@ func (s *PollStore) GetPoll(pollId string) (*store.Poll, error) {
     return &poll, err
 }
 
-func (s *PollStore) GetPolls() ([]*store.Poll, error) {
-    var polls []*store.Poll
+func (s *PollStore) GetPolls() (*[]store.Poll, error) {
+    var polls []store.Poll
     err := s.db.Order("id DESC").Find(&polls).Error
-    return polls, err
+    return &polls, err
 }
 
 func (s *PollStore) DeletePoll(pollId string) error {
@@ -61,14 +61,14 @@ func (s *PollStore) PutPoll(poll store.Poll) error {
 
     if err := tx.Model(&store.Poll{}).Where("id = ?", poll.ID).
         Updates(map[string]interface{}{
-            "title": poll.Title, // Add other fields if necessary
+            "title": poll.Title,
         }).Error; err != nil {
         tx.Rollback()
         return err
     }
 
     for i := range poll.Options {
-        poll.Options[i].PollID = poll.ID // Ensure PollID is set
+        poll.Options[i].PollID = poll.ID
     }
 
     if len(poll.Options) > 0 {

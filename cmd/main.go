@@ -150,17 +150,20 @@ func main() {
 				}).ServeHTTP)
 			})
 
-            r.Route("/poll/{pollId}", func(r chi.Router) {
-                r.Get("/", handlers.NewGetPollHandler(handlers.GetPollHandlerParams{
-                    PollStore: pollStore,
-                }).ServeHTTP)
-                r.Post("/", handlers.NewPostPollVoteHandler(handlers.PostPollVoteHandlerParams{
-                    PollStore: pollStore,
-                }).ServeHTTP)
-                r.Delete("/", handlers.NewDeletePollVoteHandler(handlers.DeletePollVoteHandlerParams{
-                    PollStore: pollStore,
-                }).ServeHTTP)
-            })
+            r.Route("/poll", func(r chi.Router) {
+				r.Get("/", handlers.NewGetPollHandler(handlers.GetPollHandlerParams{
+					PollStore: pollStore,
+				}).ServeHTTP)
+
+				r.Route("/{pollId}", func(r chi.Router) {
+					r.Post("/", handlers.NewPostPollVoteHandler(handlers.PostPollVoteHandlerParams{
+						PollStore: pollStore,
+					}).ServeHTTP)
+					r.Delete("/", handlers.NewDeletePollVoteHandler(handlers.DeletePollVoteHandlerParams{
+						PollStore: pollStore,
+					}).ServeHTTP)
+				})
+			})
 			r.Route("/webalmanak", func(r chi.Router) {
 				r.Route("/leden", func(r chi.Router) {
 					r.Get("/", handlers.NewUserSearchHandler().ServeHTTP)

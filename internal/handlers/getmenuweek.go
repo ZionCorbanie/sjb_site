@@ -31,7 +31,7 @@ func (h *GetWeekMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 
 	menus, err := h.WeekMenuStore.GetMenuRange(pageInt, 5)
-    for i, menu := range menus {
+    for i, menu := range *menus {
         if menu.ID == 0 {
             menu.ID = uint(pageInt+i)
             menu.Name = "Onbekend"

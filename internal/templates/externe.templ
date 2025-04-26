@@ -3,7 +3,7 @@ package templates
 import "sjb_site/internal/store"
 import "fmt"
 
-templ Externe(posts []*store.Post, menu templ.Component) {
+templ Externe(posts *[]store.Post, menu templ.Component) {
     <script src="/static/script/scroll-indicator.js"></script>
     <div id="scroll-indicator"
          class="fixed bottom-10 left-1/2 transform -translate-x-1/2 hidden flex-col items-center cursor-pointer transition-opacity duration-500"

@@ -68,8 +68,8 @@ templ Post(post *store.Post){
     }
 }
 
-templ Comments(comments []*store.Comment){
-    for _, comment := range comments {
+templ Comments(comments *[]store.Comment){
+    for _, comment := range *comments {
         <div class="flex flex-row flex-wrap mt-5">
             <div class="flex flex-row">
                 <a href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", comment.Author.ID)) }> 

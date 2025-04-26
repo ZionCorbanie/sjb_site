@@ -61,16 +61,16 @@ templ Eettafel(page int) {
     </div>
 }
 
-templ WeekMenu(menus []*store.Menu) {
+templ WeekMenu(menus *[]store.Menu) {
     <div id="menu" class="">
         <h3>
             Menu
         </h3>
         <div>
-            <button hx-get={ fmt.Sprintf("/eettafel/%d",menus[0].ID-7) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+            <button hx-get={ fmt.Sprintf("/eettafel/%d",(*menus)[0].ID-7) } hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
                 vorige
             </button>
-            <button hx-get={ fmt.Sprintf("/eettafel/%d",menus[0].ID+7)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
+            <button hx-get={ fmt.Sprintf("/eettafel/%d",(*menus)[0].ID+7)} hx-swap="outerHTML" hx-trigger="click" hx-target="#menu">
                 volgende
             </button>
         </div>
@@ -82,7 +82,7 @@ templ WeekMenu(menus []*store.Menu) {
                     <th>Gerecht</th>
                     <th>Alergiën</th>
                 </tr>
-                for _, menu := range menus {
+                for _, menu := range *menus {
                     <tr>
                         <td>
                             {menu.Date.Format("02-01-2006")}

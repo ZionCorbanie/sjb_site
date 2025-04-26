@@ -31,11 +31,11 @@ func (s *CommentStore) GetComment(commentId string) (*store.Comment, error) {
     return &comment, err
 }
 
-func (s *CommentStore) GetCommentsByPost(postId string) ([]*store.Comment, error) {
-    var comments []*store.Comment
+func (s *CommentStore) GetCommentsByPost(postId string) (*[]store.Comment, error) {
+    var comments []store.Comment
     err := s.db.Preload("Author").Where("post_id = ?", postId).Find(&comments).Error
 
-    return comments, err
+    return &comments, err
 }
 
 func (s *CommentStore) DeleteComment(commentId string) error {

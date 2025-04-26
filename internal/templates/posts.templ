@@ -6,10 +6,10 @@ import (
 	"regexp"
 )
 
-templ Posts(posts []*store.Post, page int) {
+templ Posts(posts *[]store.Post, page int) {
     @pagination(posts, page)
 
-    for _, post := range posts {
+    for _, post := range *posts {
         <a href={templ.URL(fmt.Sprintf("/post/%d", post.ID))} class="cursor-pointer"  >
             <div class="flex flex-col md:flex-row md:mx-10 my-5 shadow-xl rounded-md">
                 <div class="lg:w-1/3 h-48 overflow-hidden">
@@ -42,7 +42,7 @@ func stripHtmlTags(s string) string {
     return re.ReplaceAllString(s, "")
 }
 
-templ pagination(posts []*store.Post, page int){
+templ pagination(posts *[]store.Post, page int){
     <div class="flex flex-row justify-center items-center text-secondary-600">
         if page > 0 {
             <a class="" href={ templ.URL(fmt.Sprintf("/posts/%d", page-1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span></a>
@@ -50,7 +50,7 @@ templ pagination(posts []*store.Post, page int){
         <div class="">
         { fmt.Sprintf("%d",page) }
         </div> 
-        if len(posts) == 5 {
+        if len(*posts) == 5 {
             <a class="" href={ templ.URL(fmt.Sprintf("/posts/%d", page+1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span></a>
         }
     </div>

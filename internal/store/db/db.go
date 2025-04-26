@@ -8,12 +8,20 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // open opens a database connection given a database dbName
 func open(dbName string) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("root:password@tcp(db:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbName)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	config := &gorm.Config{}
+
+	if os.Getenv("env") == "production" {
+		config.Logger = logger.Default.LogMode(logger.Silent)
+	}
+
+	db, err := gorm.Open(mysql.Open(dsn), config)
 	if err != nil {
 		return nil, errors.Join(err, errors.New("failed to open database"))
 	}

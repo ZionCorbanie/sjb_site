@@ -42,6 +42,20 @@ templ Layout(contents templ.Component, title string) {
 	</body>
 }
 
+templ NoFooter(contents templ.Component, title string) {
+    @header(title)
+    <body class="bg-fixed bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% min-h-screen flex flex-col items-center justify-center">
+        <div class="flex flex-col justify-center items-center min-h-screen w-full mx-auto">
+            <header class="sticky top-0 bg-primary shadow-xl z-50 lg:rounded-b-lg w-full">
+                @nav()
+            </header>
+            <div class="flex flex-grow flex-col items-center w-full h-full">
+                @contents
+            </div>
+        </div>
+    </body>
+}
+
 templ BannerLayout(contents templ.Component, banner string, title string) {
 	@header(title)
     <body class="bg-fixed bg-radial-[at_0%_0%] from-stone-100 from-25% to-stone-200 to-75% min-h-screen flex flex-col items-center justify-center">

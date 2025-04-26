@@ -37,7 +37,7 @@ templ Poll(poll *store.Poll, voted bool, totalVotes int){
     }
 }
 
-templ Polls(polls []*store.Poll){
+templ Polls(polls *[]store.Poll){
     <div id="polls" class="flex flex-col lg:flex-row w-full h-full">
         <div id="poll" class="w-full lg:w-3/5 max-md:border-b-1 border-black pb-4">
             @CreatePoll()
@@ -48,13 +48,13 @@ templ Polls(polls []*store.Poll){
     </div>
 }
 
-templ PollList(polls []*store.Poll) {
+templ PollList(polls *[]store.Poll) {
     <a href="/admin/poll" class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">
         Nieuwe poll
     </a>
     <div class="border-1 border-black h-100 overflow-hidden overflow-y-scroll">
         <div class="max-h-100 flex flex-col">
-            for _, poll := range polls {
+            for _, poll := range *polls {
                 {{ pollClass := "flex justify-between hover:bg-stone-100 items-center px-4 h-10" }}
                 if poll.Active {
                     {{ pollClass += " -order-1"}}
@@ -108,7 +108,7 @@ templ CreatePoll(){
                 <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
             </div>
 
-            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Nieuwe poll maken</button>
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Nieuwe poll maken</button>
         </form>
     </div>
 
@@ -133,12 +133,12 @@ templ EditPoll(poll *store.Poll){
                 }
             </div>
             <div class="flex justify-between max-w-60 space-x-2">
-                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
-                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
+                <button id="addPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">+ Antwoord</button>
+                <button id="delPoll" type="button" class="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">- Antwoord</button>
             </div>
             <script src="/static/script/polls.js"> </script>
 
-            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Poll opslaan</button>
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Poll opslaan</button>
         </form>
     </div>
 

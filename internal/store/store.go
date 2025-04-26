@@ -123,7 +123,7 @@ type UserStore interface {
 	CreateUser(username string, password string) error
 	GetUser(username string) (*User, error)
 	GetUserById(userId string) (*User, error)
-	SearchUsers(search string) ([]*User, error)
+	SearchUsers(search string) (*[]User, error)
 	PatchUser(user User) error
 	DeleteUser(userId string) error
 }
@@ -144,29 +144,29 @@ type GroupStore interface {
 
 type GroupUserStore interface {
 	AddUserToGroup(userId uint, groupId uint) error
-	GetUsersByGroup(groupId string) ([]*User, error)
-    GetGroupsByUser(userId string) ([]*Group, error)
-    GetGroupUserByUser(userId string) ([]*GroupUser, error)
+	GetUsersByGroup(groupId string) (*[]User, error)
+    GetGroupsByUser(userId string) (*[]Group, error)
+    GetGroupUserByUser(userId string) (*[]GroupUser, error)
     GetGroupUserByGroup(groupId string) (*[]GroupUser, error)
 }
 
 type MenuStore interface {
 	GetMenu(id string) (*Menu)
-	GetMenuRange(start int, length int) ([]*Menu, error)
+	GetMenuRange(start int, length int) (*[]Menu, error)
 	CreateMenu(menu *Menu) error
 }
 
 type PostStore interface {
     CreatePost(post *Post) error
     GetPost(id string) (*Post, error)
-    GetPostsRange(start int, length int, admin bool, external bool) ([]*Post, error)
+    GetPostsRange(start int, length int, admin bool, external bool) (*[]Post, error)
     PatchPost(post Post) error
     DeletePost(postId string) error
 }
 
 type CommentStore interface {
     CreateComment(comment *Comment) error
-    GetCommentsByPost(postId string) ([]*Comment, error)
+    GetCommentsByPost(postId string) (*[]Comment, error)
     GetComment(commentId string) (*Comment, error)
     DeleteComment(commentId string) error
 }
@@ -174,7 +174,7 @@ type CommentStore interface {
 type PollStore interface {
     CreatePoll(poll *Poll) error
     GetPoll(pollId string) (*Poll, error)
-    GetPolls() ([]*Poll, error)
+    GetPolls() (*[]Poll, error)
     DeletePoll(pollId string) error
     PutPoll(poll Poll) error
     VotePoll(pollId uint, optionId uint, userId uint) error

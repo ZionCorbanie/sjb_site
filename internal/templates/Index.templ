@@ -3,30 +3,26 @@ package templates
 import "sjb_site/internal/store"
 import "fmt"
 
-templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
+templ Index(user *store.User, posts *[]store.Post, menu templ.Component) {
     <div class="bg-fixed h-full w-full flex flex-grow flex-col overflow-y-auto no-scrollbar">
         <div class="bg-stone-100 w-full flex justify-center">
             <div class="flex-grow flex-col justify-between h-full py-8 lg:px-8 w-full flex max-w-6xl">
                 <div class="flex lg:justify-between flex-wrap">
                     @menu
-                    if user != nil {
-                        <a href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) } class="group mb-4 p-4 bg-primary lg:rounded-xl shadow-xl max-sm:w-screen outline-red-600 hover:outline-2">
-                            <div class="underline text-xl font-medium text-red-700">Sjaarsch van de dag</div>
-                            <div class="mt-2 flex flex-col justify-center items-center">
-                                <div class="rounded-full w-40 h-40 overflow-hidden">
-                                    <image class="transition-transform duration-300 transform group-hover:scale-120 w-full h-full object-cover" src={user.Image} alt="Foto van sjaarsch van de dag"/>
-                                </div>
-                                <div class="text-center text-red-600">{user.FirstName} {user.LastName}</div>
-                                <div class="text-center">JC incest</div>
+                    //TODO sjaarsch van de dag hier
+                    <a href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) } class="group mb-4 p-4 bg-primary lg:rounded-xl shadow-xl max-sm:w-screen outline-red-600 hover:outline-2">
+                        <div class="underline text-xl font-medium text-red-700">Sjaarsch van de dag</div>
+                        <div class="mt-2 flex flex-col justify-center items-center">
+                            <div class="rounded-full w-40 h-40 overflow-hidden">
+                                <image class="transition-transform duration-300 transform group-hover:scale-120 w-full h-full object-cover" src={user.Image} alt="Foto van sjaarsch van de dag"/>
                             </div>
-                        </a>
-                        <div id="poll" class="flex flex-col items-center mb-4 bg-primary min-w-80 h-full p-4 lg:rounded-xl shadow-xl max-sm:w-screen">
-                            <div hx-get="/poll/52" hx-target="this" hx-swap="outerHTML" hx-trigger="load"> </div>
+                            <div class="text-center text-red-600">{user.FirstName} {user.LastName}</div>
+                            <div class="text-center">JC incest</div>
                         </div>
-                    } 
-                    else {
-                        @carrousel()
-                    }
+                    </a>
+                    <div id="poll" class="flex flex-col items-center mb-4 bg-primary min-w-80 h-full p-4 lg:rounded-xl shadow-xl max-sm:w-screen"
+                        hx-get="/poll" hx-swap="innerHTML" hx-trigger="load">
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,11 +39,11 @@ templ Index(user *store.User, posts []*store.Post, menu templ.Component) {
     </div>
 }
 
-templ recentPosts(posts []*store.Post){
+templ recentPosts(posts *[]store.Post){
     <div class="mt-5">
         <h1 class="text-red-800 text-3xl text-center font-serif font-weight-medium">Recente berichten</h1>
         <div class="flex flex-wrap justify-around mt-5">
-            for _, post := range posts {
+            for _, post := range *posts {
                 <div class="flex-none w-72 m-2">
                     <div class="group bg-white rounded-lg overflow-hidden shadow-md">
                         <a href={ templ.URL(fmt.Sprintf("/post/%d", post.ID)) } >
