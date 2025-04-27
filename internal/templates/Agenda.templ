@@ -22,6 +22,8 @@ templ AgendaPopup(event *store.CalendarItem) {
             <div class="bg-white rounded-lg shadow-lg p-4 w-11/12 max-w-md">
                 <h2 class="text-xl font-semibold text-red-700">{ event.Title }</h2>
                 <p class="mt-2">{ event.Description }</p>
+                <p class="mt-2 font-light">{ event.StartDate.Format("02-01-2006  15:04") }-{ event.EndDate.Format("15:04") }</p>
+                <p class="mt-2 font-light">{ event.Location }</p>
                 <button id="closePopup" class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">Sluiten</button>
             </div>
         </div>
