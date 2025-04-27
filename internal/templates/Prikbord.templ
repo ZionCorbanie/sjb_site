@@ -1,0 +1,25 @@
+package templates
+
+templ Prikbord() {
+    <div class="bg-white mb-5 h-fit w-full md:w-80 md:rounded-xl shadow-xl relative overflow-hidden no-scrollbar">
+        <h2 class="ml-3 my-2 text-red-700 text-2xl font-medium">Promoties</h2>
+        <div id="prikbord" class="flex flex-nowrap snap-mandatory snap-x md:rounded-xl transition-transform duration-500 ease-in-out w-full h-dvw md:h-80">
+            <a href="buggeg" class="min-w-full h-full cursor-pointer overflow-hidden">
+                <image src="/static/img/promo.jpg" class="transition-transform duration-400 transform hover:scale-125 w-full h-full object-cover" alt="Promo" />
+            </a>
+            <a href="buggeg" class="min-w-full h-full cursor-pointer overflow-hidden">
+                <image src="/static/img/placeholder-group.png" class="transition-transform duration-400 transform hover:scale-125 w-full h-full object-cover" alt="Promo" />
+            </a>
+            <a href="buggeg" class="min-w-full h-full cursor-pointer overflow-hidden">
+                <image src="/static/img/commissie.jpg" class="transition-transform duration-400 transform hover:scale-125 w-full h-full object-cover" alt="Promo" />
+            </a>
+        </div>
+        <button id="prkPrevBtn" class="absolute bottom-3 left-8 transform p-1 text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span>
+        </button>
+        <button id="prkNextBtn" class="absolute bottom-3 right-8 transform p-1 text-white cursor-pointer bg-black/40 rounded-full hover:bg-black/50">
+            <span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span>
+        </button>
+    </div>
+    <script src="/static/script/prikbord.js"></script>
+}

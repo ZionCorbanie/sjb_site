@@ -92,6 +92,12 @@ func main() {
         },
     )
 
+	calendarStore := dbstore.NewCalendarStore(
+		dbstore.NewCalendarStoreParams{
+			DB: db,
+		},
+	)
+
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
@@ -164,6 +170,22 @@ func main() {
 					}).ServeHTTP)
 				})
 			})
+
+			r.Route("/prikbord", func(r chi.Router) {
+				r.Get("/", handlers.NewPrikbordHandler(handlers.PrikbordHandlerParams{
+					PrikbordStore: postStore,
+				}).ServeHTTP)
+			})
+
+			r.Route("/agenda", func(r chi.Router) {
+				r.Get("/{day}", handlers.NewCalendarDayHandler(handlers.CalendarDayHandlerParams{
+					CalendarStore: calendarStore,
+				}).ServeHTTP)
+				r.Get("/{eventId}/popup", handlers.NewCalendarPopupHandler(handlers.CalendarPopupHandlerParams{
+					CalendarStore: calendarStore,
+				}).ServeHTTP)
+			})
+
 			r.Route("/webalmanak", func(r chi.Router) {
 				r.Route("/leden", func(r chi.Router) {
 					r.Get("/", handlers.NewUserSearchHandler().ServeHTTP)

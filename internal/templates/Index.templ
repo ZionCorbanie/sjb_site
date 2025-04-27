@@ -7,8 +7,9 @@ templ Index(user *store.User, posts *[]store.Post, menu templ.Component) {
     <div class="bg-fixed h-full w-full flex flex-grow flex-col overflow-y-auto no-scrollbar">
         <div class="bg-stone-100 w-full flex justify-center">
             <div class="flex-grow flex-col justify-between h-full py-8 lg:px-8 w-full flex max-w-6xl">
-                <div class="flex lg:justify-between flex-wrap">
+                <div id="widgets" class="flex lg:justify-between flex-wrap">
                     @menu
+
                     //TODO sjaarsch van de dag hier
                     <a href={ templ.SafeURL(fmt.Sprintf("/webalmanak/leden/%d", user.ID)) } class="group mb-4 p-4 bg-primary lg:rounded-xl shadow-xl max-sm:w-screen outline-red-600 hover:outline-2">
                         <div class="underline text-xl font-medium text-red-700">Sjaarsch van de dag</div>
@@ -20,9 +21,16 @@ templ Index(user *store.User, posts *[]store.Post, menu templ.Component) {
                             <div class="text-center">JC incest</div>
                         </div>
                     </a>
-                    <div id="poll" class="flex flex-col items-center mb-4 bg-primary min-w-80 h-full p-4 lg:rounded-xl shadow-xl max-sm:w-screen"
+
+                    <div id="poll" class="flex flex-col items-center mb-4 bg-primary min-w-80 min-h-full p-4 lg:rounded-xl shadow-xl max-sm:w-screen"
                         hx-get="/poll" hx-swap="innerHTML" hx-trigger="load">
                     </div>
+
+                    <div id="prikbord" class="bg-primary mb-5 h-80 w-100 lg:rounded-xl shadow-xl max-sm:w-screen"
+                        hx-get="/prikbord" hx-swap="outerHTML" hx-trigger="load">
+                    </div>
+                    
+                    @Agenda()
                 </div>
             </div>
         </div>
