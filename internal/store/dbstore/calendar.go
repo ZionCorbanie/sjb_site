@@ -31,7 +31,7 @@ func (s *CalendarStore) GetCalendarItems(day int) (*[]store.CalendarItem, error)
 	err := s.db.
 		Model(&store.CalendarItem{}).
 		Select("start_date").
-		Group("DATE_FORMAT(start_date, '%Y-%m-01')").
+		Group("DATE_FORMAT(start_date, '%Y-%m-%d')").
 		Order("start_date ASC").
 		Limit(1).
 		Offset(day).

@@ -5,14 +5,14 @@ import "sjb_site/internal/store"
 import "github.com/goodsign/monday"
 
 templ Agenda() {
-    <div id="agenda" class="bg-primary mb-5 max-h-90 w-screen md:w-100 lg:rounded-xl overflow-hidden shadow-xl flex flex-col">
+    <div id="agenda" class="relative bg-primary mb-5 max-h-90 w-screen md:w-100 lg:rounded-xl overflow-hidden shadow-xl flex flex-col">
         <div class="pl-3 py-2 border-b-2">
             <a href="/agenda" class="text-red-700 text-2xl font-medium hover:underline hover:text-red-600 cursor-pointer">Agenda</a>
         </div>
-        <div id="evenementen" class="relative w-full h-full overflow-y-auto grow">
+        <div id="evenementen" class="w-full h-full overflow-y-auto grow">
             <div hx-get="/agenda/0" hx-swap="outerHTML" hx-trigger="load"></div>
-            <div id="agendaPopup" class="z-10"></div>
         </div>
+        <div id="agendaPopup" class="z-10"></div>
     </div>
 }
 
@@ -20,11 +20,13 @@ templ AgendaPopup(event *store.CalendarItem) {
     <div class="absolute top-0 left-0 w-full h-full bg-black/50">
         <div class="flex justify-center items-center h-full">
             <div class="bg-white rounded-lg shadow-lg p-4 w-11/12 max-w-md">
-                <h2 class="text-xl font-semibold text-red-700">{ event.Title }</h2>
+                <div class="flex flex-nowrap justify-between">
+                    <h2 class="text-xl font-semibold text-red-700">{ event.Title }</h2>
+                    <button id="closePopup" class="cursor-pointer text-red-700 hover:text-red-500"><span class="icon-[material-symbols--close-rounded]"></span></button>
+                </div>
                 <p class="mt-2">{ event.Description }</p>
                 <p class="mt-2 font-light">{ event.StartDate.Format("02-01-2006  15:04") }-{ event.EndDate.Format("15:04") }</p>
                 <p class="mt-2 font-light">{ event.Location }</p>
-                <button id="closePopup" class="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">Sluiten</button>
             </div>
         </div>
     </div>
@@ -61,5 +63,7 @@ templ AgendaDay(index int, events *[]store.CalendarItem) {
         </div>
     }
     </div>
-    <div hx-get={ fmt.Sprintf("/agenda/%d", index+1) } hx-swap="outerHTML" hx-trigger="revealed"></div>
+    <div hx-get={ fmt.Sprintf("/agenda/%d", index+1) } hx-swap="outerHTML" hx-trigger="intersect once">
+        <span class="size-20 icon-[line-md--loading-loop]"></span>
+    </div>
 }
