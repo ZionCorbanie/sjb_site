@@ -128,6 +128,15 @@ type CalendarItem struct {
 	Location    string    `json:"location" gorm:"type:varchar(255)"`
 }
 
+type Promo struct{
+	ID          uint      `gorm:"primaryKey" json:"id"`
+	Title       string    `json:"title" gorm:"type:varchar(255)"`
+	Description string    `json:"description" gorm:"type:varchar(255)"`
+	Image       string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-group.png'"`
+	StartDate   time.Time `json:"start_date"`
+	EndDate     time.Time `json:"end_date"`
+}
+
 type UserStore interface {
 	CreateUser(username string, password string) error
 	GetUser(username string) (*User, error)
@@ -199,3 +208,10 @@ type CalendarStore interface {
 	GetCalendarItem(id string) (*CalendarItem, error)
 }
 
+type PromoStore interface {
+	CreatePromo(promo *Promo) error
+	GetActivePromos() (*[]Promo, error)
+	GetPromo(promoId string) (*Promo, error)
+	PatchPromo(promo Promo) error
+	DeletePromo(promoId string) error
+}

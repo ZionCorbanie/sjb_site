@@ -29,20 +29,18 @@ templ AgendaPopup(event *store.CalendarItem) {
                 <p class="mt-2 font-light">{ event.Location }</p>
             </div>
         </div>
+        <script>
+            var evenementen = document.getElementById("evenementen");
+            evenementen.classList.remove("overflow-y-auto");
+            evenementen.classList.add("overflow-y-clip");
+            
+            document.getElementById("closePopup").addEventListener("click", function() {
+                document.getElementById("agendaPopup").innerHTML = "";
+                evenementen.classList.remove("overflow-y-clip");
+                evenementen.classList.add("overflow-y-auto");
+            });
+        </script>
     </div>
-    <script>
-        var evenementen = document.getElementById("evenementen");
-        evenementen.classList.remove("overflow-y-auto");
-        evenementen.classList.add("overflow-y-clip");
-        
-        document.getElementById("closePopup").addEventListener("click", function() {
-            document.getElementById("agendaPopup").innerHTML = "";
-            evenementen.classList.remove("overflow-y-clip");
-            evenementen.classList.add("overflow-y-auto");
-        });
-
-
-    </script>
 }
 
 templ AgendaDay(index int, events *[]store.CalendarItem) {

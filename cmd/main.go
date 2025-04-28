@@ -94,6 +94,12 @@ func main() {
 		},
 	)
 
+	promoStore := dbstore.NewPromoStore(
+		dbstore.NewPromoStoreParams{
+			DB: db,
+		},
+	)
+
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
 
@@ -169,7 +175,10 @@ func main() {
 
 			r.Route("/prikbord", func(r chi.Router) {
 				r.Get("/", handlers.NewPrikbordHandler(handlers.PrikbordHandlerParams{
-					PrikbordStore: postStore,
+					PrikbordStore: promoStore,
+				}).ServeHTTP)
+				r.Get("/{promoId}", handlers.NewPrikbordPopupHandler(handlers.PrikbordPopupHandlerParams{
+					PrikbordPopupStore: promoStore,
 				}).ServeHTTP)
 			})
 

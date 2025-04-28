@@ -7,11 +7,11 @@ import (
 )
 
 type PrikbordHandler struct{
-    prikbordStore store.PostStore
+    prikbordStore store.PromoStore
 }
 
 type PrikbordHandlerParams struct {
-    PrikbordStore store.PostStore
+    PrikbordStore store.PromoStore
 }
 
 func NewPrikbordHandler(params PrikbordHandlerParams) *PrikbordHandler {
@@ -21,7 +21,13 @@ func NewPrikbordHandler(params PrikbordHandlerParams) *PrikbordHandler {
 }
 
 func (h *PrikbordHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	err := templates.Prikbord().Render(r.Context(), w)
+	promos, err := h.prikbordStore.GetActivePromos()
+	if err != nil {
+		http.Error(w, "Error getting promos", http.StatusInternalServerError)
+		return
+	}
+
+	err = templates.Prikbord(promos).Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
