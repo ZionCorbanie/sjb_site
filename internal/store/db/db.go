@@ -17,14 +17,14 @@ func open(dbName string) (*gorm.DB, error) {
 	password :=  os.Getenv("DB_PASSWORD")
 	user := os.Getenv("DB_USER")
 	server := os.Getenv("DB")
-	port := os.Getenv("DB_PORT")
+	//port := os.Getenv("DB_PORT")
 
 	if dbName == "" {
 		dbName = "sjb_site"
 	}
 
 	
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, server, port, dbName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, server, dbName)
 
 	config := &gorm.Config{}
 

@@ -44,7 +44,7 @@ docker-build:
 
 .PHONY: docker-up
 docker-up:
-	docker compose -f ./dev/docker-compose.yml up 
+	docker compose -f ./dev/docker-compose.yml up -d
 
 .PHONY: docker-dev
 docker-dev:

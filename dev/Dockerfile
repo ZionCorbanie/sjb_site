@@ -13,7 +13,7 @@ RUN go install github.com/a-h/templ/cmd/templ@latest && \
 
 COPY package.json package-lock.json ./
 RUN npm install
-#RUN npm i tailwindcss @tailwindcss/cli @tailwindcss/forms @tailwindcss/typography @iconify/json @iconify/tailwind4
+RUN npm i tailwindcss @tailwindcss/cli @tailwindcss/forms @tailwindcss/typography @iconify/json @iconify/tailwind4
 
 COPY dev/scripts/entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh

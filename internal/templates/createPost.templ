@@ -1,13 +1,13 @@
 package templates
 
 import (
-	"sjb_site/internal/store"
-	"fmt"
+"sjb_site/internal/store"
+"fmt"
 )
 
 templ CreatePost(){
-    <link href="/static/css/quill.snow.css" rel="stylesheet" />
-    <div x-data="{
+<link href="/static/css/quill.snow.css" rel="stylesheet" />
+<div x-data="{
         image: null,
         previewUrl: '',
         handleFileChange(event) {
@@ -17,184 +17,165 @@ templ CreatePost(){
                 this.previewUrl = URL.createObjectURL(file);
             }
         }
-    }" x-init={ fmt.Sprintf("previewUrl = '%s'", "/static/img/placeholder-group.png") } >
-        <form hx-post="/admin/post" hx-target-500="#post-status" enctype="multipart/form-data">
-            <button type="submit" class="flex w-40 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Opslaan</button>
-            <label for="publiek">publiek</label>
-            <input type="checkbox" id="publiek" name="publiek" />
+    }" x-init={ fmt.Sprintf("previewUrl='%s'", " /static/img/placeholder-group.png") }>
+    <form hx-post="/admin/post" hx-target-500="#post-status" enctype="multipart/form-data">
+        <button type="submit"
+            class="flex w-40 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Opslaan</button>
+        <label for="publiek">publiek</label>
+        <input type="checkbox" id="publiek" name="publiek" />
 
-            <label for="extern">extern</label>
-            <input type="checkbox" id="extern" name="extern" />
-
-            <label for="post-image" class="cursor-pointer">
-                <div class="h-72 overflow-hidden">
-                    <img 
-                        class="w-full h-full object-cover object-center" 
-                        :src="previewUrl"
-                        alt={ fmt.Sprintf("Foto van %s", "deze post") }
-                    />
-                </div>
-            </label>
-            <input 
-                id="post-image" 
-                type="file" 
-                name="image" 
-                class="hidden" 
-                @change="handleFileChange"
-            />
-            <input type="text" name="title" placeholder="Post Title" required />
-            <input type="text" class="hidden" name="content"/>
-
-            <div class="border border-[#ccc]">
-                <div id="editor" ></div>
-            </div>
-        </form>
-    </div>
-    <div id="post-status"></div>
-
-    @Editor()
-}
-
-templ EditPost(post *store.Post){
-    <link href="/static/css/quill.snow.css" rel="stylesheet" />
-    <div x-data="{
-        image: null,
-        previewUrl: '',
-        handleFileChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.image = file;
-                this.previewUrl = URL.createObjectURL(file);
-            }
-        }
-    }" x-init={ fmt.Sprintf("previewUrl = '%s'", post.Image) } >
-    <form hx-patch={ fmt.Sprintf("/admin/post/%d", post.ID) } hx-target-500="#post-status" enctype="multipart/form-data"> 
-        <div class="flex items-center space-x-5 mb-5">
-            <button type="submit" class="flex w-40 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Opslaan</button>
-            <div class="cursor-pointer">
-                <label for="publiek">publiek</label>
-                <input type="checkbox" id="publiek" name="publiek" if post.Published { 
-                    checked="" 
-                }/>
-            </div>
-
-            <div class="cursor-pointer">
-                <label for="extern">extern</label>
-                <input type="checkbox" id="extern" name="extern"  if post.External { 
-                    checked="" 
-                }/>
-            </div>
-
-            <button class="py-1.5 flex items-center" type="button" hx-delete={fmt.Sprintf("/admin/post/%d", post.ID)} hx-confirm="Ben je zeker dat je deze post wil verwijderen?">
-                <span class="size-6 icon-[tabler--trash] text-red-500 hover:text-red-700 cursor-pointer"> </span> 
-            </button>
-        </div>
+        <label for="extern">extern</label>
+        <input type="checkbox" id="extern" name="extern" />
 
         <label for="post-image" class="cursor-pointer">
             <div class="h-72 overflow-hidden">
-                <img 
-                    class="w-full h-full object-cover object-center" 
-                    :src="previewUrl"
-                    alt={ fmt.Sprintf("Foto van %s", post.Title) }
-                />
+                <img class="w-full h-full object-cover object-center" :src="previewUrl" alt={ fmt.Sprintf("Foto van %s", "deze post" ) } />
             </div>
         </label>
-        <input 
-            id="post-image" 
-            type="file" 
-            name="image" 
-            class="hidden" 
-            @change="handleFileChange"
-        />
-        <input type="text" name="title" placeholder="Post Title" value={post.Title} required />
-        <input type="text" class="hidden" name="content" value=""/>
+        <input id="post-image" type="file" name="image" class="hidden" @change="handleFileChange" />
+        <input type="text" name="title" placeholder="Post Title" required />
+        <input type="text" class="hidden" name="content" />
 
         <div class="border border-[#ccc]">
-            <div id="editor" class="scroll-container">
-                {{ content := templ.Raw(post.Content) }}
-                @content
-            </div>
+            <div id="editor"></div>
         </div>
     </form>
-    </div>
-    <div id="post-status"></div>
+</div>
+<div id="post-status"></div>
 
-    @Editor()
+@Editor()
+}
+
+templ EditPost(post *store.Post){
+<link href="/static/css/quill.snow.css" rel="stylesheet" />
+<div x-data="{
+        image: null,
+        previewUrl: '',
+        handleFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.image = file;
+                this.previewUrl = URL.createObjectURL(file);
+            }
+        }
+    }" x-init={ fmt.Sprintf("previewUrl='%s'", post.Image) } >
+    <form hx-patch={ fmt.Sprintf(" /admin/post/%d", post.ID) } hx-target-500="#post-status"
+    enctype="multipart/form-data">
+    <div class="flex items-center space-x-5 mb-5">
+        <button type="submit"
+            class="flex w-40 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Opslaan</button>
+        <div class="cursor-pointer">
+            <label for="publiek">publiek</label>
+            <input type="checkbox" id="publiek" name="publiek" if post.Published { checked="" } />
+        </div>
+
+        <div class="cursor-pointer">
+            <label for="extern">extern</label>
+            <input type="checkbox" id="extern" name="extern" if post.External { checked="" } />
+        </div>
+
+        <button class="py-1.5 flex items-center" type="button" hx-delete={fmt.Sprintf("/admin/post/%d", post.ID)}
+            hx-confirm="Ben je zeker dat je deze post wil verwijderen?">
+            <span class="size-6 icon-[tabler--trash] text-red-500 hover:text-red-700 cursor-pointer"> </span>
+        </button>
+    </div>
+
+    <label for="post-image" class="cursor-pointer">
+        <div class="h-72 overflow-hidden">
+            <img class="w-full h-full object-cover object-center" :src="previewUrl" alt={ fmt.Sprintf("Foto van %s",
+                post.Title) } />
+        </div>
+    </label>
+    <input id="post-image" type="file" name="image" class="hidden" @change="handleFileChange" />
+    <input type="text" name="title" placeholder="Post Title" value={post.Title} required />
+    <input type="text" class="hidden" name="content" value="" />
+
+    <div class="border border-[#ccc]">
+        <div id="editor" class="scroll-container">
+            {{ content := templ.Raw(post.Content) }}
+            @content
+        </div>
+    </div>
+    </form>
+</div>
+<div id="post-status"></div>
+
+@Editor()
 }
 
 templ Editor(){
-    <script src="/static/script/quill.js"></script>
-    <script src="/static/script/quill.imageUploader.min.js"></script>
+<script src="/static/script/quill.js"></script>
+<script src="/static/script/quill.imageUploader.min.js"></script>
 
-    <script type="module">
-        const uploadImage = async (file) => {
-            try {
-                const formData = new FormData();
-                formData.append("image", file);
+<script type="module">
+    const uploadImage = async (file) => {
+        try {
+            const formData = new FormData();
+            formData.append("image", file);
 
-                const response = await fetch("/admin/upload", {
-                    method: "POST",
-                    body: formData,
-                });
+            const response = await fetch("/admin/upload", {
+                method: "POST",
+                body: formData,
+            });
 
-                if (!response.ok) {
-                    throw new Error("Image upload failed");
-                }
-
-                const data = await response.json();
-                return data.path;
-            } catch (error) {
-                console.error("Upload error:", error);
-                return null;
+            if (!response.ok) {
+                throw new Error("Image upload failed");
             }
-        };
 
-        var toolbarOptions = [
-            ["bold", "italic", "underline", "strike"],
-            ["blockquote", "code-block"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            [{ script: "sub" }, { script: "super" }],
-            [{ indent: "-1" }, { indent: "+1" }],
-            [{ direction: "rtl" }],
-            [{ size: ["small", false, "large", "huge"] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ["link", "image", "video", "formula"],
-            [{ color: [] }, { background: [] }],
-            [{ font: [] }],
-            [{ align: [] }],
-            ["clean"],
-        ];
+            const data = await response.json();
+            return data.path;
+        } catch (error) {
+            console.error("Upload error:", error);
+            return null;
+        }
+    };
 
-        Quill.register("modules/imageUploader", ImageUploader);
+    var toolbarOptions = [
+        ["bold", "italic", "underline", "strike"],
+        ["blockquote", "code-block"],
+        [{list: "ordered"}, {list: "bullet"}],
+        [{script: "sub"}, {script: "super"}],
+        [{indent: "-1"}, {indent: "+1"}],
+        [{direction: "rtl"}],
+        [{size: ["small", false, "large", "huge"]}],
+        [{header: [1, 2, 3, 4, 5, 6, false]}],
+        ["link", "image", "video", "formula"],
+        [{color: []}, {background: []}],
+        [{font: []}],
+        [{align: []}],
+        ["clean"],
+    ];
 
-        var quill = new Quill("#editor", {
-            modules: {
-                toolbar: toolbarOptions,
-                imageUploader: {
-                    upload: async (file) => {
-                        const imageUrl = await uploadImage(file);
-                        if (!imageUrl) {
-                            console.error("Failed to upload image");
-                            return;
-                        }
-                        return imageUrl;
-                    },
+    Quill.register("modules/imageUploader", ImageUploader);
+
+    var quill = new Quill("#editor", {
+        modules: {
+            toolbar: toolbarOptions,
+            imageUploader: {
+                upload: async (file) => {
+                    const imageUrl = await uploadImage(file);
+                    if (!imageUrl) {
+                        console.error("Failed to upload image");
+                        return;
+                    }
+                    return imageUrl;
                 },
             },
-            theme: "snow",
-            scrollingContainer: '.scroll-container',
-        });
+        },
+        theme: "snow",
+        scrollingContainer: '.scroll-container',
+    });
 
-        let form = document.querySelector("form");
-        form.addEventListener("submit", function (event) {
-            let content = quill.root.innerHTML;
-            document.querySelector('input[name="content"]').value = content;
-        });
-    </script>
-    <style>
-        .scroll-container {
-            overflow: auto;
-            height: 600px;
-        }
-    </style>
+    let form = document.querySelector("form");
+    form.addEventListener("submit", function (event) {
+        let content = quill.root.innerHTML;
+        document.querySelector('input[name="content"]').value = content;
+    });
+</script>
+<style>
+    .scroll-container {
+        overflow: auto;
+        height: 600px;
+    }
+</style>
 }
