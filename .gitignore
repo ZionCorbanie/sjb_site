@@ -3,6 +3,7 @@ tmp
 *.db
 tailwindcss
 dev/database/
+dev/docker-compose.yml
 static/uploads/
 static/css/style.min.css
 static/css/style.css

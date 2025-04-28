@@ -30,6 +30,7 @@ templ Index(user *store.User, posts *[]store.Post, menu templ.Component) {
                         hx-get="/prikbord" hx-swap="outerHTML" hx-trigger="load">
                     </div>
 
+                    //TODO quotes
                     <div id="quote" class="bg-primary w-80 mb-5  p-8 lg:rounded-xl shadow-xl max-sm:w-screen">
                         <div class="mt-3 text-2xl text-center text-red-700 font-weight-medium">Quote van de week</div>
                         <div class="flex flex-col items-center mt-15 h-full">

@@ -13,7 +13,18 @@ import (
 
 // open opens a database connection given a database dbName
 func open(dbName string) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("root:password@tcp(db:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbName)
+
+	password :=  os.Getenv("DB_PASSWORD")
+	user := os.Getenv("DB_USER")
+	server := os.Getenv("DB")
+	port := os.Getenv("DB_PORT")
+
+	if dbName == "" {
+		dbName = "sjb_site"
+	}
+
+	
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, server, port, dbName)
 
 	config := &gorm.Config{}
 
@@ -46,10 +57,6 @@ func open(dbName string) (*gorm.DB, error) {
 
 // MustOpen opens a database connection and panics if it fails
 func MustOpen(dbName string) *gorm.DB {
-
-	if dbName == "" {
-		dbName = "sjb_site"
-	}
 
 	db, err := open(dbName)
 	if err != nil {

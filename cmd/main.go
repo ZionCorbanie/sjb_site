@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"os/exec"
 	"os/signal"
 	"sjb_site/internal/config"
 	"sjb_site/internal/handlers"
@@ -26,12 +25,9 @@ import (
 * Set to production at build time
 * used to determine what assets to load
  */
-var Environment = "development"
 
 func init() {
-	os.Setenv("env", Environment)
-	// run generate script
-	exec.Command("make", "tailwind-build").Run()
+	os.Setenv("env", os.Getenv("ENVIRONMENT"))
 }
 
 func main() {
@@ -335,7 +331,7 @@ func main() {
 		}
 	}()
 
-	logger.Info("Server started", slog.String("port", cfg.Port), slog.String("env", Environment))
+	logger.Info("Server started", slog.String("port", cfg.Port), slog.String("env", os.Getenv("env")))
 	<-killSig
 
 	logger.Info("Shutting down server")

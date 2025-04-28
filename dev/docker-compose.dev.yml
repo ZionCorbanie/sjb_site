@@ -8,6 +8,11 @@ services:
     environment:
       - ENVIRONMENT=development
       - TZ=Europe/Amsterdam
+      - DB_DATABASE=sjb_site
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB=db
+      - DB_PORT=3306
     depends_on:
       db:
         condition: service_healthy
