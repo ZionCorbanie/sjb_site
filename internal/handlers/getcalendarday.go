@@ -42,7 +42,7 @@ func (h *CalendarDayHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    err = templates.AgendaDay(int(day),events).Render(r.Context(), w)
+    err = templates.CalendarDay(int(day),events).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 		return

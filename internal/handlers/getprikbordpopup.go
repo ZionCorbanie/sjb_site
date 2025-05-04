@@ -30,7 +30,7 @@ func (h *PrikbordPopupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	err = templates.PromoPopup(promo).Render(r.Context(), w)
+	err = templates.Popup(templates.PromoPopup(promo)).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, "Failed to render template", http.StatusInternalServerError)
 		return

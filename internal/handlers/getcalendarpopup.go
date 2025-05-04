@@ -31,7 +31,7 @@ func (h *CalendarPopupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
         return
     }
 
-    err = templates.AgendaPopup(event).Render(r.Context(), w)
+    err = templates.Popup(templates.CalendarPopup(event)).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 		return
