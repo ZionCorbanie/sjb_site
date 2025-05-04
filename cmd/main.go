@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -19,6 +20,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 /*
@@ -33,6 +35,7 @@ func init() {
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	r := chi.NewRouter()
+	go startMetricsServer()
 
 	cfg := config.MustLoadConfig()
 
@@ -376,4 +379,15 @@ func main() {
 	}
 
 	logger.Info("Server shutdown complete")
+}
+
+func startMetricsServer() {
+    mux := http.NewServeMux()
+    mux.Handle("/metrics", promhttp.Handler())
+
+    addr := ":9091"
+    fmt.Printf("Metrics server listening on %s\n", addr)
+    if err := http.ListenAndServe(addr, mux); err != nil {
+        fmt.Printf("Metrics server failed: %v\n", err)
+    }
 }

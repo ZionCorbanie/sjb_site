@@ -1,3 +1,9 @@
+networks:
+  localprom:
+    driver: bridge
+  db:
+    driver: bridge
+
 services:
   app:
     build:
@@ -18,6 +24,10 @@ services:
         condition: service_healthy
     ports:
       - "80:4000"
+      - "9091:9091"
+    networks:
+      - localprom
+      - db
     tty: true
 
   db:
@@ -32,6 +42,8 @@ services:
       - ./database:/var/lib/mysql
     ports:
       - 3306:3306
+    networks:
+      - db
     healthcheck:
       test: [ "CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized" ]
       start_period: 5s
@@ -44,6 +56,17 @@ services:
       - db
     ports:
       - 3333:80
+    networks:
+      - db
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORT: password
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - localprom
+    ports:
+      - 9090:9090
