@@ -15,6 +15,7 @@ templ header(title string) {
 		<!--<link rel="stylesheet" href="/static/css/style.min.css" nonce={ middleware.GetTwNonce(ctx) }/>-->
         <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
         <script defer src="/static/script/alpine.min.js"></script>
+        <script src="/static/script/popup.js"></script>
 
         if os.Getenv("env") == "production" {
 			<link rel="stylesheet" href="/static/css/style.min.css"/>
@@ -77,6 +78,13 @@ templ BannerLayout(contents templ.Component, banner string, title string) {
             </div>
         </div>
 	</body>
+}
+
+
+templ Popup(contents templ.Component) {
+    <div id="popup" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        @contents
+    </div>
 }
 
 templ Card(contents templ.Component) {

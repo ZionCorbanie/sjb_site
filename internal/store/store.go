@@ -119,6 +119,24 @@ type PollVote struct {
     Poll   Poll       `gorm:"foreignKey:PollID" json:"poll"`
 }
 
+type CalendarItem struct {
+	ID          uint      `gorm:"primaryKey" json:"id"`
+	Title       string    `json:"title" gorm:"type:varchar(255)"`
+	Description string    `json:"description" gorm:"type:varchar(255)"`
+	StartDate   time.Time `json:"start_date"`
+	EndDate     time.Time `json:"end_date"`
+	Location    string    `json:"location" gorm:"type:varchar(255)"`
+}
+
+type Promo struct{
+	ID          uint      `gorm:"primaryKey" json:"id"`
+	Title       string    `json:"title" gorm:"type:varchar(255)"`
+	Description string    `json:"description" gorm:"type:varchar(255)"`
+	Image       string    `json:"image" gorm:"type:varchar(255);default:'/static/img/placeholder-group.png'"`
+	StartDate   time.Time `json:"start_date"`
+	EndDate     time.Time `json:"end_date"`
+}
+
 type UserStore interface {
 	CreateUser(username string, password string) error
 	GetUser(username string) (*User, error)
@@ -184,3 +202,18 @@ type PollStore interface {
     GetActivePoll() (*Poll, error)
 }
 
+type CalendarStore interface {
+	CreateCalendarItem(item *CalendarItem) error
+	GetCalendarItems(day int) (*[]CalendarItem, error)
+	GetCalendarItem(id string) (*CalendarItem, error)
+}
+
+type PromoStore interface {
+	SavePromo(promo *Promo) error
+	GetActivePromos() (*[]Promo, error)
+	GetAllPromos() (*[]Promo, error)
+	GetPromo(promoId string) (*Promo, error)
+	PatchPromo(promo Promo) error
+	DeletePromo(promoId string) error
+	DeleteInactivePromos() error
+}

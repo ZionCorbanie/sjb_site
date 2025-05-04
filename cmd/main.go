@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"os/exec"
 	"os/signal"
 	"sjb_site/internal/config"
 	"sjb_site/internal/handlers"
@@ -26,12 +25,9 @@ import (
 * Set to production at build time
 * used to determine what assets to load
  */
-var Environment = "development"
 
 func init() {
-	os.Setenv("env", Environment)
-	// run generate script
-	exec.Command("make", "tailwind-build").Run()
+	os.Setenv("env", os.Getenv("ENVIRONMENT"))
 }
 
 func main() {
@@ -91,6 +87,18 @@ func main() {
             DB: db,
         },
     )
+
+	calendarStore := dbstore.NewCalendarStore(
+		dbstore.NewCalendarStoreParams{
+			DB: db,
+		},
+	)
+
+	promoStore := dbstore.NewPromoStore(
+		dbstore.NewPromoStoreParams{
+			DB: db,
+		},
+	)
 
 	fileServer := http.FileServer(http.Dir("./static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
@@ -164,6 +172,25 @@ func main() {
 					}).ServeHTTP)
 				})
 			})
+
+			r.Route("/prikbord", func(r chi.Router) {
+				r.Get("/", handlers.NewPrikbordHandler(handlers.PrikbordHandlerParams{
+					PrikbordStore: promoStore,
+				}).ServeHTTP)
+				r.Get("/{promoId}", handlers.NewPrikbordPopupHandler(handlers.PrikbordPopupHandlerParams{
+					PrikbordPopupStore: promoStore,
+				}).ServeHTTP)
+			})
+
+			r.Route("/agenda", func(r chi.Router) {
+				r.Get("/{day}", handlers.NewCalendarDayHandler(handlers.CalendarDayHandlerParams{
+					CalendarStore: calendarStore,
+				}).ServeHTTP)
+				r.Get("/{eventId}/popup", handlers.NewCalendarPopupHandler(handlers.CalendarPopupHandlerParams{
+					CalendarStore: calendarStore,
+				}).ServeHTTP)
+			})
+
 			r.Route("/webalmanak", func(r chi.Router) {
 				r.Route("/leden", func(r chi.Router) {
 					r.Get("/", handlers.NewUserSearchHandler().ServeHTTP)
@@ -229,6 +256,26 @@ func main() {
                     PostStore: postStore,
                 }).ServeHTTP)
             })
+			r.Route("/promo", func(r chi.Router) {
+				r.Get("/{promoId}", handlers.NewPromoEditHandler(handlers.PromoEditHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Get("/", handlers.NewPrikbordCreateHandler(handlers.PrikbordCreateHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Post("/", handlers.NewPutPromoHandler(handlers.PutPromoHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Put("/{promoId}", handlers.NewPutPromoHandler(handlers.PutPromoHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Delete("/{promoId}", handlers.NewDeletePromoHandler(handlers.DeletePromoHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Delete("/inactive", handlers.NewDeletePromoHandler(handlers.DeletePromoHandlerParams{
+					PromoStore: promoStore,
+				}).DeleteInactivePromos)
+			})
             r.Post("/upload", handlers.NewPostUploadHandler().ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {
 				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
@@ -313,7 +360,7 @@ func main() {
 		}
 	}()
 
-	logger.Info("Server started", slog.String("port", cfg.Port), slog.String("env", Environment))
+	logger.Info("Server started", slog.String("port", cfg.Port), slog.String("env", os.Getenv("env")))
 	<-killSig
 
 	logger.Info("Shutting down server")

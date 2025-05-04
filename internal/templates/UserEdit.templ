@@ -6,17 +6,24 @@ import (
 )
 
 templ UserEdit(user *store.User) {
-    <div x-data="{
-        image: null,
-        previewUrl: '',
-        handleFileChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.image = file;
-                this.previewUrl = URL.createObjectURL(file); // Generate preview URL
-            }
-        }
-    }" x-init={ fmt.Sprintf("previewUrl = '%s'", user.Image) } >
+    <div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const fileInput = document.getElementById("profile-image");
+                const previewImg = document.getElementById("profile-image-preview");
+
+                previewImg.src = "{{user.Image}}";
+
+                fileInput.addEventListener("change", function (event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const previewUrl = URL.createObjectURL(file);
+                        previewImg.src = previewUrl;
+                    }
+                });
+            });
+        </script>
+
         <form
             hx-patch={ fmt.Sprintf("/webalmanak/leden/%d/edit", user.ID) }
             hx-trigger="submit"
@@ -26,8 +33,8 @@ templ UserEdit(user *store.User) {
             <label for="profile-image" class="cursor-pointer">
                 <div class="w-32 h-32 overflow-hidden">
                     <img 
-                        class="rounded-full w-full h-full object-cover object-center" 
-                        :src="previewUrl"
+                        id="profile-image-preview"
+                        class="rounded-full w-full h-full object-cover object-center"
                         alt={ fmt.Sprintf("Foto van %s", user.Username) }
                     />
                 </div>
@@ -37,15 +44,14 @@ templ UserEdit(user *store.User) {
                 type="file" 
                 name="image" 
                 class="hidden" 
-                @change="handleFileChange"
             />
             <div>
                 <label for="email">Email: </label>
-                <input type="email" name="email" id="email" placeholder="naam@mail.com" required="" value={ user.Email }/>
+                <input type="email" name="email" id="email" placeholder="naam@mail.com" required value={ user.Email }/>
             </div>
             <div>
                 <label for="phone">Telefoon: </label>
-                <input type="phone" name="phone" id="phone" placeholder="+31 xxxxxx" required="" value={ user.PhoneNumber }/>
+                <input type="phone" name="phone" id="phone" placeholder="+31 xxxxxx" required value={ user.PhoneNumber }/>
             </div>
             <div>
                 <label for="address">Adres: </label>
