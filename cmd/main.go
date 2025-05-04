@@ -272,6 +272,9 @@ func main() {
 				r.Delete("/{promoId}", handlers.NewDeletePromoHandler(handlers.DeletePromoHandlerParams{
 					PromoStore: promoStore,
 				}).ServeHTTP)
+				r.Delete("/inactive", handlers.NewDeletePromoHandler(handlers.DeletePromoHandlerParams{
+					PromoStore: promoStore,
+				}).DeleteInactivePromos)
 			})
             r.Post("/upload", handlers.NewPostUploadHandler().ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {

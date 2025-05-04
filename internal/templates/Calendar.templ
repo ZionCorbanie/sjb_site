@@ -9,7 +9,7 @@ templ Calendar() {
         <div class="pl-3 py-2 border-b-2">
             <a href="/agenda" class="text-red-700 text-2xl font-medium hover:underline hover:text-red-600 cursor-pointer">Agenda</a>
         </div>
-        <div id="evenementen" class="w-full h-full overflow-y-auto grow"
+        <div id="evenementen" class="w-full h-full overflow-y-auto grow md:overscroll-contain"
             hx-get="/agenda/0" hx-swap="innerHTML" hx-trigger="load">
         </div>
     </div>

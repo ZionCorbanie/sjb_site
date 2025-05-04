@@ -2,6 +2,7 @@ package templates
 
 import "sjb_site/internal/store"
 import "fmt"
+import "time"
 
 templ Prikbord(promos *[]store.Promo) {
     <div class="bg-white mb-5 h-fit w-full md:w-80 md:rounded-xl shadow-xl relative overflow-hidden no-scrollbar">
@@ -49,14 +50,30 @@ templ Promos(promos *[]store.Promo){
 }
 
 templ PromoList(promos *[]store.Promo) {
-    <a href="/admin/promo" class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">
-        Nieuwe promo
-    </a>
+    <div class="flex justify-between">
+        <a href="/admin/promo" class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">
+            Nieuwe promo
+        </a>
+        <button class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer" 
+        hx-delete="/admin/promo/inactive" 
+        hx-target="#promos" 
+        hx-swap="innerHTML" 
+        hx-confirm="zeker dat je alle actieve promos wilt verwijderen?">
+            Delete inactieve promos
+        </button>
+    </div>
     <div class="border-1 border-black h-100 overflow-hidden overflow-y-scroll">
         <div class="max-h-100 flex flex-col">
+            {{ 
+                currentDate := time.Now() 
+                active := true
+            }}
             for _, promo := range *promos {
-                {{ promoClass := "flex justify-between hover:bg-stone-100 items-center px-4 h-10" }}
-                <div class={promoClass}>
+                if promo.EndDate.Before(currentDate) && active {
+                    <div class="ml-2 mt-2 font-medium underline">Inactief</div>
+                    {{active = false}}
+                }
+                <div class="flex justify-between hover:bg-stone-100 items-center px-4 h-10">
                     <div class="grow h-full cursor-pointer hover:underline flex items-center" 
                         hx-trigger="click" hx-get={ fmt.Sprintf("/admin/promo/%d", promo.ID) } 
                         hx-target="#promo" 
@@ -102,21 +119,21 @@ templ CreatePromo(){
             />
             <div>
                 <label for="title" class="block text-sm/6 font-medium text-gray-900">Titel</label>
-                <input type="text" name="title" id="title" value="" autocomplete="off">
+                <input type="text" name="title" id="title" value="" autocomplete="off" required>
             </div>
             <div>
                 <label for="content" class="block text-sm/6 font-medium text-gray-900">Bericht</label>
-                <textarea type="text" name="content" id="content" placeholder="Leuk berichtje" value="" rows="8" cols="50" autocomplete="off"></textarea>
+                <textarea type="text" name="content" id="content" placeholder="Leuk berichtje" value="" rows="8" cols="40" autocomplete="off" required></textarea>
             </div>
 
             <div class="flex">
                 <div>
                     <label for="startDate" class="block text-sm/6 font-medium text-gray-900">Actief vanaf</label>
-                    <input type="date" name="startDate" id="startDate" >
+                    <input type="date" name="startDate" id="startDate" required>
                 </div>
                 <div>
                     <label for="endDate" class="block text-sm/6 font-medium text-gray-900">Actief tot</label>
-                    <input type="date" name="endDate" id="endDate" >
+                    <input type="date" name="endDate" id="endDate" required>
                 </div>
             </div>
 
@@ -157,7 +174,7 @@ templ EditPromo(promo *store.Promo){
             </div>
             <div>
                 <label for="content" class="block text-sm/6 font-medium text-gray-900">Bericht</label>
-                <textarea type="text" name="content" id="content" placeholder="Leuk berichtje" rows="8" cols="50" autocomplete="off">{promo.Description}</textarea>
+                <textarea type="text" name="content" id="content" placeholder="Leuk berichtje" rows="8" cols="40" autocomplete="off">{promo.Description}</textarea>
             </div>
 
             <div class="flex">

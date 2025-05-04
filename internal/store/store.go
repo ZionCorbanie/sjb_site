@@ -211,7 +211,9 @@ type CalendarStore interface {
 type PromoStore interface {
 	SavePromo(promo *Promo) error
 	GetActivePromos() (*[]Promo, error)
+	GetAllPromos() (*[]Promo, error)
 	GetPromo(promoId string) (*Promo, error)
 	PatchPromo(promo Promo) error
 	DeletePromo(promoId string) error
+	DeleteInactivePromos() error
 }

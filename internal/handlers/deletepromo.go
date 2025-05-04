@@ -31,8 +31,23 @@ func (h *DeletePromoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    promos, err := h.store.GetActivePromos()
+    promos, err := h.store.GetAllPromos()
     err = templates.Promos(promos).Render(r.Context(), w)
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *DeletePromoHandler) DeleteInactivePromos(w http.ResponseWriter, r *http.Request) {
+	err := h.store.DeleteInactivePromos()
+	if err != nil {
+		http.Error(w, "Error deleting inactive promos", http.StatusInternalServerError)
+		return
+	}
+
+	promos, err := h.store.GetAllPromos()
+	err = templates.Promos(promos).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 		return

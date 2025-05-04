@@ -100,7 +100,7 @@ func (h *PutPromoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-	promos, err := h.promoStore.GetActivePromos()
+	promos, err := h.promoStore.GetAllPromos()
 	if err != nil {
 		http.Error(w, "Error getting promos", http.StatusInternalServerError)
 		return
