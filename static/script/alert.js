@@ -12,8 +12,19 @@ document.addEventListener("htmx:confirm", function(e) {
         cancelButtonText: "Annuleren",
         cancelButtonColor: "#3085d6",
     }).then(function(result) {
-      if (result.isConfirmed) {
-        e.detail.issueRequest(true);
-      }
+        if (result.isConfirmed) {
+            e.detail.issueRequest(true);
+        }
     })
-  })
+})
+
+document.addEventListener("htmx:beforeSwap", function(e) {
+    console.log(e.detail)
+    if (e.detail.isError) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oeps...',
+            text: e.detail.xhr.responseText,
+        })
+    }
+})
