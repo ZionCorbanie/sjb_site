@@ -16,6 +16,8 @@ templ header(title string) {
         <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico"/>
         <script defer src="/static/script/alpine.min.js"></script>
         <script src="/static/script/popup.js"></script>
+        <script src="/static/script/sweetalert2.min.js"></script>
+        <script src="/static/script/alert.js"></script>
 
         if os.Getenv("env") == "production" {
 			<link rel="stylesheet" href="/static/css/style.min.css"/>
