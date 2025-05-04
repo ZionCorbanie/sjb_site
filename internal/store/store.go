@@ -209,7 +209,7 @@ type CalendarStore interface {
 }
 
 type PromoStore interface {
-	CreatePromo(promo *Promo) error
+	SavePromo(promo *Promo) error
 	GetActivePromos() (*[]Promo, error)
 	GetPromo(promoId string) (*Promo, error)
 	PatchPromo(promo Promo) error

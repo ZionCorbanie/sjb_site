@@ -36,3 +36,143 @@ templ PromoPopup(promo *store.Promo) {
         <p>{ promo.Description }</p>
     </div>
 }
+
+templ Promos(promos *[]store.Promo){
+    <div id="promos" class="flex flex-col lg:flex-row w-full h-full">
+        <div id="promo" class="w-full lg:w-3/5 max-md:border-b-1 border-black pb-4">
+            @CreatePromo()
+        </div>
+        <div id="list" class="w-full lg:w-2/5">
+            @PromoList(promos)
+        </div>
+    </div>
+}
+
+templ PromoList(promos *[]store.Promo) {
+    <a href="/admin/promo" class="flex justify-center max-w-40 my-4 rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-red-500 focus-visible:outline  focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">
+        Nieuwe promo
+    </a>
+    <div class="border-1 border-black h-100 overflow-hidden overflow-y-scroll">
+        <div class="max-h-100 flex flex-col">
+            for _, promo := range *promos {
+                {{ promoClass := "flex justify-between hover:bg-stone-100 items-center px-4 h-10" }}
+                <div class={promoClass}>
+                    <div class="grow h-full cursor-pointer hover:underline flex items-center" 
+                        hx-trigger="click" hx-get={ fmt.Sprintf("/admin/promo/%d", promo.ID) } 
+                        hx-target="#promo" 
+                        hx-swap="innerHTML">
+                        <p>{ promo.Title }</p>
+                    </div>
+                    <span class="size-6 icon-[tabler--trash] text-red-500 hover:text-red-700 cursor-pointer" 
+                        hx-delete={ fmt.Sprintf("/admin/promo/%d", promo.ID) } 
+                        hx-target="#promos" 
+                        hx-swap="outerHTML"
+                        hx-confirm="Zeker dat je de promo wil verwijderen?">
+                    </span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+templ CreatePromo(){
+    <div class="lg:mt-10 flex justify-center" hx-ext="response-targets">
+        <form class="space-y-6" 
+            hx-post="/admin/promo"
+            hx-trigger="submit"
+            hx-target="#promos"
+            hx-swap="outerHTML"
+            enctype="multipart/form-data"
+            >
+            <label for="promoImage" class="cursor-pointer">
+                <div class="size-40 overflow-hidden">
+                    <img 
+                        id="promoImagePreview"
+                        class="w-full h-full object-cover object-center"
+                        alt="Promo foto"
+                        src="/static/img/placeholder-group.png"
+                    />
+                </div>
+            </label>
+            <input 
+                id="promoImage" 
+                type="file" 
+                name="image" 
+                class="hidden" 
+            />
+            <div>
+                <label for="title" class="block text-sm/6 font-medium text-gray-900">Titel</label>
+                <input type="text" name="title" id="title" value="" autocomplete="off">
+            </div>
+            <div>
+                <label for="content" class="block text-sm/6 font-medium text-gray-900">Bericht</label>
+                <textarea type="text" name="content" id="content" placeholder="Leuk berichtje" value="" rows="8" cols="50" autocomplete="off"></textarea>
+            </div>
+
+            <div class="flex">
+                <div>
+                    <label for="startDate" class="block text-sm/6 font-medium text-gray-900">Actief vanaf</label>
+                    <input type="date" name="startDate" id="startDate" >
+                </div>
+                <div>
+                    <label for="endDate" class="block text-sm/6 font-medium text-gray-900">Actief tot</label>
+                    <input type="date" name="endDate" id="endDate" >
+                </div>
+            </div>
+
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Nieuwe promo maken</button>
+        </form>
+    </div>
+    <script src="/static/script/uploadImage.js"></script>
+} 
+
+templ EditPromo(promo *store.Promo){
+    <div class="lg:mt-10 flex justify-center" hx-ext="response-targets">
+        <form class="space-y-6" 
+            hx-put={ fmt.Sprintf("/admin/promo/%d", promo.ID) }
+            hx-trigger="submit"
+            hx-target="#promos"
+            hx-swap="outerHTML"
+            enctype="multipart/form-data"
+            >
+            <label for="promoImage" class="cursor-pointer">
+                <div class="size-40 overflow-hidden">
+                    <img 
+                        id="promoImagePreview"
+                        class="w-full h-full object-cover object-center"
+                        alt="Promo foto"
+                        src={ promo.Image }
+                    />
+                </div>
+            </label>
+            <input 
+                id="promoImage" 
+                type="file" 
+                name="image" 
+                class="hidden" 
+            />
+            <div>
+                <label for="title" class="block text-sm/6 font-medium text-gray-900">Titel</label>
+                <input type="text" name="title" id="title" value={promo.Title} autocomplete="off">
+            </div>
+            <div>
+                <label for="content" class="block text-sm/6 font-medium text-gray-900">Bericht</label>
+                <textarea type="text" name="content" id="content" placeholder="Leuk berichtje" rows="8" cols="50" autocomplete="off">{promo.Description}</textarea>
+            </div>
+
+            <div class="flex">
+                <div>
+                    <label for="startDate" class="block text-sm/6 font-medium text-gray-900">Actief vanaf</label>
+                    <input type="date" name="startDate" id="startDate" value={ promo.StartDate.Format("2006-01-02")}>
+                </div>
+                <div>
+                    <label for="endDate" class="block text-sm/6 font-medium text-gray-900">Actief tot</label>
+                    <input type="date" name="endDate" id="endDate" value={ promo.EndDate.Format("2006-01-02")}>
+                </div>
+            </div>
+
+            <button type="submit" class="flex w-60 justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 cursor-pointer">Promo opslaan</button>
+        </form>
+    </div>
+    <script src="/static/script/uploadImage.js"></script>
+}

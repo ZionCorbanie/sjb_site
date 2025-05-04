@@ -21,8 +21,8 @@ func NewPromoStore(params NewPromoStoreParams) *PromoStore {
 	}
 }
 
-func (s *PromoStore) CreatePromo(promo *store.Promo) error {
-	return s.db.Create(promo).Error
+func (s *PromoStore) SavePromo(promo *store.Promo) error {
+	return s.db.Save(promo).Error
 }
 
 func (s *PromoStore) GetActivePromos() (*[]store.Promo, error) {

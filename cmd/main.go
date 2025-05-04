@@ -256,6 +256,23 @@ func main() {
                     PostStore: postStore,
                 }).ServeHTTP)
             })
+			r.Route("/promo", func(r chi.Router) {
+				r.Get("/{promoId}", handlers.NewPromoEditHandler(handlers.PromoEditHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Get("/", handlers.NewPrikbordCreateHandler(handlers.PrikbordCreateHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Post("/", handlers.NewPutPromoHandler(handlers.PutPromoHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Put("/{promoId}", handlers.NewPutPromoHandler(handlers.PutPromoHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+				r.Delete("/{promoId}", handlers.NewDeletePromoHandler(handlers.DeletePromoHandlerParams{
+					PromoStore: promoStore,
+				}).ServeHTTP)
+			})
             r.Post("/upload", handlers.NewPostUploadHandler().ServeHTTP)
 			r.Route("/leden", func(r chi.Router) {
 				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
