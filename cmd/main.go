@@ -114,6 +114,7 @@ func main() {
 			m.TextHTMLMiddleware,
 			// m.CSPMiddleware,
 			authMiddleware.AddUserToContext,
+			m.MetricsMiddleware,
 		)
 
 		r.NotFound(handlers.NewNotFoundHandler().ServeHTTP)
@@ -382,6 +383,7 @@ func main() {
 }
 
 func startMetricsServer() {
+
     mux := http.NewServeMux()
     mux.Handle("/metrics", promhttp.Handler())
 
