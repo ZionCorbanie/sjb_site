@@ -19,12 +19,20 @@ document.addEventListener("htmx:confirm", function(e) {
 })
 
 document.addEventListener("htmx:beforeSwap", function(e) {
-    console.log(e.detail)
     if (e.detail.isError) {
+        e.preventDefault();
         Swal.fire({
             icon: 'error',
             title: 'Oeps...',
             text: e.detail.xhr.responseText,
-        })
+        });
     }
 })
+
+document.addEventListener("message", function(e){
+    Swal.fire({
+        icon: 'success',
+        title: 'success',
+        text: e.detail.value,
+    });
+});

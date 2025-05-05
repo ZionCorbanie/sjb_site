@@ -43,7 +43,6 @@ func (h *PutPromoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
     title := r.FormValue("title")
     content := r.FormValue("content")
-	fmt.Println("datum: ", r.Form.Get("startDate"))
     startDate, err := time.Parse("2006-01-02", r.Form.Get("startDate"))
 	if err != nil {
 		http.Error(w, "Invalid start date", http.StatusBadRequest)
