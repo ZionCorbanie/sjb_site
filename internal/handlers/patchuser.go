@@ -100,5 +100,6 @@ func (h *PatchUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sendPopup(w, "Account van aangepast")
 	w.Header().Add("Hx-Redirect", fmt.Sprintf("/webalmanak/leden/%d", userId))
 }

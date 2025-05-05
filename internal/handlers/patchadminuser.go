@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"sjb_site/internal/middleware"
 	"sjb_site/internal/store"
@@ -59,5 +60,6 @@ func (h *PatchAdminUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	sendPopup(w, fmt.Sprintf("Account van %s aangepast", firstname))
 	w.Header().Add("Hx-Redirect", "/admin/leden/")
 }

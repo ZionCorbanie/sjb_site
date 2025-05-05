@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"sjb_site/internal/store"
 	"sjb_site/internal/store/dbstore"
-	"sjb_site/internal/templates"
 	"time"
 )
 
@@ -26,7 +25,7 @@ func (h *PostMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     date, err := time.Parse("2006-01-02", r.Form.Get("date"))
     if err != nil {
-        templates.MenuError(err).Render(r.Context(), w)
+		http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
     id := uint(date.Unix() / (60*60*24))
@@ -42,9 +41,9 @@ func (h *PostMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
     err = h.store.CreateMenu(menu)
     if err != nil {
-        templates.MenuError(err).Render(r.Context(), w)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
 
-    templates.MenuError(nil).Render(r.Context(), w)
+	sendPopup(w, "Menu toegevoegd")
 }

@@ -94,5 +94,6 @@ func (h *PatchPostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sendPopup(w, "Post aangepast")
 	w.Header().Add("Hx-Redirect", fmt.Sprintf("/post/%d", postId))
 }

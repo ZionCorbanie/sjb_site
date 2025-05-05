@@ -27,10 +27,9 @@ func (h *DeleteCommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
     commentID := chi.URLParam(r, "commentId")
     postID := chi.URLParam(r, "postId")
 
-    //get post
     comment, err := h.store.GetComment(commentID)
     if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
 
@@ -41,7 +40,7 @@ func (h *DeleteCommentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 
     err = h.store.DeleteComment(commentID)
     if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
 

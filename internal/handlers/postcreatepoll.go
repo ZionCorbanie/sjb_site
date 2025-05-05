@@ -51,5 +51,6 @@ func (h *PostCreatePollHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
         return
     }
 
+	sendPopup(w, "Poll gemaakt")
     templates.Polls(polls).Render(r.Context(), w)
 }
