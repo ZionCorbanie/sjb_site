@@ -48,5 +48,6 @@ func (h *DeletePostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sendPopup(w, "Post verwijderd")
 	w.Header().Add("Hx-Redirect", "/posts")
 }

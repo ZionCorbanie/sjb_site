@@ -37,6 +37,7 @@ func (h *DeletePromoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 		return
 	}
+	sendPopup(w, "Promo verwijderd")
 }
 
 func (h *DeletePromoHandler) DeleteInactivePromos(w http.ResponseWriter, r *http.Request) {
@@ -52,4 +53,6 @@ func (h *DeletePromoHandler) DeleteInactivePromos(w http.ResponseWriter, r *http
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 		return
 	}
+
+	sendPopup(w, "Alle inactieve posts verwijderd")
 }

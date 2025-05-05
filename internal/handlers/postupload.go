@@ -23,7 +23,6 @@ func (h *PostUploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-    //handle file upload
     file, header, err := r.FormFile("image")
     if err != nil {
         http.Error(w, "Failed to get image", http.StatusBadRequest)

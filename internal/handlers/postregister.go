@@ -20,6 +20,7 @@ func NewPostRegisterHandler(params PostRegisterHandlerParams) *PostRegisterHandl
 	}
 }
 
+//TODO deze functie mag op de uiteindelijke site niet bestaan
 func (h *PostRegisterHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")

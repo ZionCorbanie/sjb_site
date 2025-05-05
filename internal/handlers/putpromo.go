@@ -105,5 +105,10 @@ func (h *PutPromoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if r.Method == "POST"{
+		sendPopup(w, "Promo aangemaakt")
+	}else{
+		sendPopup(w, "Promo aangepast")
+	}
 	templates.Promos(promos).Render(r.Context(), w)
 }

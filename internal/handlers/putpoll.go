@@ -59,5 +59,6 @@ func (h *PutPollHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+	sendPopup(w, "Poll aangepast")
     templates.Polls(polls).Render(r.Context(), w)
 }
