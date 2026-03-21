@@ -9,21 +9,21 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type CalendarDayHandler struct{
+type CalendarHandler struct{
     calendarStore store.CalendarStore
 }
 
-type CalendarDayHandlerParams struct {
+type CalendarHandlerParams struct {
     CalendarStore store.CalendarStore
 }
 
-func NewCalendarDayHandler(params CalendarDayHandlerParams) *CalendarDayHandler {
-	return &CalendarDayHandler{
+func NewCalendarHandler(params CalendarHandlerParams) *CalendarHandler {
+	return &CalendarHandler{
         calendarStore: params.CalendarStore,
     }
 }
 
-func (h *CalendarDayHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *CalendarHandler) Day(w http.ResponseWriter, r *http.Request) {
 	day, err := strconv.ParseInt(chi.URLParam(r, "day"), 10, 64)
 	if err != nil {
 		http.Error(w, "Invalid day parameter", http.StatusBadRequest)
@@ -43,6 +43,22 @@ func (h *CalendarDayHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
     err = templates.CalendarDay(int(day),events).Render(r.Context(), w)
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *CalendarHandler) Popup(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "eventId")
+	
+    event, err := h.calendarStore.GetCalendarItem(id)
+    if err != nil {
+        http.Error(w, "Error getting event", http.StatusInternalServerError)
+        return
+    }
+
+    err = templates.Popup(templates.CalendarPopup(event)).Render(r.Context(), w)
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 		return

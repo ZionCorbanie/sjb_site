@@ -1,27 +1,39 @@
-package handlers
+package admin
 
 import (
 	"net/http"
+	"sjb_site/internal/handlers"
 	"sjb_site/internal/store"
 	"sjb_site/internal/store/dbstore"
+	"sjb_site/internal/templates"
 	"time"
 )
 
-type PostMenuHandler struct{
+type MenuHandler struct{
     store *dbstore.MenuStore
 }
 
-type PostMenuHandlerParams struct {
+type MenuHandlerParams struct {
     MenuStore *dbstore.MenuStore
 }
 
-func NewPostMenuHandler(params PostMenuHandlerParams) *PostMenuHandler {
-    return &PostMenuHandler{
+func NewMenuHandler(params MenuHandlerParams) *MenuHandler {
+    return &MenuHandler{
         store: params.MenuStore,
     }
 }
 
-func (h *PostMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *MenuHandler) New(w http.ResponseWriter, r *http.Request) {
+    c := templates.CreateMenu()
+	err := templates.Layout(templates.Card(c), "Menu toevoegen").Render(r.Context(), w)
+
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *MenuHandler) Create(w http.ResponseWriter, r *http.Request) {
     r.ParseForm()
     date, err := time.Parse("2006-01-02", r.Form.Get("date"))
     if err != nil {
@@ -45,5 +57,5 @@ func (h *PostMenuHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-	sendPopup(w, "Menu toegevoegd")
+	handlers.SendPopup(w, "Menu toegevoegd")
 }

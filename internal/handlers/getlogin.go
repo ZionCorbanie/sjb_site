@@ -19,7 +19,7 @@ func (h *GetLoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 
 	c := templates.Login("Login", target)
-	err := templates.Layout(c, "My website").Render(r.Context(), w)
+	err := templates.Layout(c, "Sint Jansbrug - Login").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

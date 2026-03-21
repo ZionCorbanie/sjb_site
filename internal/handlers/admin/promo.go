@@ -1,4 +1,4 @@
-package handlers
+package admin
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sjb_site/internal/handlers"
 	"sjb_site/internal/store"
 	"sjb_site/internal/templates"
 	"strconv"
@@ -15,21 +16,54 @@ import (
 	"github.com/google/uuid"
 )
 
-type PutPromoHandler struct{
+type PromoHandler struct{
     promoStore store.PromoStore
 }
 
-type PutPromoHandlerParams struct {
+type PromoHandlerParams struct {
     PromoStore store.PromoStore
 }
 
-func NewPutPromoHandler(params PutPromoHandlerParams) *PutPromoHandler {
-    return &PutPromoHandler{
+func NewPromoHandler(params PromoHandlerParams) *PromoHandler {
+	return &PromoHandler{
         promoStore: params.PromoStore,
     }
 }
 
-func (h *PutPromoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *PromoHandler) New(w http.ResponseWriter, r *http.Request) {
+	promos, err := h.promoStore.GetAllPromos()
+	if err != nil {
+		http.Error(w, "Error getting promos", http.StatusInternalServerError)
+		return
+	}
+
+	err = templates.Layout(templates.Card(templates.Promos(promos)), "Promo maken").Render(r.Context(), w)
+
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+}
+
+
+func (h *PromoHandler) Edit(w http.ResponseWriter, r *http.Request) {
+	promoId := chi.URLParam(r, "promoId")
+
+	promo, err := h.promoStore.GetPromo(promoId)
+	if err != nil {
+		http.Error(w, "Error getting promos", http.StatusInternalServerError)
+		return
+	}
+
+	err = templates.EditPromo(promo).Render(r.Context(), w)
+
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *PromoHandler) Put(w http.ResponseWriter, r *http.Request) {
     promoId, err := strconv.ParseInt(chi.URLParam(r, "promoId"), 10, 64)
 	if err != nil {
 		promoId = 0
@@ -106,9 +140,44 @@ func (h *PutPromoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == "POST"{
-		sendPopup(w, "Promo aangemaakt")
+		handlers.SendPopup(w, "Promo aangemaakt")
 	}else{
-		sendPopup(w, "Promo aangepast")
+		handlers.SendPopup(w, "Promo aangepast")
 	}
 	templates.Promos(promos).Render(r.Context(), w)
+}
+
+func (h *PromoHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	promoId := chi.URLParam(r, "promoId")
+    
+    err := h.promoStore.DeletePromo(promoId)
+	if err != nil {
+		http.Error(w, "Error deleting promos", http.StatusInternalServerError)
+		return
+	}
+
+    promos, err := h.promoStore.GetAllPromos()
+    err = templates.Promos(promos).Render(r.Context(), w)
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+	handlers.SendPopup(w, "Promo verwijderd")
+}
+
+func (h *PromoHandler) DeleteInactive(w http.ResponseWriter, r *http.Request) {
+	err := h.promoStore.DeleteInactivePromos()
+	if err != nil {
+		http.Error(w, "Error deleting inactive promos", http.StatusInternalServerError)
+		return
+	}
+
+	promos, err := h.promoStore.GetAllPromos()
+	err = templates.Promos(promos).Render(r.Context(), w)
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+
+	handlers.SendPopup(w, "Alle inactieve posts verwijderd")
 }

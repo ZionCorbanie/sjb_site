@@ -4,6 +4,6 @@ import (
 	"net/http"
 )
 
-func sendPopup(w http.ResponseWriter, message string) {
+func SendPopup(w http.ResponseWriter, message string) {
 	w.Header().Set("HX-Trigger", `{"message": "` + message + `"}`)
 }
