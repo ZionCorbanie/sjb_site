@@ -10,24 +10,24 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type GetGroupHandler struct {
+type GroupHandler struct {
 	GroupStore     store.GroupStore
 	GroupUserStore store.GroupUserStore
 }
 
-type GetGroupHandlerParams struct {
+type GroupHandlerParams struct {
 	GroupStore     store.GroupStore
 	GroupUserStore store.GroupUserStore
 }
 
-func NewGroupHandler(params GetGroupHandlerParams) *GetGroupHandler {
-	return &GetGroupHandler{
+func NewGroupHandler(params GroupHandlerParams) *GroupHandler {
+	return &GroupHandler{
 		GroupStore:     params.GroupStore,
 		GroupUserStore: params.GroupUserStore,
 	}
 }
 
-func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *GroupHandler) Show(w http.ResponseWriter, r *http.Request) {
 	groupId := chi.URLParam(r, "groupId")
 	group, err := h.GroupStore.GetGroup(groupId)
 	if err != nil {
@@ -69,6 +69,28 @@ func (h *GetGroupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	c := templates.Group(group, users, isVoorzitter)
 	err = templates.BannerLayout(templates.Sidebar(templates.Card(c), templates.Card(s)), group.Image, group.Name).Render(r.Context(), w)
+
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *GroupHandler) List(w http.ResponseWriter, r *http.Request) {
+	groupType := chi.URLParam(r, "groupType")
+
+	groups, err := h.GroupStore.GetGroupsByType(groupType)
+	if err != nil {
+		err = templates.NotFound().Render(r.Context(), w)
+		if err != nil {
+			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+			return
+		}
+		return
+	}
+
+	c := templates.Groups(groups)
+	err = templates.Layout(templates.Card(c), "Sint Jansbrug").Render(r.Context(), w)
 
 	if err != nil {
 		http.Error(w, "Error rendering template", http.StatusInternalServerError)

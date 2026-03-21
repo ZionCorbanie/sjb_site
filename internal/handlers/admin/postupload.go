@@ -1,4 +1,4 @@
-package handlers
+package admin
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ func NewPostUploadHandler() *PostUploadHandler {
 	return &PostUploadHandler{}
 }
 
-func (h *PostUploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *PostUploadHandler) Upload(w http.ResponseWriter, r *http.Request) {
 	if !middleware.IsAdmin(r.Context()) {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return

@@ -10,22 +10,22 @@ import (
 	"time"
 )
 
-type PostLoginHandler struct {
+type LoginHandler struct {
 	userStore         store.UserStore
 	sessionStore      store.SessionStore
 	passwordhash      hash.PasswordHash
 	sessionCookieName string
 }
 
-type PostLoginHandlerParams struct {
+type LoginHandlerParams struct {
 	UserStore         store.UserStore
 	SessionStore      store.SessionStore
 	PasswordHash      hash.PasswordHash
 	SessionCookieName string
 }
 
-func NewPostLoginHandler(params PostLoginHandlerParams) *PostLoginHandler {
-	return &PostLoginHandler{
+func NewLoginHandler(params LoginHandlerParams) *LoginHandler {
+	return &LoginHandler{
 		userStore:         params.UserStore,
 		sessionStore:      params.SessionStore,
 		passwordhash:      params.PasswordHash,
@@ -33,7 +33,23 @@ func NewPostLoginHandler(params PostLoginHandlerParams) *PostLoginHandler {
 	}
 }
 
-func (h *PostLoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *LoginHandler) Show(w http.ResponseWriter, r *http.Request) {
+    target := r.URL.Query().Get("redirect")
+
+    if target == "" {
+        target = "/"
+    }
+
+	c := templates.Login("Login", target)
+	err := templates.Layout(c, "Sint Jansbrug - Login").Render(r.Context(), w)
+
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		return
+	}
+}
+
+func (h *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	username := r.FormValue("username")
 	password := r.FormValue("password")
@@ -84,5 +100,18 @@ func (h *PostLoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     target := r.URL.Query().Get("redirect")
 
 	w.Header().Set("HX-Redirect", target)
+	w.WriteHeader(http.StatusOK)
+}
+
+func (h *LoginHandler) Logout(w http.ResponseWriter, r *http.Request) {
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    h.sessionCookieName,
+		MaxAge:  -1,
+		Expires: time.Now().Add(-100 * time.Hour),
+		Path:    "/",
+	})
+
+	w.Header().Set("HX-Redirect", "/")
 	w.WriteHeader(http.StatusOK)
 }
