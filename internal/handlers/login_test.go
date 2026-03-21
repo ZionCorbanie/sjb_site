@@ -79,7 +79,7 @@ func TestLogin(t *testing.T) {
 				sessionStore.On("CreateSession", &store.Session{UserID: tc.getUserResult.ID}).Return(tc.createSessionResult, nil)
 			}
 
-			handler := NewPostLoginHandler(PostLoginHandlerParams{
+			handler := NewLoginHandler(LoginHandlerParams{
 				UserStore:         userStore,
 				SessionStore:      sessionStore,
 				PasswordHash:      passwordHash,
@@ -90,7 +90,7 @@ func TestLogin(t *testing.T) {
 			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 			rr := httptest.NewRecorder()
 
-			handler.ServeHTTP(rr, req)
+			handler.Login(rr, req)
 
 			assert.Equal(tc.expectedStatusCode, rr.Code, "handler returned wrong status code: got %v want %v", rr.Code, tc.expectedStatusCode)
 

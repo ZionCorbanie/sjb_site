@@ -84,7 +84,7 @@ func (h *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 	userID := user.ID
 	sessionID := session.SessionID
 
-	cookieValue := b64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%d", sessionID, userID)))
+	cookieValue := b64.StdEncoding.EncodeToString(fmt.Appendf(nil, "%s:%d", sessionID, userID))
 
 	expiration := time.Now().Add(365 * 24 * time.Hour)
 	cookie := http.Cookie{
