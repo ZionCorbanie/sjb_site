@@ -145,7 +145,9 @@ func main() {
             MenuStore: menuStore,
         }).Day)
 
-        r.Get("/eettafel", handlers.NewEettafelHandler().ServeHTTP)
+        r.Get("/eettafel", handlers.NewMenuHandler(handlers.MenuHandlerParams{
+			MenuStore: menuStore,
+		}).Eettafel)
         r.Get("/eettafel/{pageId}", handlers.NewMenuHandler(handlers.MenuHandlerParams{
             MenuStore: menuStore,
         }).Week)
