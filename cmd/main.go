@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"sjb_site/internal/config"
 	"sjb_site/internal/handlers"
+	"sjb_site/internal/handlers/admin"
 	"sjb_site/internal/hash/passwordhash"
 	database "sjb_site/internal/store/db"
 	"sjb_site/internal/store/dbstore"
@@ -124,94 +125,91 @@ func main() {
             MenuStore: menuStore,
         }).ServeHTTP)
 
+		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)
 		r.Get("/info", handlers.NewInfoHandler().ServeHTTP)
 
-        r.Get("/post/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
-            PostStore: postStore,
-        }).ServeHTTP)
+		r.Get("/post/{postId}", handlers.NewPostHandler(handlers.PostHandlerParams{
+			PostStore: postStore,
+		}).Show)
 
-        r.Get("/posts", handlers.NewPostsHandler(handlers.PostsHandlerParams{
-            PostsStore: postStore,
-        }).ServeHTTP)
-        r.Get("/posts/{page}", handlers.NewPostsHandler(handlers.PostsHandlerParams{
-            PostsStore: postStore,
-        }).ServeHTTP)
+		r.Route("/posts", func(r chi.Router){
+			handler := handlers.NewPostHandler(handlers.PostHandlerParams{
+				PostStore: postStore,
+			})
 
-        r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.GetMenuHandlerParams{
+			r.Get("/", handler.List)
+			//r.Get("/{page}", handler.List)
+		})
+
+        r.Get("/menu/{menuId}", handlers.NewMenuHandler(handlers.MenuHandlerParams{
             MenuStore: menuStore,
-        }).ServeHTTP)
+        }).Day)
 
-        r.Get("/eettafel", handlers.NewEettafelHandler().ServeHTTP)
-        r.Get("/eettafel/{pageId}", handlers.NewWeekMenuHandler(handlers.GetWeekMenuHandlerParams{
-            WeekMenuStore: menuStore,
-        }).ServeHTTP)
+        r.Get("/eettafel", handlers.NewMenuHandler(handlers.MenuHandlerParams{
+			MenuStore: menuStore,
+		}).Eettafel)
+        r.Get("/eettafel/{pageId}", handlers.NewMenuHandler(handlers.MenuHandlerParams{
+            MenuStore: menuStore,
+        }).Week)
 
 		//Need to be logged in to access these routes
 		r.Group(func(r chi.Router) {
 			r.Use(authMiddleware.LoggedIn)
 
 			r.Route("/comments/{postId}", func(r chi.Router) {
-				r.Get("/", handlers.NewCommentsHandler(handlers.CommentsHandlerParams{
+				handler := handlers.NewCommentHandler(handlers.CommentHandlerParams{
 					CommentStore: commentStore,
-				}).ServeHTTP)
-				r.Post("/", handlers.NewPostCommentHandler(handlers.PostCommentHandlerParams{
-					CommentStore: commentStore,
-				}).ServeHTTP)
-				r.Delete("/{commentId}", handlers.NewDeleteCommentHandler(handlers.DeleteCommentHandlerParams{
-					CommentStore: commentStore,
-				}).ServeHTTP)
+				})
+				r.Get("/", handler.List)
+				r.Post("/", handler.Create)
+				r.Delete("/{commentId}", handler.Delete)
 			})
 
             r.Route("/poll", func(r chi.Router) {
-				r.Get("/", handlers.NewGetPollHandler(handlers.GetPollHandlerParams{
+				handler := handlers.NewPollHandler(handlers.PollHandlerParams{
 					PollStore: pollStore,
-				}).ServeHTTP)
+				})
+				r.Get("/", handler.Show)
 
 				r.Route("/{pollId}", func(r chi.Router) {
-					r.Post("/", handlers.NewPostPollVoteHandler(handlers.PostPollVoteHandlerParams{
-						PollStore: pollStore,
-					}).ServeHTTP)
-					r.Delete("/", handlers.NewDeletePollVoteHandler(handlers.DeletePollVoteHandlerParams{
-						PollStore: pollStore,
-					}).ServeHTTP)
+					r.Post("/", handler.Vote)
+					r.Delete("/", handler.RemoveVote)
 				})
 			})
 
-			r.Route("/prikbord", func(r chi.Router) {
-				r.Get("/", handlers.NewPrikbordHandler(handlers.PrikbordHandlerParams{
-					PrikbordStore: promoStore,
-				}).ServeHTTP)
-				r.Get("/{promoId}", handlers.NewPrikbordPopupHandler(handlers.PrikbordPopupHandlerParams{
-					PrikbordPopupStore: promoStore,
-				}).ServeHTTP)
+			r.Route("/promo", func(r chi.Router) {
+				handler := handlers.NewPromoHandler(handlers.PromoHandlerParams{
+					PromoStore: promoStore,
+				})
+				r.Get("/", handler.Show)
+				r.Get("/{promoId}", handler.Popup)
 			})
 
 			r.Route("/agenda", func(r chi.Router) {
-				r.Get("/{day}", handlers.NewCalendarDayHandler(handlers.CalendarDayHandlerParams{
+				handler := handlers.NewCalendarHandler(handlers.CalendarHandlerParams{
 					CalendarStore: calendarStore,
-				}).ServeHTTP)
-				r.Get("/{eventId}/popup", handlers.NewCalendarPopupHandler(handlers.CalendarPopupHandlerParams{
-					CalendarStore: calendarStore,
-				}).ServeHTTP)
+				})
+				r.Get("/{day}", handler.Day)
+				r.Get("/{eventId}/popup", handler.Popup)
 			})
 
 			r.Route("/webalmanak", func(r chi.Router) {
 				r.Route("/leden", func(r chi.Router) {
-					r.Get("/", handlers.NewUserSearchHandler().ServeHTTP)
-					r.Post("/", handlers.NewPostUserSearchHandler(handlers.PostUserSearchHandlerParams{
+					handler := handlers.NewUserHandler(handlers.UserHandlerParams{
 						UserStore: userStore,
-					}).ServeHTTP)
+						GroupUserStore: groupUserStore,
+					})
+					r.Get("/", handler.List)
+					r.Post("/", handler.Search)
 
-					r.Get("/{userId}", handlers.NewUserHandler(handlers.GetUserHandlerParams{
-						UserStore: userStore,
-                        GroupUserStore: groupUserStore,
-					}).ServeHTTP)
-					r.Get("/{userId}/edit", handlers.NewUserEditHandler(handlers.GetUserEditHandlerParams{
-						UserStore: userStore,
-					}).ServeHTTP)
-					r.Patch("/{userId}/edit", handlers.NewPatchtUserHandler(handlers.PatchUserHandlerParams{
-						UserStore: userStore,
-					}).ServeHTTP)
+					r.Get("/{userId}", handler.Show)
+					r.Get("/{userId}/edit", handler.Edit)
+					r.Patch("/{userId}/edit", handler.Patch)
+				})
+
+				handler := handlers.NewGroupHandler(handlers.GroupHandlerParams{
+					GroupStore: groupStore,
+					GroupUserStore: groupUserStore,
 				})
                 r.Route("/jaarclubs", func(r chi.Router) {
                     r.Get("/", handlers.NewJaarclubsHandler(handlers.GetJaarclubsHandlerParams{
@@ -227,121 +225,90 @@ func main() {
                     }).ServeHTTP)
 				})
 				r.Route("/{groupType}", func(r chi.Router) {
-					r.Get("/", handlers.NewGroupsHandler(handlers.GetGroupsHandlerParams{
-						GroupStore: groupStore,
-					}).ServeHTTP)
+					r.Get("/", handler.List)
 				})
-				r.Get("/groep/{groupId}", handlers.NewGroupHandler(handlers.GetGroupHandlerParams{
-					GroupStore:     groupStore,
-					GroupUserStore: groupUserStore,
-				}).ServeHTTP)
+				r.Get("/groep/{groupId}", handler.Show)
 			})
 		})
 
 		r.Route("/admin", func(r chi.Router) {
 			r.Use(authMiddleware.IsAdmin)
-			r.Get("/", handlers.NewAdminHandler().ServeHTTP)
-			r.Get("/menu", handlers.NewGetCreateMenuHandler().ServeHTTP)
-			r.Post("/menu", handlers.NewPostMenuHandler(handlers.PostMenuHandlerParams{
-				MenuStore: menuStore,
-			}).ServeHTTP)
-            r.Route("/post", func(r chi.Router) {
-                r.Get("/", handlers.NewGetCreatePostHandler().ServeHTTP)
-                r.Post("/", handlers.NewPostCreatePostHandler(handlers.PostCreatePostHandlerParams{
-                    PostStore: postStore,
-                }).ServeHTTP) 
-                r.Get("/{postId}", handlers.NewPostEditHandler(handlers.GetPostEditHandlerParams{
-                    PostStore: postStore,
-                }).ServeHTTP)
-                r.Patch("/{postId}", handlers.NewPatchPostHandler(handlers.PatchPostHandlerParams{
-                    PostStore: postStore,
-                }).ServeHTTP)
-                r.Delete("/{postId}", handlers.NewDeletePostHandler(handlers.DeletePostHandlerParams{
-                    PostStore: postStore,
-                }).ServeHTTP)
-            })
-			r.Route("/promo", func(r chi.Router) {
-				r.Get("/{promoId}", handlers.NewPromoEditHandler(handlers.PromoEditHandlerParams{
-					PromoStore: promoStore,
-				}).ServeHTTP)
-				r.Get("/", handlers.NewPrikbordCreateHandler(handlers.PrikbordCreateHandlerParams{
-					PromoStore: promoStore,
-				}).ServeHTTP)
-				r.Post("/", handlers.NewPutPromoHandler(handlers.PutPromoHandlerParams{
-					PromoStore: promoStore,
-				}).ServeHTTP)
-				r.Put("/{promoId}", handlers.NewPutPromoHandler(handlers.PutPromoHandlerParams{
-					PromoStore: promoStore,
-				}).ServeHTTP)
-				r.Delete("/{promoId}", handlers.NewDeletePromoHandler(handlers.DeletePromoHandlerParams{
-					PromoStore: promoStore,
-				}).ServeHTTP)
-				r.Delete("/inactive", handlers.NewDeletePromoHandler(handlers.DeletePromoHandlerParams{
-					PromoStore: promoStore,
-				}).DeleteInactivePromos)
+			r.Get("/", admin.NewAdminHandler().ServeHTTP)
+			r.Route("/menu", func(r chi.Router) {
+				handler := admin.NewMenuHandler(admin.MenuHandlerParams{
+					MenuStore: menuStore,
+				})
+				r.Get("/", handler.New)
+				r.Post("/", handler.Create)
 			})
-            r.Post("/upload", handlers.NewPostUploadHandler().ServeHTTP)
+
+            r.Route("/post", func(r chi.Router) {
+				handler := admin.NewPostHandler(admin.PostHandlerParam{
+					PostStore: postStore,
+				})
+                r.Get("/", handler.New)
+                r.Post("/", handler.Create) 
+                r.Get("/{postId}", handler.Edit)
+                r.Patch("/{postId}", handler.Patch)
+                r.Delete("/{postId}", handler.Delete)
+            })
+            r.Post("/upload", admin.NewPostUploadHandler().Upload)
+			r.Route("/promo", func(r chi.Router) {
+				handler := admin.NewPromoHandler(admin.PromoHandlerParams{
+					PromoStore: promoStore,
+				})
+				r.Get("/", handler.New)
+				r.Post("/", handler.Put) //Same logic as put
+				r.Delete("/inactive", handler.DeleteInactive)
+
+				r.Get("/{promoId}", handler.Edit)
+				r.Put("/{promoId}", handler.Put)
+				r.Delete("/{promoId}", handler.Delete)
+			})
 			r.Route("/leden", func(r chi.Router) {
-				r.Get("/", handlers.NewGetUserManagementHandler().ServeHTTP)
-				r.Post("/", handlers.NewPostUserManagementHandler(handlers.PostUserManagementHandlerParams{
+				handler := admin.NewUserHandler(admin.UserHandlerParams{
 					UserStore: userStore,
-				}).ServeHTTP)
+				})				
+				r.Get("/", handler.List)
+				r.Post("/", handler.Search)
 				r.Route("/{userId}", func(r chi.Router) {
-					r.Get("/", handlers.NewAdminUserHandler(handlers.GetAdminUserHandlerParams{
-						UserStore: userStore,
-					}).ServeHTTP)
-					r.Patch("/", handlers.NewPatchAdminUserHandler(handlers.PatchAdminUserHandlerParams{
-						UserStore: userStore,
-					}).ServeHTTP)
-					r.Delete("/delete", handlers.NewDeleteUserHandler(handlers.DeleteUserHandlerParams{
-						UserStore: userStore,
-					}).ServeHTTP)
+					r.Get("/", handler.Edit)
+					r.Patch("/", handler.Patch)
+					r.Delete("/", handler.Delete)
 				})
 			})
             r.Route("/poll", func(r chi.Router) {
-                r.Get("/", handlers.NewGetCreatePollHandler(handlers.GetCreatePollHandlerParams{
+				handler := admin.NewPollHandler(admin.PollHandlerParams{
                     PollStore: pollStore,
-                }).ServeHTTP)
-                r.Post("/", handlers.NewPostCreatePollHandler(handlers.PostCreatePollHandlerParams{
-                    PollStore: pollStore,
-                }).ServeHTTP)
+                })
+                r.Get("/", handler.New)
+                r.Post("/", handler.Create)
                 r.Route("/{pollId}", func(r chi.Router) {
-                    r.Get("/", handlers.NewGetPollEditHandler(handlers.GetPollEditHandlerParams{
-                        PollStore: pollStore,
-                    }).ServeHTTP)
-                    r.Put("/", handlers.NewPutPollHandler(handlers.PutPollHandlerParams{
-                        PollStore: pollStore,
-                    }).ServeHTTP)
-                    r.Delete("/", handlers.NewDeletePollHandler(handlers.DeletePollHandlerParams{
-                        PollStore: pollStore,
-                    }).ServeHTTP)
-                    r.Post("/activate", handlers.NewPostPollActivateHandler(handlers.PostPollActivateHandlerParams{
-                        PollStore: pollStore,
-                    }).ServeHTTP)
+                    r.Get("/", handler.Edit)
+                    r.Put("/", handler.Put)
+                    r.Delete("/", handler.Delete)
+                    r.Post("/activate", handler.Activate)
                 })
             })
         })
 
-		r.Get("/about", handlers.NewAboutHandler().ServeHTTP)
+		r.Route("/register", func(r chi.Router) {
+			handler := handlers.NewRegisterHandler(handlers.RegisterHandlerParams{
+				UserStore: userStore,
+			})
+			r.Get("/", handler.Show)
+			r.Post("/", handler.Register)
+		})
 
-		r.Get("/register", handlers.NewGetRegisterHandler().ServeHTTP)
-
-		r.Post("/register", handlers.NewPostRegisterHandler(handlers.PostRegisterHandlerParams{
-			UserStore: userStore,
-		}).ServeHTTP)
-
-		r.Get("/login", handlers.NewGetLoginHandler().ServeHTTP)
-
-		r.Post("/login", handlers.NewPostLoginHandler(handlers.PostLoginHandlerParams{
+		handler := handlers.NewLoginHandler(handlers.LoginHandlerParams{
 			UserStore:         userStore,
 			SessionStore:      sessionStore,
 			PasswordHash:      passwordhash,
 			SessionCookieName: cfg.SessionCookieName,
-		}).ServeHTTP)
-
-		r.Post("/logout", handlers.NewPostLogoutHandler(handlers.PostLogoutHandlerParams{
-			SessionCookieName: cfg.SessionCookieName,
-		}).ServeHTTP)
+		})
+		r.Get("/login", handler.Show)
+		r.Post("/login", handler.Login)
+		r.Post("/logout", handler.Logout)
 	})
 
 	killSig := make(chan os.Signal, 1)

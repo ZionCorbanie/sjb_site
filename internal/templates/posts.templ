@@ -45,13 +45,13 @@ func stripHtmlTags(s string) string {
 templ pagination(posts *[]store.Post, page int){
     <div class="flex flex-row justify-center items-center text-secondary-600">
         if page > 0 {
-            <a class="" href={ templ.URL(fmt.Sprintf("/posts/%d", page-1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span></a>
+            <a class="" href={ templ.URL(fmt.Sprintf("/posts?page=%d", page-1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-left-rounded]"></span></a>
         }
         <div class="">
         { fmt.Sprintf("%d",page) }
         </div> 
         if len(*posts) == 5 {
-            <a class="" href={ templ.URL(fmt.Sprintf("/posts/%d", page+1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span></a>
+            <a class="" href={ templ.URL(fmt.Sprintf("/posts?page=%d", page+1)) }><span class="inline-block align-middle icon-[material-symbols-light--chevron-right-rounded]"></span></a>
         }
     </div>
 }

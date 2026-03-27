@@ -16,7 +16,7 @@ Momenteel werkt alleen de dev omgeving, maar er is ook een productie omgeving.
 ## Ports
 
 * 4000 - Site (80 in de dev env)
-* 3333 - PhpMyAdmin (database shit)
+* 3333 - PhpMyAdmin (database)
 
 ## Dir structuur
 

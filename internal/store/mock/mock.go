@@ -21,6 +21,11 @@ func (m *UserStoreMock) GetUser(username string) (*store.User, error) {
 	return args.Get(0).(*store.User), args.Error(1)
 }
 
+func (m *UserStoreMock) GetUserById(userId string) (*store.User, error)
+func (m *UserStoreMock) SearchUsers(search string) (*[]store.User, error)
+func (m *UserStoreMock) PatchUser(user store.User) error
+func (m *UserStoreMock) DeleteUser(userId string) error
+
 type SessionStoreMock struct {
 	mock.Mock
 }
